@@ -47,7 +47,6 @@ public class BaseActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         Log.i(TAG, "Heading to Home Fragment");
                         break;
-                        // TODO
                     case R.id.action_chats:
                         Log.i(TAG, "Heading to Chats Fragment");
                         fragment = new ChatsFragment();

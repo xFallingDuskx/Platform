@@ -5,23 +5,28 @@
     <item
         android:id="@+id/action_communities"
         android:title="Communities"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_communities_temp"/>
 
     <item
         android:id="@+id/action_catalog"
         android:title="Catalog"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_catalog"/>
 
     <item
         android:id="@+id/action_home"
         android:title="Home"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/action_chats"
         android:title="Chats"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_chats"/>
     <item
         android:id="@+id/action_inbox"
         android:title="Inbox"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_inbox"/>
 </menu>
