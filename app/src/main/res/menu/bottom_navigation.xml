@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_communities"
+        android:title="Communities"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_catalog"
+        android:title="Catalog"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_home"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_chats"
+        android:title="Chats"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_inbox"
+        android:title="Inbox"
+        app:showAsAction="always" />
+</menu>
