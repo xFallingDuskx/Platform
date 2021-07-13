@@ -124,10 +124,10 @@ User
 | email        | String           | email address for the user account               |
 | password     | String           | password for user to log into their account      |
 | titleLikes   | List<Title/>     | the titles and episodes a user has liked         |
-| commentLikes | List<Comment/>   | the comments a user has liked                    |
+| commentLikes | List <Comment/>   | the comments a user has liked                    |
 | following    | List<Title/>     | titles and episodes a user is following          |
-| chats        | List<Chat/>      | the chat messages the user has with another user |
-| communities  | List<Community/> | communities the user is a part of                |
+| chats        | List <Chat/>      | the chat messages the user has with another user |
+| communities  | List <Community/> | communities the user is a part of                |
 
 Title
 | Property         | Type            | Description                                  |
