@@ -55,7 +55,8 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="30dp"
-        android:hint="Email" />
+        android:hint="Email"
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/etPassword_Signup"
@@ -67,13 +68,28 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="30dp"
-        android:hint="Password" />
+        android:hint="Password"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/etPassword_Confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPassword_Signup"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="30dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"/>
+
 
     <Button
         android:id="@+id/btnSignup_Signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etPassword_Signup"
+        android:layout_below="@+id/etPassword_Confirmation"
         android:layout_alignParentBottom="false"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="30dp"
