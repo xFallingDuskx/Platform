@@ -153,8 +153,6 @@ Genre
 | objectID | String | unique id for the genre                   |
 | tmdbID   | int    | unique id for the genre according to TMDb |
 | name | String | the name of the genre |
-| tmdbID | int | unique id for the genre according to TMDb |
-
 
 Actor
 | Property | Type   | Description                               |
