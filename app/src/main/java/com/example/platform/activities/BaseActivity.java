@@ -2,11 +2,13 @@ package com.example.platform.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.platform.R;
@@ -22,7 +24,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
-
+    //TODO: private String toolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,5 +67,21 @@ public class BaseActivity extends AppCompatActivity {
         });
         // Set default selection - only for Home
         bottomNavigationView.setSelectedItemId(R.id.action_home);
+
+        // Find the toolbar view inside the activity layout
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        setSupportActionBar(toolbar);
+        // Remove default title text
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.toolbar, menu);
+        return true;
     }
 }
