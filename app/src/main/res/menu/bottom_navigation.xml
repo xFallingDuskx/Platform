@@ -6,7 +6,7 @@
         android:id="@+id/action_communities"
         android:title="Communities"
         app:showAsAction="always"
-        android:icon="@drawable/ic_communities_temp"/>
+        android:icon="@drawable/ic_communities"/>
 
     <item
         android:id="@+id/action_catalog"
@@ -29,4 +29,6 @@
         android:title="Inbox"
         app:showAsAction="always"
         android:icon="@drawable/ic_inbox"/>
+
+
 </menu>
