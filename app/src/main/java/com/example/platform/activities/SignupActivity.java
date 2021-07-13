@@ -60,7 +60,6 @@ public class SignupActivity extends AppCompatActivity {
 
     private void signupUser(String email, String fullName, String username, String password) {
         Log.i(TAG, "Attempting to signup user " + username);
-
         ParseUser user = new ParseUser();
         user.setEmail(email);
         user.put("fullName", fullName);
@@ -81,8 +80,10 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void goMainActivity() {
+        Log.i(TAG, "Removing past activities from the stack to prevent user from going back");
         Intent intent = new Intent(SignupActivity.this, BaseActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 }

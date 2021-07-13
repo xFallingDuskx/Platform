@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username);
-
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
@@ -60,8 +59,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goMainActivity() {
+        Log.i(TAG, "Removing past activities from the stack to prevent user from going back");
         Intent intent = new Intent(LoginActivity.this, BaseActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 }
