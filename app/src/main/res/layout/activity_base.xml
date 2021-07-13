@@ -16,7 +16,7 @@
         app:titleTextColor="@android:color/white">
 
         <ImageView
-            android:id="@+id/ivProfileIcon"
+            android:id="@+id/ivProfileIcon_Base"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/ic_profile" />

@@ -6,10 +6,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.platform.R;
 import com.example.platform.fragments.CatalogFragment;
@@ -25,6 +28,7 @@ public class BaseActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
     //TODO: private String toolbarTitle;
+    private ImageView ivProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +72,20 @@ public class BaseActivity extends AppCompatActivity {
         // Set default selection - only for Home
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
-        // Find the toolbar view inside the activity layout
+        // Setting up the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
-        // Remove default title text
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // Take user to their profile
+        ivProfile = findViewById(R.id.ivProfileIcon_Base);
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(BaseActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // Menu icons are inflated just as they were with actionbar

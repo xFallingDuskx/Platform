@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ProfileActivity">
+
+    <ImageView
+        android:id="@+id/ivProfileIcon_Profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/ic_profile_black_larger" />
+
+    <TextView
+        android:id="@+id/tvMemberSince"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="40dp"
+        android:layout_toEndOf="@+id/ivProfileIcon_Profile"
+        android:text="Member Since"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvCreatedAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMemberSince"
+        android:layout_alignParentEnd="false"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfileIcon_Profile"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="01-12-2020" />
+
+    <TextView
+        android:id="@+id/tvFullname_Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivProfileIcon_Profile"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="25dp"
+        android:text="Fullname:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvFullname_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvFullname_Header"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"
+        android:textSize="20sp"
+        tools:text="Stephon Ricks" />
+
+    <TextView
+        android:id="@+id/tvUsername_Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivProfileIcon_Profile"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@+id/tvFullname_Header"
+        android:text="Username:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvUsername_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername_Header"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="3dp"
+        android:layout_toEndOf="@+id/tvFullname_Header"
+        android:textSize="20sp"
+        tools:text="ricks_stephon" />
+
+    <TextView
+        android:id="@+id/tvEmail_Header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername_Profile"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="Email:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvEmail_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEmail_Header"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="3dp"
+        android:textSize="20sp"
+        tools:text="randomemail@gmail.com" />
+
+    <Button
+        android:id="@+id/btnLogout_Profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername_Profile"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="false"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Logout"
+        android:textSize="16sp" />
+
+</RelativeLayout>

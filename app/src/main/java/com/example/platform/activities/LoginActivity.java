@@ -45,8 +45,6 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(String username, String password) {
         Log.i(TAG, "Attempting to login user " + username);
 
-        // Check username and password in background thread
-        // Background preferred over regular LoginIn
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
