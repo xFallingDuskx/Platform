@@ -40,4 +40,7 @@ dependencies {
 
     // Toolbar
     implementation 'androidx.appcompat:appcompat:1.0.0'
+
+    // Parse
+    implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
 }
