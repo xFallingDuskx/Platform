@@ -52,7 +52,7 @@ User can...
 
 User can...
 - Voting prompts user to chose keywords to describe title
-- Sensor comments with a 'spoiler' tag
+- Censor comments with a 'spoiler' tag
 - Search through a catalog of titles organized by categories: TV shows, Movies, Platform, and Genre
 - Be notified about new comments for a title they are following
 - Chat directly with other users
@@ -138,7 +138,7 @@ Title
 | type             | String          | if the title is a TV show, movie, or episode |
 | description      | String          | what the title is about                      |
 | genres           | List<Genre/>    | genres the title fits into                   |
-| starring         | List<Actor/>    | popular actors that are in the title         |
+| actors           | List<Actor/>    | popular actors that are in the title         |
 | releaseDate      | Date            | when the title was released                  |
 | availableOn      | List<Provider/> | where the title can be watched               |
 | likes            | int             | number of likes for a title                  |
