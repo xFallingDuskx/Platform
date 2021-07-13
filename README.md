@@ -226,3 +226,12 @@ Community
 | description | String          | description of the community by its owner |
 | members     | List<User/>     | users who are part of the community       |
 | messages    | List<Message/>  | messages between users in the community   |
+
+## Credits
+- TMDb API
+- Email Verification API
+- Words API (Dictionary)
+- Parse SDK
+- Back4App
+- Async Client
+- External libraries
