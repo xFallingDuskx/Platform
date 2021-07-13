@@ -111,3 +111,127 @@ User can...
 
 ## Digital Wireframes
 
+## Schemas
+### Models
+
+User
+| Property     | Type             | Description                                      |
+| ------------ | ---------------- | ------------------------------------------------ |
+| objectID     | String           | unique id for the user                           |
+| createdAt    | Date             | creation data of the user account                |
+| fullName     | String           | last and first name of the user                  |
+| username     | String           | chosen screen name of the user                   |
+| email        | String           | email address for the user account               |
+| password     | String           | password for user to log into their account      |
+| titleLikes   | List<Title/>     | the titles and episodes a user has liked         |
+| commentLikes | List<Comment/>   | the comments a user has liked                    |
+| following    | List<Title/>     | titles and episodes a user is following          |
+| chats        | List<Chat/>      | the chat messages the user has with another user |
+| communities  | List<Community/> | communities the user is a part of                |
+
+Title
+| Property         | Type            | Description                                  |
+| ---------------- | --------------- | -------------------------------------------- |
+| objectID         | String          | unique id for the title                      |
+| name             | String          | name of the title                            |
+| coverPath        | String          | path to cover for the title                  |
+| type             | String          | if the title is a TV show, movie, or episode |
+| description      | String          | what the title is about                      |
+| genres           | List<Genre/>    | genres the title fits into                   |
+| starring         | List<Actor/>    | popular actors that are in the title         |
+| releaseDate      | Date            | when the title was released                  |
+| availableOn      | List<Provider/> | where the title can be watched               |
+| likes            | int             | number of likes for a title                  |
+| comments         | List<Comment/>  | the comments made for a title by users       |
+| shares           | int             | number of shares for a title                 |
+| seasons          | List<Season/>   | the seasons associated with a title          |
+| numberOfEpisodes | int             | total number of episodes for the title       |
+
+Genre
+| Property | Type   | Description                               |
+| -------- | ------ | ----------------------------------------- |
+| objectID | String | unique id for the genre                   |
+| tmdbID   | int    | unique id for the genre according to TMDb |
+| name | String | the name of the genre |
+| tmdbID | int | unique id for the genre according to TMDb |
+
+
+Actor
+| Property | Type   | Description                               |
+| -------- | ------ | ----------------------------------------- |
+| objectID | String | unique id for the actor                   |
+| tmdbID   | int    | unique id for the actor according to TMDb |
+| fullName | String | name of the actor                         |
+
+Provider
+| Property | Type   | Description                                                |
+| -------- | ------ | ---------------------------------------------------------- |
+| objectID | String | unique id for the provider                                 |
+| tmdbID   | int    | unique id for the provider according to TMDb               |
+| name     | String | name of the provider                                       |
+| logoPath | String | path to the image of the logo associated with the provider |
+
+Season
+| Property | Type           | Description                                |
+| -------- | -------------- | ------------------------------------------ |
+| objectID | String         | unique id for the season                   |
+| tmdbID   | int            | unique id for the season according to TMDb |
+| episodes | List<Episode/> | the episodes contained within the season   |
+
+Episode
+| Property      | Type   | Description                                 |
+| ------------- | ------ | ------------------------------------------- |
+| objectID      | String | unique id for the title                     |
+| tmdbID        | int    | unique id for the episode according to TMDb |
+| name          | int    | name of the episode                         |
+| stillPath     | String | path to the episode image                   |
+| description   | String | an overview of the episode                  |
+| seasonNumber  | int    | number of the season the episode is in      |
+| episodeNumber | int    | number of episode within the season         |
+
+Comment
+| Property  | Type            | Description                           |
+| --------- | --------------- | ------------------------------------- |
+| objectID  | String          | unique id for the comment             |
+| createdAt | Date            | when the comment was created          |
+| User      | Pointer to User | user who wrote and posted the comment |
+| text      | String          | the comment made by the user          |
+| likes     | int             | number of likes for the comment       |
+| replies   | List<Comment/>  | replies to the comment                |
+
+Chat
+| Property      | Type            | Description                                        |
+| ------------- | --------------- | -------------------------------------------------- |
+| objectID      | String          | unique id for the chat                             |
+| receivingUser | Pointer to User | who is receiving messages from the sender          |
+| updatedAt     | Date            | the last time a message was sent between the users |
+| read          | boolean         | whether the user has opened the chat or not        |
+| messages      | List<Message/>  | the messages sent within the chat                  |
+
+Message
+| Property  | Type            | Description                   |
+| --------- | --------------- | ----------------------------- |
+| objectID  | String          | unique id for the message     |
+| createdAt | Date            | when the message was created  |
+| sender    | Pointer to User | user who sent the message     |
+| receiver  | Pointer to User | user who received the message |
+| content   | String          | the content of the message    |
+
+Community
+| Property    | Type            | Description                               |
+| ----------- | --------------- | ----------------------------------------- |
+| objectID    | String          | unique id for the community               |
+| createdAt   | Date            | when the community was created            |
+| owner       | Pointer to User | the user who created the community        |
+| description | String          | description of the community by its owner |
+| members     | List<User/>     | users who are part of the community       |
+| messages    | List<Message/>  | messages between users in the community   |
+
+## Credits
+- TMDb API
+- Email Verification API
+- Words API (Dictionary)
+- Parse SDK
+- Back4App
+- Async Client
+- External libraries
