@@ -1,8 +1,5 @@
 package com.example.platform.fragments;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.graphics.Movie;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -52,6 +50,7 @@ public class HomeFragment extends Fragment {
     List<Title> allTitles;
     Set<Integer> savedTitles;
     TitlesAdapter adapter;
+    ProgressBar progressBar;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -111,11 +110,13 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTitles.setLayoutManager(linearLayoutManager);
         rvTitles.setAdapter(adapter);
+        progressBar = view.findViewById(R.id.pbHome);
         
         displayTitles();
     }
 
     private void displayTitles() {
+        showProgressBar(); // Make progressBar visible
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get(POPULAR_TV_SHOWS_URL, new JsonHttpResponseHandler() {
@@ -138,6 +139,7 @@ public class HomeFragment extends Fragment {
                     Log.e(TAG, "Hit ParseException while attempting to updateParseServer / Message: " + e.getMessage());
                     e.printStackTrace();
                 }
+                hideProgressBar(); // Make progressBar invisible
             }
 
             @Override
@@ -234,5 +236,13 @@ public class HomeFragment extends Fragment {
                 Log.i(TAG, "Success saving the title: " + title.getName());
             }
         });
+    }
+
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }
