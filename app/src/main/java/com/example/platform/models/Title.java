@@ -76,6 +76,9 @@ public class Title extends ParseObject {
 //    }
 
     public String getDescription() {
+        if (description.isEmpty()) {
+            description = "Sorry! No overview is available for the title.";
+        }
         return description;
     }
 

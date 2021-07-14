@@ -51,12 +51,17 @@
 
         <TextView
             android:id="@+id/tvDescription_Home"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tvGenres_Home"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="30dp"
             android:layout_marginBottom="3dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:minLines="2"
+            android:scrollHorizontally="true"
             android:textColor="@color/white"
             android:textSize="16sp"
             tools:text="Description of the title" />
@@ -76,12 +81,13 @@
 
         <TextView
             android:id="@+id/tvShares_Home"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="60dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="80dp"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -99,12 +105,13 @@
 
         <TextView
             android:id="@+id/tvComments_Home"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/ivShare_Home"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="15dp"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -122,13 +129,14 @@
 
         <TextView
             android:id="@+id/tvLikes_Home"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/ivComment_Home"
             android:layout_alignParentTop="false"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="17dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="15dp"
+            android:gravity="center"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
