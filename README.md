@@ -133,7 +133,8 @@ Title
 | Property         | Type            | Description                                  |
 | ---------------- | --------------- | -------------------------------------------- |
 | objectID         | String          | unique id for the title                      |
-| name             | String          | name of the title                            |
+| tmdbID         | int          | id for the title according to TMDb                   |
+   | name             | String          | name of the title                            |
 | coverPath        | String          | path to cover for the title                  |
 | type             | String          | if the title is a TV show, movie, or episode |
 | description      | String          | what the title is about                      |
