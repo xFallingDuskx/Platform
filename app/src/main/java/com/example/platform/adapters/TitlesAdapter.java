@@ -78,9 +78,9 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             tvName.setText(title.getName());
             tvDescription.setText(title.getDescription());
             //TODO: tvGenres.setText(title.getGenres);
-            tvLikes.setText(String.valueOf(0));
+            tvLikes.setText(title.getLikes().toString());
             tvComments.setText(String.valueOf(0));
-            tvShares.setText(String.valueOf(0));
+            tvShares.setText(title.getShare().toString());
 
             Glide.with(context)
                     .load(title.getPosterPath())

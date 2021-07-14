@@ -1,9 +1,15 @@
 package com.example.platform.models;
 
 import android.graphics.Movie;
+import android.util.Log;
+import android.widget.Toast;
 
+import com.example.platform.activities.LoginActivity;
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,13 +25,18 @@ import java.util.List;
 @ParseClassName("Title")
 public class Title extends ParseObject {
 
+    private static final String TAG = "Title";
+
     String backdropPath;
     String posterPath;
     String name;
+    String country;
     String description;
     Integer id;
     String releaseDate;
+    String type;
 
+    public static final String KEY_TMDB_ID = "tmdbID";
     public static final String KEY_NAME = "name";
     public static final String KEY_COVER_PATH = "coverPath";
     public static final String KEY_TYPE = "type";
@@ -48,13 +59,27 @@ public class Title extends ParseObject {
         backdropPath = jsonObject.getString("backdrop_path");
         posterPath = jsonObject.getString("poster_path");
         name = jsonObject.getString("name");
+        country = jsonObject.getString("origin_country");
+
+        // If there is no description
         description = jsonObject.getString("overview");
+        if (description.isEmpty()) {
+            description = "Sorry! No overview is available for the title.";
+        }
+
         id = jsonObject.getInt("id");
-        releaseDate = jsonObject.getString("first_air_date");
 
-        // TODO: create method to create Title Parse object
-        // ParseObject title = new Title();
-
+        // Check if Title is a Movie, TV Show, or Episode
+        if (jsonObject.has("release_date")) {
+            releaseDate = jsonObject.getString("release_date");
+            type = "Movie";
+        } else if (jsonObject.has("first_air_date")) {
+            releaseDate = jsonObject.getString("first_air_date");
+            type = "TV Show";
+        } else if (jsonObject.has("air_date")) {
+            releaseDate = jsonObject.getString("air_date");
+            type = "Episode";
+        }
     }
 
     // Convert JSONArray into List<Titles>
@@ -67,6 +92,8 @@ public class Title extends ParseObject {
     }
 
     // TODO: Assign a getter and setter method for each key value
+    public Integer getId() {return id;}
+
     public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
 
     public String getPosterPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);}
@@ -76,15 +103,16 @@ public class Title extends ParseObject {
     }
 
     public String getDescription() {
-        if (description.isEmpty()) {
-            description = "Sorry! No overview is available for the title.";
-        }
         return description;
     }
 
-    public Integer getId() {return id;}
-
     public String getReleaseDate() {return releaseDate;}
+
+    public String getType() {return type;}
+
+    public Integer getLikes() {return getInt(KEY_LIKES);}
+
+    public Integer getShare() {return getInt(KEY_SHARES);}
 
 //    public String getType() {
 //        return getString(KEY_TYPE);
