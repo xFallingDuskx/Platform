@@ -1,6 +1,8 @@
 package com.example.platform.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.platform.R;
+import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Title;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -71,6 +76,20 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             tvComments = itemView.findViewById(R.id.tvComments_Home);
             ivShare = itemView.findViewById(R.id.ivShare_Home);
             tvShares = itemView.findViewById(R.id.tvShares_Home);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Title post = titles.get(position);
+                        Intent intent = new Intent(context, TvTitleDetailsActivity.class);
+                        intent.putExtra(Title.class.getSimpleName(), Parcels.wrap(post));
+                        context.startActivity(intent);
+                        Log.i(TAG, "Opening TvTitleDetailsActivity");
+                    }
+                }
+            });
         }
 
         public void bind(Title title) {

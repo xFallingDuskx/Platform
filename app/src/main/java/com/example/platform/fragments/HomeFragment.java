@@ -127,12 +127,15 @@ public class HomeFragment extends Fragment {
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results: " + results.toString());
                     List<Title> newTitles = Title.fromJsonArray(results);
+                    allTitles.addAll(Title.fromJsonArray(results));
                     updateParseServer(newTitles);
-                    allTitles.addAll(newTitles);
                     adapter.notifyDataSetChanged();
                     Log.i(TAG, "Titles: " + allTitles.size());
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.e(TAG, "Hit ParseException while attempting to updateParseServer / Message: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -144,15 +147,38 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void updateParseServer(List<Title> newTitles) {
-        // First check what title already exist on the server using their unique TMDb ID #
-        checkExistingTitles();
-        // Then checking the titles that are being added to the RecyclerView
-        // Save any titles on the server if they are not their
-        checkNewTitles(newTitles);
+    private void updateParseServer(List<Title> newTitles) throws ParseException {
+        Log.i(TAG, "Entering updateParseServer");
+        Log.i(TAG, "The newTitles received are: " + newTitles.toString());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+
+        for (Title title : newTitles) {
+            Integer titleID = title.getId();
+
+            Log.i(TAG, "Title: " + title.getName() + " / TMDB ID: " + title.getId());
+
+
+            query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
+
+            Log.i(TAG, "Query count = " + query.count());
+
+
+            if (query.count() == 0) {
+                savedTitles.add(titleID);
+                Log.i(TAG, "(2) Saved Titles includes: " + savedTitles.toString());
+                Log.i(TAG, "Title is " + title.getName() + " / TMDB ID is " + title.getId());
+                saveTitle(title);
+            }
+        }
+//        // First check what title already exist on the server using their unique TMDb ID #
+//        Set<Integer> savedTitles = checkExistingTitles();
+//        // Then checking the titles that are being added to the RecyclerView
+//        // Save any titles on the server if they are not their
+//        checkNewTitles(newTitles, savedTitles);
     }
 
-    private void checkExistingTitles() {
+    private Set<Integer> checkExistingTitles() {
+        Set<Integer> savedTitles = new HashSet<>();
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
 
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -165,15 +191,20 @@ public class HomeFragment extends Fragment {
                 Log.i(TAG, "checkTitles - entering the for loop");
                 for (ParseObject title : titles) {
                     savedTitles.add(title.getInt(Title.KEY_TMDB_ID));
+                    Log.i(TAG, "(1) Saved Titles includes: " + savedTitles.toString());
+                    Log.i(TAG, "Saving Title:" + title.getString(Title.KEY_NAME) + " / TMDB ID: " + title.getInt(Title.KEY_TMDB_ID));
                 }
             }
         });
+        return savedTitles;
     }
 
-    private void checkNewTitles(List<Title> newTitles) {
+    private void checkNewTitles(List<Title> newTitles, Set<Integer> savedTitles) {
         for (Title title : newTitles) {
             Integer titleID = title.getId();
             if (! savedTitles.contains(titleID)) {
+                Log.i(TAG, "(2) Saved Titles includes: " + savedTitles.toString());
+                Log.i(TAG, "Title is " + title.getName() + " / TMDB ID is " + title.getId());
                 saveTitle(title);
             }
         }

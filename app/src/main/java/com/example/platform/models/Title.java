@@ -14,13 +14,16 @@ import com.parse.ParseQuery;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ParseClassName("Title")
 public class Title extends ParseObject {
@@ -90,6 +93,7 @@ public class Title extends ParseObject {
         }
         return titles;
     }
+
 
     // TODO: Assign a getter and setter method for each key value
     public Integer getId() {return id;}
