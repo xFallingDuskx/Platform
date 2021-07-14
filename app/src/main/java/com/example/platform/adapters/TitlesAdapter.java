@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.platform.R;
 import com.example.platform.models.Title;
 
@@ -80,6 +81,14 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             tvLikes.setText(String.valueOf(0));
             tvComments.setText(String.valueOf(0));
             tvShares.setText(String.valueOf(0));
+
+            Glide.with(context)
+                    .load(title.getPosterPath())
+                    //.placeholder(placeholder)
+                    //.error(placeholder)
+                    .centerCrop() // scale image to fill the entire ImageView
+                    //.transform(new RoundedCornersTransformation(radius, margin))
+                    .into(ivCover);
         }
     }
 }

@@ -53,6 +53,8 @@ public class Title extends ParseObject {
         releaseDate = jsonObject.getString("first_air_date");
 
         // TODO: create method to create Title Parse object
+        // ParseObject title = new Title();
+
     }
 
     // Convert JSONArray into List<Titles>
@@ -65,15 +67,13 @@ public class Title extends ParseObject {
     }
 
     // TODO: Assign a getter and setter method for each key value
+    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
+
+    public String getPosterPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);}
+
     public String getName() {
         return name;
     }
-
-//    public String getCoverPath() {return getString(KEY_COVER_PATH);}
-//
-//    public String getType() {
-//        return getString(KEY_TYPE);
-//    }
 
     public String getDescription() {
         if (description.isEmpty()) {
@@ -81,6 +81,14 @@ public class Title extends ParseObject {
         }
         return description;
     }
+
+    public Integer getId() {return id;}
+
+    public String getReleaseDate() {return releaseDate;}
+
+//    public String getType() {
+//        return getString(KEY_TYPE);
+//    }
 
 //    public Array getGenres() {
 //        JSONArray genres = getJSONArray(KEY_GENRES);
@@ -90,10 +98,6 @@ public class Title extends ParseObject {
 //    public Array getActors() {
 //        JSONArray actors = getJSONArray(KEY_ACTORS);
 //        return;
-//    }
-//
-//    public Date getReleaseDate() {
-//        return getDate(KEY_RELEASE_DATE);
 //    }
 //
 //    public Array getAvailableOn() {
