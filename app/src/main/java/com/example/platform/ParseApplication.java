@@ -2,7 +2,9 @@ package com.example.platform;
 
 import android.app.Application;
 
+import com.example.platform.models.Title;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 public class ParseApplication extends Application {
     // Initializes Parse SDK as soon as the application is created
@@ -10,8 +12,8 @@ public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // TODO: Register your parse models
-        //ParseObject.registerSubclass(Post.class);
+        // Register Parse models
+        ParseObject.registerSubclass(Title.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getResources().getString(R.string.parseApplicationID))
