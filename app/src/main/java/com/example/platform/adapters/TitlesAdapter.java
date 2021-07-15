@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.platform.R;
+import com.example.platform.activities.MovieTitleDetailsActivity;
 import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Title;
 
@@ -82,7 +83,14 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     if (position != RecyclerView.NO_POSITION) {
                         Title title = titles.get(position);
                         Log.i(TAG, "The title is " + title.toString());
-                        Intent intent = new Intent(context, TvTitleDetailsActivity.class);
+                        Intent intent;
+
+                        // Determine where to send Intent based of the type associated with a Title
+                        if (title.getType() == "TV Show") { // TV Show type
+                            intent = new Intent(context, TvTitleDetailsActivity.class);
+                        } else { // Movie type
+                            intent = new Intent(context, MovieTitleDetailsActivity.class);
+                        }
                         intent.putExtra(Title.class.getSimpleName(), title.getId());
                         context.startActivity(intent);
                         Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());

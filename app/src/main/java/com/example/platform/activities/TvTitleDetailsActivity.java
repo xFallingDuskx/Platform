@@ -22,7 +22,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
     Integer titleTmdbID;
-    ParseObject title;
     Context context;
 
     ImageView ivCover;
@@ -47,6 +46,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_title_details);
+        context = getApplicationContext();
 
         ivCover = findViewById(R.id.ivCover_TV_Details);
         tvName = findViewById(R.id.tvName_TV_Details);
@@ -88,6 +88,8 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     private void setView(ParseObject parseObject) {
+
+
         tvName.setText(parseObject.getString(Title.KEY_NAME));
         tvDescription.setText(parseObject.getString(Title.KEY_DESCRIPTION));
         tvStarring.setText("Actor, Actor, ..."); //todo
@@ -96,7 +98,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvSeasons.setText("2"); //todo
         tvEpisodes.setText("24"); //todo
 
-        // TODO
         Glide.with(context)
                 .load(parseObject.getString(Title.KEY_COVER_PATH))
                 //.placeholder(placeholder)

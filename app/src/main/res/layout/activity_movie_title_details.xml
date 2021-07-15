@@ -1,9 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MovieTitleDetailsActivity">
+    android:background="@color/black_light">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:id="@+id/svMovieDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".activities.MovieTitleDetailsActivity">
+
+            <RelativeLayout
+                android:id="@+id/rlContainer_Movie_Details"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:background="@color/purple_200">
+
+                <ImageView
+                    android:id="@+id/ivCover_Movie_Details"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="false"
+                    android:layout_alignParentTop="false"
+                    tools:srcCompat="@tools:sample/avatars" />
+
+                <ImageView
+                    android:id="@+id/ivGradient_Movie_Details"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    app:srcCompat="@drawable/gradient_two" />
+
+                <TextView
+                    android:id="@+id/tvStarringText_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvRelease_Date_Movie_Details"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="Starring:"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvStarring_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvRelease_Date_Movie_Details"
+                    android:layout_toRightOf="@+id/tvStarringText_Movie_Details"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="Starring: Actor, Actor, ..." />
+
+                <TextView
+                    android:id="@+id/tvRelease_Date_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvAvailable_On_Movie_Details"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="12/10/2014" />
+
+                <TextView
+                    android:id="@+id/tvGenres_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvAvailable_On_TV_Details"
+                    android:layout_toRightOf="@+id/tvRelease_Date_Movie_Details"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="Genre, Genre, ..." />
+
+                <TextView
+                    android:id="@+id/tvAvailable_On_Text_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:text="Available on:"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvAvailable_On_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@+id/tvAvailable_On_Text_Movie_Details"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    tools:text="Available On:" />
+
+                <TextView
+                    android:id="@+id/tvDescription_Movie_Details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvStarring_Movie_Details"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginBottom="40dp"
+                    android:scrollHorizontally="true"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:text="Description of the title" />
+
+                <TextView
+                    android:id="@+id/tvName_Movie_Details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvDescription_Movie_Details"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="3dp"
+                    android:textColor="@color/white"
+                    android:textSize="36sp"
+                    android:textStyle="bold"
+                    tools:text="Name of Title" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlIcons_Movie_Details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlContainer_Movie_Details"
+                android:layout_centerInParent="true">
+
+                <ImageView
+                    android:id="@+id/ivFollowingStatus_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="0dp"
+                    app:srcCompat="@drawable/ic_following_false" />
+
+                <TextView
+                    android:id="@+id/tvFollowingStatusText_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivFollowingStatus_Movie_Details"
+                    android:layout_marginTop="3dp"
+                    android:gravity="center"
+                    android:text="Not Following"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivShare_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/ivFollowingStatus_Movie_Details"
+                    app:srcCompat="@drawable/ic_share_2" />
+
+                <TextView
+                    android:id="@+id/tvShareText_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivShare_Movie_Details"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toRightOf="@+id/ivFollowingStatus_Movie_Details"
+                    android:gravity="center"
+                    android:text="Share"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivLikeStatus_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/ivShare_Movie_Details"
+                    app:srcCompat="@drawable/ic_heart_empty" />
+
+                <TextView
+                    android:id="@+id/tvLikeStatusText_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivLikeStatus_Movie_Details"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toRightOf="@+id/ivShare_Movie_Details"
+                    android:gravity="center"
+                    android:text="Like"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivComment_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_toRightOf="@+id/ivLikeStatus_Movie_Details"
+                    app:srcCompat="@drawable/ic_comment" />
+
+                <TextView
+                    android:id="@+id/tvCommentText_Movie_Details"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ivComment_Movie_Details"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_toRightOf="@+id/ivLikeStatus_Movie_Details"
+                    android:gravity="center"
+                    android:text="Comment"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlTopDisplay_Movie_Details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rlIcons_Movie_Details"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/tvSeasons_Movie_Details"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="50sp"
+                    android:textStyle="bold"
+                    tools:text="2" />
+
+                <TextView
+                    android:id="@+id/tvSeasonsText_Movie_Details"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvSeasons_Movie_Details"
+                    android:layout_marginTop="-15dp"
+                    android:gravity="center"
+                    android:text="seasons"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvEpisodes_Movie_Details"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_toRightOf="@+id/tvSeasons_Movie_Details"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="50sp"
+                    android:textStyle="bold"
+                    tools:text="24" />
+
+                <TextView
+                    android:id="@+id/tvEpisodesText_Movie_Details"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvEpisodes_Movie_Details"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="-15dp"
+                    android:layout_toRightOf="@+id/tvSeasons_Movie_Details"
+                    android:gravity="center"
+                    android:text="episodes"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
