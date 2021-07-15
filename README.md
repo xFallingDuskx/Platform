@@ -123,7 +123,7 @@ User
 | username     | String           | chosen screen name of the user                   |
 | email        | String           | email address for the user account               |
 | password     | String           | password for user to log into their account      |
-| titleLikes   | List<Title/>     | the titles and episodes a user has liked         |
+| titleLikes   | List<Integar>     | the titles and episodes a user has liked based off their TMDB ID        |
 | commentLikes | List<Comment>   | the comments a user has liked                    |
 | following    | List<Title/>     | titles and episodes a user is following          |
 | chats        | List <Chat/>      | the chat messages the user has with another user |
