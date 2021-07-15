@@ -81,10 +81,11 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Title title = titles.get(position);
+                        Log.i(TAG, "The title is " + title.toString());
                         Intent intent = new Intent(context, TvTitleDetailsActivity.class);
-                        intent.putExtra(Title.class.getSimpleName(), title.getObjectId());
+                        intent.putExtra(Title.class.getSimpleName(), title.getId());
                         context.startActivity(intent);
-                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title.getName() + " and ObjectID: " + title.getObjectId() + " at position: " + position + " within the list: " + titles.toString());
+                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
                     }
                 }
             });

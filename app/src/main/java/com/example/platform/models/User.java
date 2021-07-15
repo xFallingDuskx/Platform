@@ -1,11 +1,19 @@
 package com.example.platform.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("User")
 public class User extends ParseObject {
@@ -34,8 +42,25 @@ public class User extends ParseObject {
 
     public String getEmail() {return getString(KEY_EMAIL);}
 
-    public String getKeyTitleLikes() {
-        return getString(KEY_TITLE_LIKES);
+    // Get Titles liked by User based on the Titles' TMDB ID
+    public List<Integer> getKeyTitleLikes() throws JSONException {
+        List<Integer> titles = new ArrayList<>();
+        JSONArray jsonArray = getJSONArray(KEY_TITLE_LIKES);
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            Integer titleTmdbID = jsonArray.getJSONObject(i).getInt(Title.KEY_TMDB_ID);
+            titles.add(titleTmdbID);
+        }
+        return titles;
+    }
+
+    // Update the likes for a
+    public void addTitleLike(Integer titleTmdbID) throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+        query.whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID);
+        ParseObject parseObject = query.getFirst();
+        Integer currentLikes = parseObject.getInt(Title.KEY_LIKES);
+        parseObject.put(Title.KEY_LIKES, currentLikes + 1);
     }
 
     public String getKeyCommentLikes() {

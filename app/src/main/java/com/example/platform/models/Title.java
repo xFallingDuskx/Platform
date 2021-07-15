@@ -70,6 +70,7 @@ public class Title extends ParseObject {
         }
 
         id = jsonObject.getInt("id");
+        Log.i(TAG, "Value of TMBD ID: " + id);
 
         // Check if Title is a Movie, TV Show, or Episode
         if (jsonObject.has("release_date")) { // Movie
@@ -98,6 +99,10 @@ public class Title extends ParseObject {
 
     // TODO: Assign a getter and setter method for each key value
     public Integer getId() {return id;}
+
+    public String getObjectId() {
+        return getString("objectId");
+    }
 
     public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
 

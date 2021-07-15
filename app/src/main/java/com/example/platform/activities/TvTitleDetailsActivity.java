@@ -21,7 +21,7 @@ import org.parceler.Parcels;
 public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
-    String titleObjectID;
+    Integer titleTmdbID;
     ParseObject title;
     Context context;
 
@@ -67,25 +67,42 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
 
         // Get Title
-        titleObjectID = getIntent().getStringExtra(Title.class.getSimpleName());
-        Log.i(TAG, "Title ObjectID: " + titleObjectID);
+        try {
+            getTitleObject();
+        } catch (ParseException e) {
+            Log.d(TAG, "Issue getting title / Message: " + e.getMessage());
+        }
 
-        tvName.setText(title.getString(Title.KEY_NAME));
-        tvDescription.setText(title.getString(Title.KEY_DESCRIPTION));
+    }
+
+    private void getTitleObject() throws ParseException {
+        titleTmdbID = getIntent().getIntExtra(Title.class.getSimpleName(), 0);
+        Log.i(TAG, "Title TMDB ID: " + titleTmdbID);
+
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+        query.whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID);
+        ParseObject parseObject = query.getFirst();
+        if (parseObject != null) {
+            setView(parseObject);
+        }
+    }
+
+    private void setView(ParseObject parseObject) {
+        tvName.setText(parseObject.getString(Title.KEY_NAME));
+        tvDescription.setText(parseObject.getString(Title.KEY_DESCRIPTION));
         tvStarring.setText("Actor, Actor, ..."); //todo
-        tvReleaseDate.setText(title.getString(Title.KEY_RELEASE_DATE));
+        tvReleaseDate.setText(parseObject.getString(Title.KEY_RELEASE_DATE));
         tvAvailableOn.setText("Provide, Provider, ..."); //todo
         tvSeasons.setText("2"); //todo
         tvEpisodes.setText("24"); //todo
 
         // TODO
-//        Glide.with(context)
-//                .load(title.getPosterPath())
-//                //.placeholder(placeholder)
-//                //.error(placeholder)
-//                .centerCrop() // scale image to fill the entire ImageView
-//                //.transform(new RoundedCornersTransformation(radius, margin))
-//                .into(ivCover);
-
+        Glide.with(context)
+                .load(parseObject.getString(Title.KEY_COVER_PATH))
+                //.placeholder(placeholder)
+                //.error(placeholder)
+                .centerCrop() // scale image to fill the entire ImageView
+                //.transform(new RoundedCornersTransformation(radius, margin))
+                .into(ivCover);
     }
 }
