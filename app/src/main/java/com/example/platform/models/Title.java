@@ -34,7 +34,6 @@ public class Title extends ParseObject {
     String backdropPath;
     String posterPath;
     String name;
-    String country;
     String description;
     Integer id;
     String releaseDate;
@@ -63,8 +62,6 @@ public class Title extends ParseObject {
     public Title(JSONObject jsonObject) throws JSONException{
         backdropPath = jsonObject.getString("backdrop_path");
         posterPath = jsonObject.getString("poster_path");
-        name = jsonObject.getString("name");
-        country = jsonObject.getString("origin_country");
 
         // If there is no description
         description = jsonObject.getString("overview");
@@ -75,13 +72,15 @@ public class Title extends ParseObject {
         id = jsonObject.getInt("id");
 
         // Check if Title is a Movie, TV Show, or Episode
-        if (jsonObject.has("release_date")) {
+        if (jsonObject.has("release_date")) { // Movie
+            name = jsonObject.getString("title");
             releaseDate = jsonObject.getString("release_date");
             type = "Movie";
-        } else if (jsonObject.has("first_air_date")) {
+        } else if (jsonObject.has("first_air_date")) { // TV Show
+            name = jsonObject.getString("name");
             releaseDate = jsonObject.getString("first_air_date");
             type = "TV Show";
-        } else if (jsonObject.has("air_date")) {
+        } else if (jsonObject.has("air_date")) { // Episode
             releaseDate = jsonObject.getString("air_date");
             type = "Episode";
         }

@@ -6,14 +6,13 @@
     android:background="@color/black_light"
     tools:context=".fragments.HomeFragment_TvShows">
 
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTitles"
+        android:id="@+id/rvTitles_TV_Shows"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <ProgressBar
-        android:id="@+id/pbHome"
+        android:id="@+id/pbHome_TV_Shows"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

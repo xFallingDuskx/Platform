@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -45,22 +44,12 @@ public class HomeFragment_TvShows extends Fragment {
 
     public static final String TAG = "HomeFragment_TvShows";
     public String POPULAR_TV_SHOWS_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1";
-    public static final String PAGE_NAME = "TV Shows";
 
     RecyclerView rvTitles;
     List<Title> allTitles;
     Set<Integer> savedTitles;
     TitlesAdapter adapter;
     ProgressBar progressBar;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public HomeFragment_TvShows() {
         // Required empty public constructor
@@ -70,14 +59,11 @@ public class HomeFragment_TvShows extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
      * @return A new instance of fragment HomeFragment_TvShows.
      */
     // TODO: Rename and change types and number of parameters
     public static HomeFragment_TvShows newInstance(int page) {
         Bundle args = new Bundle();
-        args.putInt(PAGE_NAME, page);
         HomeFragment_TvShows fragment = new HomeFragment_TvShows();
         fragment.setArguments(args);
         return fragment;
@@ -99,14 +85,14 @@ public class HomeFragment_TvShows extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        rvTitles = view.findViewById(R.id.rvTitles);
+        rvTitles = view.findViewById(R.id.rvTitles_TV_Shows);
         allTitles = new ArrayList<>();
         savedTitles = new HashSet<>();
         adapter = new TitlesAdapter(getContext(), allTitles);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTitles.setLayoutManager(linearLayoutManager);
         rvTitles.setAdapter(adapter);
-        progressBar = view.findViewById(R.id.pbHome);
+        progressBar = view.findViewById(R.id.pbHome_TV_Shows);
 
         displayTitles();
     }
@@ -155,8 +141,6 @@ public class HomeFragment_TvShows extends Fragment {
             query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
             if (query.count() == 0) {
                 savedTitles.add(titleID);
-                Log.i(TAG, "(2) Saved Titles includes: " + savedTitles.toString());
-                Log.i(TAG, "Title is " + title.getName() + " / TMDB ID is " + title.getId());
                 saveTitle(title);
             }
         }

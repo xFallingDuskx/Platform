@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
     // TODO: HIDE API KEY IN STRING RESOURCES
-//    public String POPULAR_MOVIES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=" + etActivity().getResources().getString(R.string.tmdbApiKey);
     FrameLayout flHome;
     ViewPager vpHome;
     TabLayout tlHome;

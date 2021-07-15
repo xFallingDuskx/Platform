@@ -3,13 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment_Movies">
+    tools:context=".fragments.HomeFragment_Movies"
+    android:background="@color/black">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTitles_Movies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="ARRIVED AT MOVIES"
-        android:textSize="30sp"/>
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/pbHome_Movies"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </FrameLayout>
