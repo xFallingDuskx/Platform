@@ -20,12 +20,12 @@ import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Parcel
 @ParseClassName("Title")
 public class Title extends ParseObject {
 
@@ -39,6 +39,7 @@ public class Title extends ParseObject {
     Integer id;
     String releaseDate;
     String type;
+
 
     public static final String KEY_TMDB_ID = "tmdbID";
     public static final String KEY_NAME = "name";
@@ -111,7 +112,15 @@ public class Title extends ParseObject {
         return description;
     }
 
-    public String getReleaseDate() {return releaseDate;}
+    // Change date format from YYYY-DD-MM to DD/MM/YYYY
+    public String getReleaseDate() {
+        String[] dateArray = releaseDate.split("-");
+        List<String> dateList = new ArrayList<>(Arrays.asList(dateArray));
+        String year = dateList.remove(0);
+        dateList.add(year); // Move year of title to the end
+        String date = dateList.get(0) + "/" + dateList.get(1) + "/" + dateList.get(2);
+        return date;
+    }
 
     public String getType() {return type;}
 

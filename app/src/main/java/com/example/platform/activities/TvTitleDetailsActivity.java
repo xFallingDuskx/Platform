@@ -12,13 +12,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.platform.R;
 import com.example.platform.models.Title;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.parceler.Parcels;
 
 public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
-    Title title;
+    String titleObjectID;
+    ParseObject title;
     Context context;
 
     ImageView ivCover;
@@ -62,14 +66,14 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvSeasons = findViewById(R.id.tvSeasons_TV_Details);
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
 
-        // Unwrap Title
-        title = (Title) Parcels.unwrap(getIntent().getParcelableExtra(Title.class.getSimpleName()));
-        Log.d(TAG, String.format("Showing details for '%s'", title.getName()));
+        // Get Title
+        titleObjectID = getIntent().getStringExtra(Title.class.getSimpleName());
+        Log.i(TAG, "Title ObjectID: " + titleObjectID);
 
-        tvName.setText(title.getName());
-        tvDescription.setText(title.getDescription());
+        tvName.setText(title.getString(Title.KEY_NAME));
+        tvDescription.setText(title.getString(Title.KEY_DESCRIPTION));
         tvStarring.setText("Actor, Actor, ..."); //todo
-        tvReleaseDate.setText(title.getReleaseDate());
+        tvReleaseDate.setText(title.getString(Title.KEY_RELEASE_DATE));
         tvAvailableOn.setText("Provide, Provider, ..."); //todo
         tvSeasons.setText("2"); //todo
         tvEpisodes.setText("24"); //todo
