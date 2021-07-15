@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Parcel
 @ParseClassName("Title")
 public class Title extends ParseObject {
 

@@ -149,22 +149,14 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    // First check if Title already exist in the Parse Server
+    // Requires making a query for Titles within the server that contain the same unique TMDB ID #
     private void updateParseServer(List<Title> newTitles) throws ParseException {
-        Log.i(TAG, "Entering updateParseServer");
-        Log.i(TAG, "The newTitles received are: " + newTitles.toString());
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
 
         for (Title title : newTitles) {
             Integer titleID = title.getId();
-
-            Log.i(TAG, "Title: " + title.getName() + " / TMDB ID: " + title.getId());
-
-
             query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
-
-            Log.i(TAG, "Query count = " + query.count());
-
-
             if (query.count() == 0) {
                 savedTitles.add(titleID);
                 Log.i(TAG, "(2) Saved Titles includes: " + savedTitles.toString());
@@ -172,46 +164,9 @@ public class HomeFragment extends Fragment {
                 saveTitle(title);
             }
         }
-//        // First check what title already exist on the server using their unique TMDb ID #
-//        Set<Integer> savedTitles = checkExistingTitles();
-//        // Then checking the titles that are being added to the RecyclerView
-//        // Save any titles on the server if they are not their
-//        checkNewTitles(newTitles, savedTitles);
     }
 
-    private Set<Integer> checkExistingTitles() {
-        Set<Integer> savedTitles = new HashSet<>();
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
-
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> titles, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue getting Title objects");
-                    return;
-                }
-                Log.i(TAG, "checkTitles - entering the for loop");
-                for (ParseObject title : titles) {
-                    savedTitles.add(title.getInt(Title.KEY_TMDB_ID));
-                    Log.i(TAG, "(1) Saved Titles includes: " + savedTitles.toString());
-                    Log.i(TAG, "Saving Title:" + title.getString(Title.KEY_NAME) + " / TMDB ID: " + title.getInt(Title.KEY_TMDB_ID));
-                }
-            }
-        });
-        return savedTitles;
-    }
-
-    private void checkNewTitles(List<Title> newTitles, Set<Integer> savedTitles) {
-        for (Title title : newTitles) {
-            Integer titleID = title.getId();
-            if (! savedTitles.contains(titleID)) {
-                Log.i(TAG, "(2) Saved Titles includes: " + savedTitles.toString());
-                Log.i(TAG, "Title is " + title.getName() + " / TMDB ID is " + title.getId());
-                saveTitle(title);
-            }
-        }
-    }
-
+    // Save Title in the Parse Server if it does not exist
     private void saveTitle(Title title) {
         Title newTitle = new Title();
         newTitle.put(Title.KEY_TMDB_ID, title.getId());
