@@ -41,7 +41,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            app:srcCompat="@drawable/ic_heart_empty" />
+            android:background="@drawable/ic_heart_empty"/>
 
         <TextView
             android:id="@+id/tvGenres_Home"

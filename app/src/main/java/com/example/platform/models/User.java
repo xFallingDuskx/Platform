@@ -1,9 +1,12 @@
 package com.example.platform.models;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +20,9 @@ import java.util.List;
 
 @ParseClassName("User")
 public class User extends ParseObject {
-    // TODO: Ensure that your subclass has a public default constructor
+
+    public static final String TAG = "User";
+
     public User() {
     }
 
@@ -43,24 +48,99 @@ public class User extends ParseObject {
     public String getEmail() {return getString(KEY_EMAIL);}
 
     // Get Titles liked by User based on the Titles' TMDB ID
-    public List<Integer> getKeyTitleLikes() throws JSONException {
+    public List<Integer> getTitleLikes() throws JSONException {
         List<Integer> titles = new ArrayList<>();
         JSONArray jsonArray = getJSONArray(KEY_TITLE_LIKES);
 
-        for(int i = 0; i < jsonArray.length(); i++) {
-            Integer titleTmdbID = jsonArray.getJSONObject(i).getInt(Title.KEY_TMDB_ID);
-            titles.add(titleTmdbID);
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Integer titleTmdbID = jsonArray.getJSONObject(i).getInt(Title.KEY_TMDB_ID);
+                titles.add(titleTmdbID);
+            }
         }
         return titles;
     }
 
-    // Update the likes for a
     public void addTitleLike(Integer titleTmdbID) throws ParseException {
+        // First get the Title
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
         query.whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID);
         ParseObject parseObject = query.getFirst();
+        // Then increment the likes for the Title by 1
+        handleLikeForTitle(parseObject);
+        // Finally save the like to the User profile
+        try {
+            handleLikeForUser(parseObject);
+        } catch (JSONException e) {
+            Log.i(TAG, "Issue handling likes for user");
+        }
+    }
+
+    public void handleLikeForTitle(ParseObject parseObject) {
         Integer currentLikes = parseObject.getInt(Title.KEY_LIKES);
         parseObject.put(Title.KEY_LIKES, currentLikes + 1);
+        parseObject.saveInBackground();
+        Log.i(TAG, "Like has been handled for Title");
+    }
+
+    public void handleLikeForUser(ParseObject parseObject) throws JSONException {
+        List<Integer> likedTitles = new ArrayList<>();
+        Integer toAddTmdbID = parseObject.getInt(Title.KEY_TMDB_ID);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        JSONArray jsonArray = currentUser.getJSONArray(KEY_TITLE_LIKES);
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            Integer titleTmdbID = jsonArray.getInt(i);
+                if (titleTmdbID != toAddTmdbID) {
+                    likedTitles.add(titleTmdbID);
+                }
+        }
+
+        likedTitles.add(toAddTmdbID);
+        currentUser.put(KEY_TITLE_LIKES, likedTitles);
+        currentUser.saveInBackground();
+        Log.i(TAG, "Like has been handled for User");
+    }
+
+    public void removeTitleLike(Integer titleTmdbID) throws ParseException {
+        // First get the Title
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+        query.whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID);
+        ParseObject parseObject = query.getFirst();
+        // Then decrease the likes for the Title by 1
+        handleUnlikeForTitle(parseObject);
+        // Finally remove the like from the User profile
+        try {
+            handleUnlikeForUser(parseObject);
+        } catch (JSONException e) {
+            Log.i(TAG, "Issue handling likes for user");
+        }
+    }
+
+    public void handleUnlikeForTitle(ParseObject parseObject) {
+        Integer currentLikes = parseObject.getInt(Title.KEY_LIKES);
+        parseObject.put(Title.KEY_LIKES, currentLikes - 1);
+        parseObject.saveInBackground();
+        Log.i(TAG, "Unlike has been handled for Title");
+    }
+
+    public void handleUnlikeForUser(ParseObject parseObject) throws JSONException {
+        List<Integer> likedTitles = new ArrayList<>();
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        JSONArray jsonArray = currentUser.getJSONArray(KEY_TITLE_LIKES);
+
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                Integer titleTmdbID = jsonArray.getInt(i);
+                if (titleTmdbID != parseObject.getInt(Title.KEY_TMDB_ID)) {
+                    likedTitles.add(titleTmdbID);
+                }
+            }
+        }
+
+        currentUser.put(KEY_TITLE_LIKES, likedTitles);
+        currentUser.saveInBackground();
+        Log.i(TAG, "Unlike has been handled for User");
     }
 
     public String getKeyCommentLikes() {

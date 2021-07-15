@@ -128,7 +128,10 @@ public class Title extends ParseObject {
 
     public String getType() {return type;}
 
-    public Integer getLikes() {return getInt(KEY_LIKES);}
+    public Integer getLikes() {
+        Log.i(TAG, "Title: " + getName() + " / Likes: " + getInt(KEY_LIKES));
+        return getInt(KEY_LIKES);
+    }
 
     public Integer getShare() {return getInt(KEY_SHARES);}
 

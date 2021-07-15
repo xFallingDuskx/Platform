@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,8 +20,16 @@ import com.example.platform.R;
 import com.example.platform.activities.MovieTitleDetailsActivity;
 import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Title;
+import com.example.platform.models.User;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder>{
 
@@ -26,6 +37,9 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
     private Context context;
     private List<Title> titles;
+    User currentUser = new User();
+    Map<Integer, Boolean> titlesLiked = new HashMap<>();
+
 
     public TitlesAdapter(Context context, List<Title> titles) {
         this.context = context;
@@ -51,6 +65,8 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
+
         public ImageView ivCover;
         public TextView tvName;
         public TextView tvDescription;
@@ -76,6 +92,50 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             ivShare = itemView.findViewById(R.id.ivShare_Home);
             tvShares = itemView.findViewById(R.id.tvShares_Home);
 
+            // User clicks on Like
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Title title = titles.get(position);
+                    Integer titleTmdbID = title.getId();
+
+                    // If title does not exist in Map
+                    if (! titlesLiked.containsKey(titleTmdbID)) {
+                        titlesLiked.put(titleTmdbID, false);
+                    }
+
+                    // If the Title is currently not liked by the User
+                    if (! titlesLiked.get(titleTmdbID)) {
+                        ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
+                        Integer currentLikes = Integer.valueOf(tvLikes.getText().toString());
+                        tvLikes.setText(String.valueOf(currentLikes + 1)); // Increment the likes for the Title (as displayed to the User) by !
+
+                        try {
+                            currentUser.addTitleLike(titleTmdbID);
+                        } catch (ParseException e) {
+                            Log.i(TAG, "Issue trying to add title like");
+                            e.printStackTrace();
+                        }
+
+                        titlesLiked.put(titleTmdbID, true);
+                    } else {  // Title is currently liked by the User
+                        ivLike.setImageResource(R.drawable.ic_heart_empty); // Change to empty heart
+                        Integer currentLikes = Integer.valueOf(tvLikes.getText().toString());
+                        tvLikes.setText(String.valueOf(currentLikes - 1)); // Decrease the likes for the Title (as displayed to the User) by !
+
+                        try {
+                            currentUser.removeTitleLike(titleTmdbID);
+                        } catch (ParseException e) {
+                            Log.i(TAG, "Issue trying to add title like");
+                            e.printStackTrace();
+                        }
+                        titlesLiked.put(titleTmdbID, false);
+                    }
+                }
+            });
+
+            // User clicks on View
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -103,9 +163,13 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             tvName.setText(title.getName());
             tvDescription.setText(title.getDescription());
             //TODO: tvGenres.setText(title.getGenres);
-            tvLikes.setText(title.getLikes().toString());
+            tvLikes.setText(String.valueOf(title.getLikes()));
+            Log.i(TAG, "The title " + title.getName() + " has " + title.getLikes() + " number of likes");
             tvComments.setText(String.valueOf(0));
-            tvShares.setText(title.getShare().toString());
+            tvShares.setText(String.valueOf(title.getShare()));
+
+            // Handle unique User information about each Title (i.e Like status)
+            handleTitleData(title, ivLike);
 
             Glide.with(context)
                     .load(title.getPosterPath())
@@ -114,6 +178,22 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     .centerCrop() // scale image to fill the entire ImageView
                     //.transform(new RoundedCornersTransformation(radius, margin))
                     .into(ivCover);
+        }
+    }
+
+    private void handleTitleData(Title title, ImageView ivLike) {
+        Integer titleTmdbID = title.getId();
+        List<Integer> userLikedTitles;
+
+        try {
+            userLikedTitles = currentUser.getTitleLikes();
+            if (userLikedTitles.contains(titleTmdbID)) {
+                titlesLiked.put(titleTmdbID, true);
+                ivLike.setImageResource(R.drawable.ic_heart_filled);
+            }
+        } catch (JSONException e) {
+            Log.d(TAG, "Issue getting User liked titles");
+            e.printStackTrace();
         }
     }
 }
