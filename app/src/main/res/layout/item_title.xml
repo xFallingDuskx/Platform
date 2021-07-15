@@ -7,7 +7,7 @@
     android:background="@color/black_light">
 
     <RelativeLayout
-        android:id="@+id/rlContainer"
+        android:id="@+id/flContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"

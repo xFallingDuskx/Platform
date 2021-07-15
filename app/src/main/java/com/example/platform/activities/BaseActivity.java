@@ -65,7 +65,8 @@ public class BaseActivity extends AppCompatActivity {
                         fragment = new HomeFragment();
                         break;
                 }
-                fragmentManager.beginTransaction().replace(R.id.rlContainer, fragment).commit();
+                // Complete the transcation to the fragment
+                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 return true;
             }
         });

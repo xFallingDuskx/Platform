@@ -17,8 +17,6 @@ import com.example.platform.R;
 import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Title;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 
 public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder>{
