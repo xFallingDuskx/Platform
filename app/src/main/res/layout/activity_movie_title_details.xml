@@ -68,7 +68,7 @@
                     android:id="@+id/tvRelease_Date_Movie_Details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvAvailable_On_Movie_Details"
+                    android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="20dp"
@@ -80,7 +80,7 @@
                     android:id="@+id/tvGenres_Movie_Details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvAvailable_On_Movie_Details"
+                    android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/tvRelease_Date_Movie_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="3dp"
@@ -88,32 +88,6 @@
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="Genre, Genre, ..." />
-
-                <TextView
-                    android:id="@+id/tvAvailable_On_Text_Movie_Details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:text="Available on:"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvAvailable_On_Movie_Details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvAvailable_On_Text_Movie_Details"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    tools:text="Available On:" />
 
                 <TextView
                     android:id="@+id/tvDescription_Movie_Details"
@@ -253,49 +227,23 @@
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:id="@+id/tvSeasons_Movie_Details"
-                    android:layout_width="100dp"
+                    android:id="@+id/tvRuntime_Movie_Details"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="50sp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
-                    tools:text="2" />
+                    tools:text="1 hour" />
 
                 <TextView
-                    android:id="@+id/tvSeasonsText_Movie_Details"
-                    android:layout_width="100dp"
+                    android:id="@+id/tvRuntimeText_Movie_Details"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvSeasons_Movie_Details"
-                    android:layout_marginTop="-15dp"
+                    android:layout_below="@+id/tvRuntime_Movie_Details"
+                    android:layout_marginTop="-8dp"
                     android:gravity="center"
-                    android:text="seasons"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvEpisodes_Movie_Details"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_toRightOf="@+id/tvSeasons_Movie_Details"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="50sp"
-                    android:textStyle="bold"
-                    tools:text="24" />
-
-                <TextView
-                    android:id="@+id/tvEpisodesText_Movie_Details"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvEpisodes_Movie_Details"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="-15dp"
-                    android:layout_toRightOf="@+id/tvSeasons_Movie_Details"
-                    android:gravity="center"
-                    android:text="episodes"
+                    android:text="Watchtime"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />

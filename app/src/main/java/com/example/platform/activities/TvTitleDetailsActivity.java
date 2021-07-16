@@ -61,7 +61,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     ImageView ivComment;
     TextView tvComment;
     TextView tvSeasons;
+    TextView tvSeasonsText;
     TextView tvEpisodes;
+    TextView tvEpisodesText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment_TV_Details);
         tvComment = findViewById(R.id.tvCommentText_TV_Details);
         tvSeasons = findViewById(R.id.tvSeasons_TV_Details);
+        tvSeasonsText = findViewById(R.id.tvSeasonsText_TV_Details);
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
+        tvEpisodesText = findViewById(R.id.tvEpisodesText_TV_Details);
 
         // Get Title information
         getTitleInformation();
@@ -172,6 +176,13 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvAvailableOn.setText(networks); //todo
         tvSeasons.setText(String.valueOf(numberOfSeasons)); //todo
         tvEpisodes.setText(String.valueOf(numberOfEpisodes)); //todo
+
+        if (numberOfSeasons == 1) {
+            tvSeasonsText.setText("season");
+        }
+        if (numberOfEpisodes == 1) {
+            tvEpisodesText.setText("spisode");
+        }
 
         Glide.with(context)
                 .load(titleCoverPath)
