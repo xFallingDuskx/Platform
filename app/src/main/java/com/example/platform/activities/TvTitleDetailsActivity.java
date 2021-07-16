@@ -21,7 +21,13 @@ import org.parceler.Parcels;
 public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
+
     Integer titleTmdbID;
+    String titleName;
+    String titleCoverPath;
+    String titleType;
+    String titleDescription;
+    String titleReleaseDate;
     Context context;
 
     ImageView ivCover;
@@ -66,46 +72,78 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvSeasons = findViewById(R.id.tvSeasons_TV_Details);
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
 
-        // Get Title
-//        Title title = (Title) getIntent().getSerializableExtra(Title.class.getSimpleName());
-//        Log.i(TAG, "Title details for the title " + title + " and is this null? " + (title == null));
-        try {
-            getTitleObject();
-        } catch (ParseException e) {
-            Log.d(TAG, "Issue getting title / Message: " + e.getMessage());
-        }
+        // Get Title information
+        getTitleInformation();
+
+        // Set Title information
+        setTitleInformation();
+
+//        try {
+//            getTitleObject();
+//        } catch (ParseException e) {
+//            Log.d(TAG, "Issue getting title / Message: " + e.getMessage());
+//        }
 
     }
 
-    private void getTitleObject() throws ParseException {
-        titleTmdbID = (Integer) getIntent().getSerializableExtra(Title.class.getSimpleName());
-        Log.i(TAG, "Title TMDB ID: " + titleTmdbID);
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
-        query.whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID);
-        ParseObject parseObject = query.getFirst();
-        if (parseObject != null) {
-            setView(parseObject);
-        }
+    private void getTitleInformation() {
+        Log.i(TAG, "Getting title information...");
+        titleName = (String) getIntent().getStringExtra(Title.KEY_NAME);
+        titleTmdbID = (Integer) getIntent().getIntExtra( Title.KEY_TMDB_ID, 0);
+        titleCoverPath = (String) getIntent().getStringExtra(Title.KEY_COVER_PATH);
+        titleType = (String) getIntent().getStringExtra(Title.KEY_TYPE);
+        titleDescription = (String) getIntent().getStringExtra(Title.KEY_DESCRIPTION);
+        titleReleaseDate = (String) getIntent().getStringExtra(Title.KEY_RELEASE_DATE);
+        Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in TV Details");
     }
 
-    private void setView(ParseObject parseObject) {
-
-
-        tvName.setText(parseObject.getString(Title.KEY_NAME));
-        tvDescription.setText(parseObject.getString(Title.KEY_DESCRIPTION));
+    private void setTitleInformation() {
+        tvName.setText(titleName);
+        tvDescription.setText(titleDescription);
         tvStarring.setText("Actor, Actor, ..."); //todo
-        tvReleaseDate.setText(parseObject.getString(Title.KEY_RELEASE_DATE));
+        tvReleaseDate.setText(titleReleaseDate);
         tvAvailableOn.setText("Provide, Provider, ..."); //todo
         tvSeasons.setText("2"); //todo
         tvEpisodes.setText("24"); //todo
 
         Glide.with(context)
-                .load(parseObject.getString(Title.KEY_COVER_PATH))
+                .load(titleCoverPath)
                 //.placeholder(placeholder)
                 //.error(placeholder)
                 .centerCrop() // scale image to fill the entire ImageView
                 //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
     }
+
+//    private void getTitleObject() throws ParseException {
+//        titleTmdbID = (Integer) getIntent().getSerializableExtra(Title.class.getSimpleName());
+//        Log.i(TAG, "Title TMDB ID: " + titleTmdbID);
+//
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+//        query.whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID);
+//        ParseObject parseObject = query.getFirst();
+//        if (parseObject != null) {
+//            setView(parseObject);
+//        }
+//    }
+//
+//    private void setView(ParseObject parseObject) {
+//
+//
+//        tvName.setText(parseObject.getString(Title.KEY_NAME));
+//        tvDescription.setText(parseObject.getString(Title.KEY_DESCRIPTION));
+//        tvStarring.setText("Actor, Actor, ..."); //todo
+//        tvReleaseDate.setText(parseObject.getString(Title.KEY_RELEASE_DATE));
+//        tvAvailableOn.setText("Provide, Provider, ..."); //todo
+//        tvSeasons.setText("2"); //todo
+//        tvEpisodes.setText("24"); //todo
+//
+//        Glide.with(context)
+//                .load(parseObject.getString(Title.KEY_COVER_PATH))
+//                //.placeholder(placeholder)
+//                //.error(placeholder)
+//                .centerCrop() // scale image to fill the entire ImageView
+//                //.transform(new RoundedCornersTransformation(radius, margin))
+//                .into(ivCover);
+//    }
 }

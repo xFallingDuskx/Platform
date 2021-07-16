@@ -146,18 +146,31 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Title title = titles.get(position);
-                        Log.i(TAG, "The title is " + title.toString());
+                        Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId() + " /Object ID:" + title.getObjectId());
                         Intent intent;
 
                         // Determine where to send Intent based of the type associated with a Title
-                        if (title.getType() == "TV Show") { // TV Show type
+                        if (title.getType().equals("TV Show")) { // TV Show type
+                            Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
                             intent = new Intent(context, TvTitleDetailsActivity.class);
                         } else { // Movie type
+                            Log.i(TAG, "Type is: " + title.getType() + " for Movies");
                             intent = new Intent(context, MovieTitleDetailsActivity.class);
                         }
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable(Title.class.getSimpleName(), title.getId());
-                        intent.putExtras(bundle);
+                        intent.putExtra(Title.KEY_TMDB_ID, title.getId());
+                        intent.putExtra(Title.KEY_NAME, title.getName());
+                        intent.putExtra(Title.KEY_COVER_PATH, title.getCoverPath());
+                        intent.putExtra(Title.KEY_TYPE, title.getType());
+                        intent.putExtra(Title.KEY_DESCRIPTION, title.getDescription());
+                        intent.putExtra(Title.KEY_RELEASE_DATE, title.getReleaseDate());
+//                        Bundle bundle = new Bundle();
+//                        bundle.putSerializable(Title.KEY_TMDB_ID, title.getId());
+//                        bundle.putSerializable(Title.KEY_NAME, title.getName());
+//                        bundle.putSerializable(Title.KEY_COVER_PATH, title.getCoverPath());
+//                        bundle.putSerializable(Title.KEY_TYPE, title.getType());
+//                        bundle.putSerializable(Title.KEY_DESCRIPTION, title.getDescription());
+//                        bundle.putSerializable(Title.KEY_RELEASE_DATE, title.getReleaseDate());
+//                        intent.putExtras(bundle);
                         context.startActivity(intent);
                         Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
                     }

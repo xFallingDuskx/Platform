@@ -67,7 +67,7 @@ public class Title extends ParseObject implements Serializable {
 
     public Title(JSONObject jsonObject) throws JSONException{
         backdropPath = jsonObject.getString("backdrop_path");
-        posterPath = jsonObject.getString("poster_path");
+        posterPath = String.format("https://image.tmdb.org/t/p/w342/%s", jsonObject.getString("poster_path"));
 
         // If there is no description
         description = jsonObject.getString("overview");
@@ -148,9 +148,7 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public void setCoverPath(String posterPath) {
-        Log.i(TAG, "Title: " + getName() + " /Coverpath: " + getCoverPath());
-        String toAdd = String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);
-        this.put(KEY_COVER_PATH, toAdd);
+        this.put(KEY_COVER_PATH, posterPath);
     }
 
     public String getName() {
