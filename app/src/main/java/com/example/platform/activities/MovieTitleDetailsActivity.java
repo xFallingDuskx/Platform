@@ -69,18 +69,11 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         tvSeasons = findViewById(R.id.tvSeasons_Movie_Details);
         tvEpisodes = findViewById(R.id.tvEpisodes_Movie_Details);
 
-
         // Get Title information
         getTitleInformation();
 
         // Set Title information
         setTitleInformation();
-
-//        try {
-//            getTitleObject();
-//        } catch (ParseException e) {
-//            Log.d(TAG, "Issue getting title / Message: " + e.getMessage());
-//        }
 
     }
 

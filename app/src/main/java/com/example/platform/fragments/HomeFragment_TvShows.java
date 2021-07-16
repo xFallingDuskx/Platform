@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -51,6 +52,7 @@ public class HomeFragment_TvShows extends Fragment {
     Set<Integer> savedTitles;
     TitlesAdapter adapter;
     ProgressBar progressBar;
+    TextView tvLoadingMessage;
 
     public HomeFragment_TvShows() {
         // Required empty public constructor
@@ -94,6 +96,7 @@ public class HomeFragment_TvShows extends Fragment {
         rvTitles.setLayoutManager(linearLayoutManager);
         rvTitles.setAdapter(adapter);
         progressBar = view.findViewById(R.id.pbHome_TV_Shows);
+        tvLoadingMessage = view.findViewById(R.id.tvLoadingMessage_TV_Shows);
 
         displayTitles();
     }
@@ -177,9 +180,11 @@ public class HomeFragment_TvShows extends Fragment {
 
     public void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
+        tvLoadingMessage.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
+        tvLoadingMessage.setVisibility(View.INVISIBLE);
     }
 }

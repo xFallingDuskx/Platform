@@ -14,7 +14,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/purple_200">
+        android:background="@color/black_light">
 
         <ImageView
             android:id="@+id/ivCover_Home"

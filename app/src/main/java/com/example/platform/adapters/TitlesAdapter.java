@@ -163,14 +163,6 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         intent.putExtra(Title.KEY_TYPE, title.getType());
                         intent.putExtra(Title.KEY_DESCRIPTION, title.getDescription());
                         intent.putExtra(Title.KEY_RELEASE_DATE, title.getReleaseDate());
-//                        Bundle bundle = new Bundle();
-//                        bundle.putSerializable(Title.KEY_TMDB_ID, title.getId());
-//                        bundle.putSerializable(Title.KEY_NAME, title.getName());
-//                        bundle.putSerializable(Title.KEY_COVER_PATH, title.getCoverPath());
-//                        bundle.putSerializable(Title.KEY_TYPE, title.getType());
-//                        bundle.putSerializable(Title.KEY_DESCRIPTION, title.getDescription());
-//                        bundle.putSerializable(Title.KEY_RELEASE_DATE, title.getReleaseDate());
-//                        intent.putExtras(bundle);
                         context.startActivity(intent);
                         Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
                     }

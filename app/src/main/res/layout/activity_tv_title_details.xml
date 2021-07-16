@@ -45,6 +45,7 @@
                     android:layout_above="@+id/tvRelease_Date_TV_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
+                    android:layout_marginBottom="2dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     android:text="Starring:"
@@ -58,6 +59,7 @@
                     android:layout_toRightOf="@+id/tvStarringText_TV_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="3dp"
+                    android:layout_marginBottom="2dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="Starring: Actor, Actor, ..." />
@@ -69,6 +71,7 @@
                     android:layout_above="@+id/tvAvailable_On_TV_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
+                    android:layout_marginBottom="20dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="12/10/2014" />
@@ -80,7 +83,8 @@
                     android:layout_above="@+id/tvAvailable_On_TV_Details"
                     android:layout_toRightOf="@+id/tvRelease_Date_TV_Details"
                     android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginBottom="20dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="Genre, Genre, ..." />

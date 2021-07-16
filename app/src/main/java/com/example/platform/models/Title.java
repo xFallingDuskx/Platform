@@ -130,6 +130,13 @@ public class Title extends ParseObject implements Serializable {
         return allTitleInformation;
     }
 
+    // Convert JSONObject into a List<String> contained additional Title information
+    public static List<String> getAdditionalTvInformation(JSONObject jsonObject) {
+        List<String> additionalInfo = new ArrayList<>();
+
+        return additionalInfo;
+    }
+
     // Getters and setters method for each key value
     public Integer getId() {
         Log.i(TAG, "Getting... Title: " + getName() + " / TMDB ID: " + parseObject.getInt(KEY_TMDB_ID) + " / Object ID: " + parseObject.getObjectId());

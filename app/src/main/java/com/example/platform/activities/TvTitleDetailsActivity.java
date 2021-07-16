@@ -10,17 +10,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
 import com.example.platform.models.Title;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Headers;
 
 public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
+    public String TV_SHOW_DETAILS_URL;
+    Context context;
 
     Integer titleTmdbID;
     String titleName;
@@ -28,7 +40,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     String titleType;
     String titleDescription;
     String titleReleaseDate;
-    Context context;
+    Integer numberOfSeasons;
+    Integer numberOfEpisodes;
+    String genres;
+    String networks;
 
     ImageView ivCover;
     TextView tvName;
@@ -74,19 +89,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
         // Get Title information
         getTitleInformation();
-
-        // Set Title information
-        setTitleInformation();
-
-//        try {
-//            getTitleObject();
-//        } catch (ParseException e) {
-//            Log.d(TAG, "Issue getting title / Message: " + e.getMessage());
-//        }
-
     }
 
     private void getTitleInformation() {
+        // First get information that was sent from previous activity
         Log.i(TAG, "Getting title information...");
         titleName = (String) getIntent().getStringExtra(Title.KEY_NAME);
         titleTmdbID = (Integer) getIntent().getIntExtra( Title.KEY_TMDB_ID, 0);
@@ -95,16 +101,77 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         titleDescription = (String) getIntent().getStringExtra(Title.KEY_DESCRIPTION);
         titleReleaseDate = (String) getIntent().getStringExtra(Title.KEY_RELEASE_DATE);
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in TV Details");
+
+        // Then get additional information from TMDB API
+        TV_SHOW_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+        Log.i(TAG, "Title Details URL: " + TV_SHOW_DETAILS_URL);
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(TV_SHOW_DETAILS_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess to getting additional title information");
+                JSONObject jsonObject = json.jsonObject;
+
+                try {
+                    numberOfSeasons = jsonObject.getInt("number_of_seasons");
+                    numberOfEpisodes = jsonObject.getInt("number_of_episodes");
+                    genres = "- " + getGenresFormatted(jsonObject.getJSONArray("genres"));
+                    networks = getNetworksFormatted(jsonObject.getJSONArray("networks"));
+
+                    // Now set Title information
+                    setTitleInformation();
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                }
+                Log.i(TAG, "Successful receive information / Title: " + titleName + " / Episodes: " + numberOfEpisodes + " / Seasons: " + numberOfSeasons + " / Genres: " + genres + " / Networks: " + networks);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to get additional title information / Response: " + response + " / Error: " + throwable);
+            }
+        });
+    }
+
+    private String getNetworksFormatted(JSONArray networks) throws JSONException {
+        StringBuilder formattedNetworks = new StringBuilder();
+
+        for (int i = 0; i < networks.length(); i++) {
+            JSONObject networkObject = networks.getJSONObject(i);
+            String network = networkObject.getString("name");
+            formattedNetworks.append(network);
+            if (i != networks.length() - 1) { // Custom version String.join method as SDK is too low for the actual method
+                formattedNetworks.append(", ");
+            }
+        }
+        return formattedNetworks.toString();
+    }
+
+    private String getGenresFormatted(JSONArray genres) throws JSONException {
+        StringBuilder formattedGenres = new StringBuilder();
+
+        for (int i = 0; i < genres.length(); i++) {
+            JSONObject genreObject = genres.getJSONObject(i);
+            String genre = genreObject.getString("name");
+            formattedGenres.append(genre);
+            if (i != genres.length() - 1) { // Custom version String.join method as SDK is too low for the actual method
+                formattedGenres.append(", ");
+            }
+        }
+        return formattedGenres.toString();
     }
 
     private void setTitleInformation() {
         tvName.setText(titleName);
         tvDescription.setText(titleDescription);
         tvStarring.setText("Actor, Actor, ..."); //todo
+        tvGenres.setText(genres);
         tvReleaseDate.setText(titleReleaseDate);
-        tvAvailableOn.setText("Provide, Provider, ..."); //todo
-        tvSeasons.setText("2"); //todo
-        tvEpisodes.setText("24"); //todo
+        tvAvailableOn.setText(networks); //todo
+        tvSeasons.setText(String.valueOf(numberOfSeasons)); //todo
+        tvEpisodes.setText(String.valueOf(numberOfEpisodes)); //todo
 
         Glide.with(context)
                 .load(titleCoverPath)
@@ -115,6 +182,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 .into(ivCover);
     }
 
+    // TODO: IS THIS NEEDED 4 LATER?
 //    private void getTitleObject() throws ParseException {
 //        titleTmdbID = (Integer) getIntent().getSerializableExtra(Title.class.getSimpleName());
 //        Log.i(TAG, "Title TMDB ID: " + titleTmdbID);
