@@ -19,6 +19,7 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
 import com.example.platform.adapters.TitlesAdapter;
 import com.example.platform.models.Title;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -110,8 +111,9 @@ public class HomeFragment_TvShows extends Fragment {
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results: " + results.toString());
                     List<Title> newTitles = Title.fromJsonArray(results);
+                    List<List<String>> newTitleInformation = Title.getStringFormattedData(newTitles); // Purpose of saving to Parse
+                    updateParseServer(newTitleInformation); // Purpose of saving to Parse
                     allTitles.addAll(Title.fromJsonArray(results));
-                    updateParseServer(newTitles);
                     adapter.notifyDataSetChanged();
                     Log.i(TAG, "Titles: " + allTitles.size());
                 } catch (JSONException e) {
@@ -133,42 +135,42 @@ public class HomeFragment_TvShows extends Fragment {
 
     // First check if Title already exist in the Parse Server
     // Requires making a query for Titles within the server that contain the same unique TMDB ID #
-    private void updateParseServer(List<Title> newTitles) throws ParseException {
+    private void updateParseServer(List<List<String>> newTitles) throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
 
-        for (Title title : newTitles) {
-            Integer titleID = title.getId();
-            query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
+        for (List<String> titleInfo : newTitles) {
+            Integer titleID = Integer.valueOf(titleInfo.get(0));
+            query.whereEqualTo(Title.KEY_TMDB_ID, titleID);
             if (query.count() == 0) {
                 savedTitles.add(titleID);
-                saveTitle(title);
+                saveTitle(titleInfo);
             }
         }
     }
 
     // Save Title in the Parse Server if it does not exist
-    private void saveTitle(Title title) {
+    private void saveTitle(List<String> titleInfo) {
         Title newTitle = new Title();
-        newTitle.put(Title.KEY_TMDB_ID, title.getId());
-        newTitle.put(Title.KEY_NAME, title.getName());
-        newTitle.put(Title.KEY_COVER_PATH, title.getPosterPath());
-        newTitle.put(Title.KEY_TYPE, title.getType());
-        newTitle.put(Title.KEY_DESCRIPTION, title.getDescription());
+        newTitle.put(Title.KEY_TMDB_ID, Integer.valueOf(titleInfo.get(0)));
+        newTitle.put(Title.KEY_NAME, titleInfo.get(1));
+        newTitle.put(Title.KEY_COVER_PATH, titleInfo.get(2));
+        newTitle.put(Title.KEY_TYPE, titleInfo.get(3));
+        newTitle.put(Title.KEY_DESCRIPTION, titleInfo.get(4));
         // TODO: Genres
         // TODO: Actors
-        newTitle.put(Title.KEY_RELEASE_DATE, title.getReleaseDate());
+        newTitle.put(Title.KEY_RELEASE_DATE, titleInfo.get(5));
         // TODO: Available on
-        newTitle.put(Title.KEY_LIKES, title.getLikes());
+        newTitle.put(Title.KEY_LIKES, 0);
         // TODO: Comments
-        newTitle.put(Title.KEY_SHARES, title.getShare());
+        newTitle.put(Title.KEY_SHARES, 0);
         // TODO: Seasons
         // TODO: Episodes
 
         newTitle.saveInBackground(e -> {
             if (e != null){
-                Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
+                Log.e(TAG, "Issue saving title / Title: " + titleInfo.get(1) + " / Message: " + e.getMessage());
             } else {
-                Log.i(TAG, "Success saving the title: " + title.getName());
+                Log.i(TAG, "Success saving the title: " + titleInfo.get(1));
             }
         });
     }

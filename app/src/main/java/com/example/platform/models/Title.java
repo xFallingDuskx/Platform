@@ -16,18 +16,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+//@Parcel (analyze = Title.class)
 @ParseClassName("Title")
-public class Title extends ParseObject {
+public class Title extends ParseObject implements Serializable {
 
     private static final String TAG = "Title";
 
@@ -39,6 +43,8 @@ public class Title extends ParseObject {
     String releaseDate;
     String type;
 
+    ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+    ParseObject parseObject;
 
     public static final String KEY_TMDB_ID = "tmdbID";
     public static final String KEY_NAME = "name";
@@ -70,20 +76,31 @@ public class Title extends ParseObject {
         }
 
         id = jsonObject.getInt("id");
-        Log.i(TAG, "Value of TMBD ID: " + id);
 
         // Check if Title is a Movie, TV Show, or Episode
         if (jsonObject.has("release_date")) { // Movie
             name = jsonObject.getString("title");
             releaseDate = jsonObject.getString("release_date");
+            releaseDate = convertDate(releaseDate);
             type = "Movie";
         } else if (jsonObject.has("first_air_date")) { // TV Show
             name = jsonObject.getString("name");
             releaseDate = jsonObject.getString("first_air_date");
+            releaseDate = convertDate(releaseDate);
             type = "TV Show";
         } else if (jsonObject.has("air_date")) { // Episode
             releaseDate = jsonObject.getString("air_date");
+            releaseDate = convertDate(releaseDate);
             type = "Episode";
+        }
+
+        // To read Parse object for data
+        ParseQuery<ParseObject> updateQuery = query.whereEqualTo(KEY_TMDB_ID, id);
+        try {
+            parseObject = updateQuery.getFirst();
+        } catch (ParseException e) {
+            Log.d(TAG, "Issue reading Parse Object");
+            e.printStackTrace();
         }
     }
 
@@ -91,54 +108,116 @@ public class Title extends ParseObject {
     public static List<Title> fromJsonArray(JSONArray titleJsonArray) throws JSONException {
         List<Title> titles = new ArrayList<>();
         for(int i = 0; i < titleJsonArray.length(); i++) {
-            titles.add(new Title(titleJsonArray.getJSONObject(i)));
+            Title title = new Title(titleJsonArray.getJSONObject(i));
+            titles.add(title);
         }
         return titles;
     }
 
-
-    // TODO: Assign a getter and setter method for each key value
-    public Integer getId() {return id;}
-
-    public String getObjectId() {
-        return getString("objectId");
+    // Convert JSONArray into List<Titles>
+    public static List<List<String>> getStringFormattedData(List<Title> newTitles) {
+        List<List<String>> allTitleInformation = new ArrayList<>();
+        for(Title title : newTitles) { // Add each piece of information of the Title in String format
+            List<String> titleInformation = new ArrayList<>();
+            titleInformation.add(String.valueOf(title.id)); // Index 0
+            titleInformation.add(title.name); // Index 1
+            titleInformation.add(title.posterPath); // Index 2
+            titleInformation.add(title.type); // Index 3
+            titleInformation.add(title.description); // Index 4
+            titleInformation.add(title.releaseDate); // Index 5
+            allTitleInformation.add(titleInformation); // Index 6
+        }
+        return allTitleInformation;
     }
 
-    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
+    // Getters and setters method for each key value
+    public Integer getId() {
+        Log.i(TAG, "Getting... Title: " + getName() + " / TMDB ID: " + parseObject.getInt(KEY_TMDB_ID) + " / Object ID: " + parseObject.getObjectId());
+        return parseObject.getInt(KEY_TMDB_ID);
+    }
 
-    public String getPosterPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);}
+    public void setId(Integer tmdbID) {
+        this.id = tmdbID;
+        this.put(KEY_TMDB_ID, tmdbID);
+    }
+
+//    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
+
+    public String getCoverPath() {
+        return parseObject.getString(KEY_COVER_PATH);
+    }
+
+    public void setCoverPath(String posterPath) {
+        Log.i(TAG, "Title: " + getName() + " /Coverpath: " + getCoverPath());
+        String toAdd = String.format("https://image.tmdb.org/t/p/w342/%s", posterPath);
+        this.put(KEY_COVER_PATH, toAdd);
+    }
 
     public String getName() {
-        return name;
+        return parseObject.getString(KEY_NAME);
+    }
+
+    public void setName(String name) {
+        this.put(KEY_NAME, name);
     }
 
     public String getDescription() {
-        return description;
+        return parseObject.getString(KEY_DESCRIPTION);
+    }
+
+    public void setDescription(String description) {
+        this.put(KEY_DESCRIPTION, description);
     }
 
     // Change date format from YYYY-DD-MM to DD/MM/YYYY
     public String getReleaseDate() {
-        String[] dateArray = releaseDate.split("-");
+        return parseObject.getString(KEY_RELEASE_DATE);
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.put(KEY_RELEASE_DATE, releaseDate);
+    }
+
+    public String convertDate(String currentForm) {
+        if (currentForm.isEmpty()) {
+            return "No Date Provided";
+        }
+        String[] dateArray = currentForm.split("-");
         List<String> dateList = new ArrayList<>(Arrays.asList(dateArray));
         String year = dateList.remove(0);
         dateList.add(year); // Move year of title to the end
-        String date = dateList.get(0) + "/" + dateList.get(1) + "/" + dateList.get(2);
-        return date;
+        Log.i(TAG, "The new form is: " + String.valueOf(dateList));
+        String newForm = dateList.get(0) + "/" + dateList.get(1) + "/" + dateList.get(2);
+        return newForm;
     }
 
-    public String getType() {return type;}
+    public String getType() {
+        return parseObject.getString(KEY_TYPE);
+    }
+
+    public void setType(String type) {
+        this.put(KEY_TYPE, type);
+    }
 
     public Integer getLikes() {
         Log.i(TAG, "Title: " + getName() + " / Likes: " + getInt(KEY_LIKES));
-        return getInt(KEY_LIKES);
+        return parseObject.getInt(KEY_LIKES);
     }
 
-    public Integer getShare() {return getInt(KEY_SHARES);}
+    public void setLikes() {
+        this.put(KEY_LIKES, 0);
+    }
 
-//    public String getType() {
-//        return getString(KEY_TYPE);
-//    }
+    public Integer getShare() {
+        Log.i(TAG, "Title: " + getName() + " / Shares: " + getInt(KEY_SHARES));
+        return parseObject.getInt(KEY_SHARES);
+    }
 
+    public void setShares() {
+        this.put(KEY_SHARES, 0);
+    }
+
+    // TODO: MAKE SURE TO DO BOTH GETTERS AND SETTERS
 //    public Array getGenres() {
 //        JSONArray genres = getJSONArray(KEY_GENRES);
 //        return;

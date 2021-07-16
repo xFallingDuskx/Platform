@@ -2,6 +2,8 @@ package com.example.platform.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,9 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import org.json.JSONException;
+import org.parceler.Parcels;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -151,20 +155,22 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         } else { // Movie type
                             intent = new Intent(context, MovieTitleDetailsActivity.class);
                         }
-                        intent.putExtra(Title.class.getSimpleName(), title.getId());
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(Title.class.getSimpleName(), title.getId());
+                        intent.putExtras(bundle);
                         context.startActivity(intent);
-                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
+                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
                     }
                 }
             });
         }
 
         public void bind(Title title) {
+            Log.i(TAG, "Binding for the title: " + title);
             tvName.setText(title.getName());
             tvDescription.setText(title.getDescription());
             //TODO: tvGenres.setText(title.getGenres);
             tvLikes.setText(String.valueOf(title.getLikes()));
-            Log.i(TAG, "The title " + title.getName() + " has " + title.getLikes() + " number of likes");
             tvComments.setText(String.valueOf(0));
             tvShares.setText(String.valueOf(title.getShare()));
 
@@ -172,7 +178,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             handleTitleData(title, ivLike);
 
             Glide.with(context)
-                    .load(title.getPosterPath())
+                    .load(title.getCoverPath())
                     //.placeholder(placeholder)
                     //.error(placeholder)
                     .centerCrop() // scale image to fill the entire ImageView

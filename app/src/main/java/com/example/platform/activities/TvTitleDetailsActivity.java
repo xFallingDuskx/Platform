@@ -67,6 +67,8 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
 
         // Get Title
+//        Title title = (Title) getIntent().getSerializableExtra(Title.class.getSimpleName());
+//        Log.i(TAG, "Title details for the title " + title + " and is this null? " + (title == null));
         try {
             getTitleObject();
         } catch (ParseException e) {
@@ -76,7 +78,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     private void getTitleObject() throws ParseException {
-        titleTmdbID = getIntent().getIntExtra(Title.class.getSimpleName(), 0);
+        titleTmdbID = (Integer) getIntent().getSerializableExtra(Title.class.getSimpleName());
         Log.i(TAG, "Title TMDB ID: " + titleTmdbID);
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
