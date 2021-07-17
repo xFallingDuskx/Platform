@@ -58,7 +58,7 @@ public class Title extends ParseObject implements Serializable {
     public static final String KEY_LIKES = "likes";
     public static final String KEY_COMMENTS = "comments";
     public static final String KEY_SHARES = "shares";
-    public static final String KEY_SEASONS = "seasons";
+    public static final String KEY_NUMBER_OF_SEASONS = "numberOfSeasons";
     public static final String KEY_NUMBER_OF_EPISODES = "numberOfEpisodes";
 
     // Default, empty constructor
@@ -102,6 +102,10 @@ public class Title extends ParseObject implements Serializable {
             Log.d(TAG, "Issue reading Parse Object");
             e.printStackTrace();
         }
+
+        if (parseObject == null) {
+            Log.d(TAG, "ParseObject is null /Title: " + name + " /TMDB ID: " + id);
+        }
     }
 
     // Convert JSONArray into List<Titles>
@@ -125,7 +129,7 @@ public class Title extends ParseObject implements Serializable {
             titleInformation.add(title.type); // Index 3
             titleInformation.add(title.description); // Index 4
             titleInformation.add(title.releaseDate); // Index 5
-            allTitleInformation.add(titleInformation); // Index 6
+            allTitleInformation.add(titleInformation);
         }
         return allTitleInformation;
     }

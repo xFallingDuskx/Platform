@@ -20,7 +20,7 @@
                 android:id="@+id/rlContainer_TV_Details"
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
-                android:background="@color/purple_200">
+                android:background="@color/black_light">
 
                 <ImageView
                     android:id="@+id/ivCover_TV_Details"
@@ -176,6 +176,7 @@
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="0dp"
                     android:layout_toRightOf="@+id/ivFollowingStatus_TV_Details"
@@ -301,6 +302,27 @@
                     android:textStyle="bold" />
 
             </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tvViewEpisodes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All Episodes"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_below="@+id/rlTopDisplay_TV_Details"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvEpisodesDisplay"
+                android:scrollbars="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvViewEpisodes"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/white"/>
 
         </RelativeLayout>
 

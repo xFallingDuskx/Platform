@@ -1,6 +1,8 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.graphics.Movie;
@@ -13,6 +15,9 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
+import com.example.platform.adapters.EpisodesAdapter;
+import com.example.platform.adapters.TitlesAdapter;
+import com.example.platform.models.Episode;
 import com.example.platform.models.Title;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -25,6 +30,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.Headers;
 
@@ -32,6 +38,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
     public String TV_SHOW_DETAILS_URL;
+    public String SEASON_DETAILS_URL;
+    public Integer seasonNumberAccessible;
+    public String EPISODE_DETAILS_URL;
     Context context;
 
     Integer titleTmdbID;
@@ -65,6 +74,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     TextView tvEpisodes;
     TextView tvEpisodesText;
 
+    RecyclerView rvEpisodesDisplay;
+    List<Episode> allEpisodes;
+    EpisodesAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +106,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
         // Get Title information
         getTitleInformation();
+
+        // Set up the Recycler View for episodes display
+        setEpisodeDisplay();
     }
 
     private void getTitleInformation() {
@@ -104,7 +120,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         titleType = (String) getIntent().getStringExtra(Title.KEY_TYPE);
         titleDescription = (String) getIntent().getStringExtra(Title.KEY_DESCRIPTION);
         titleReleaseDate = (String) getIntent().getStringExtra(Title.KEY_RELEASE_DATE);
-        Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in TV Details");
+        Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " and TMDB ID: " + titleTmdbID + " in TV Details");
 
         // Then get additional information from TMDB API
         TV_SHOW_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
@@ -125,11 +141,14 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
                     // Now set Title information
                     setTitleInformation();
+
+                    // Display Episodes in RecyclerView
+                    displayEpisodesInDisplay();
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
                     e.printStackTrace();
                 }
-                Log.i(TAG, "Successful receive information / Title: " + titleName + " / Episodes: " + numberOfEpisodes + " / Seasons: " + numberOfSeasons + " / Genres: " + genres + " / Networks: " + networks);
+                Log.i(TAG, "Successfully received additional information / Title: " + titleName + " / Episodes: " + numberOfEpisodes + " / Seasons: " + numberOfSeasons + " / Genres: " + genres + " / Networks: " + networks);
             }
 
             @Override
@@ -192,6 +211,90 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
     }
+
+    private void setEpisodeDisplay() {
+        rvEpisodesDisplay = findViewById(R.id.rvEpisodesDisplay);
+        allEpisodes = new ArrayList<>();
+        adapter = new EpisodesAdapter(context, allEpisodes);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        rvEpisodesDisplay.setLayoutManager(linearLayoutManager);
+        rvEpisodesDisplay.setAdapter(adapter);
+    }
+
+    private void displayEpisodesInDisplay() {
+        Log.i(TAG, "Title: " + titleName + "/Number of seasons: " + numberOfSeasons);
+        for(int seasonNumber = 1; seasonNumber <= numberOfSeasons; seasonNumber++) { // for each season in the title
+            SEASON_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "/season/" + seasonNumber + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+            Log.i(TAG, "Season Details URL: " + SEASON_DETAILS_URL);
+            AsyncHttpClient seasonClient = new AsyncHttpClient();
+            seasonNumberAccessible = seasonNumber; // seasonNumber cannot be accessed by inner for-loop so this is necessary
+
+            seasonClient.get(SEASON_DETAILS_URL, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    Log.d(TAG, "onSuccess to get season details");
+                    JSONObject seasonJsonObject = json.jsonObject;
+                    try {
+                        JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
+                        Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
+                        List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes);
+                        List<List<String>> newEpisodeInformation = Episode.getStringFormattedData(newEpisodes);
+                        updateParseServer(newEpisodeInformation); // Purpose of saving to Parse
+                        allEpisodes.addAll(newEpisodes);
+                        adapter.notifyDataSetChanged();
+                        Log.i(TAG, "Episodes: " + allEpisodes.size());
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                        e.printStackTrace();
+                    } catch (ParseException e) {
+                        Log.e(TAG, "Hit ParseException while attempting to updateParseServer / Message: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.d(TAG, "onFailure to get season / Response: " + response + " / Error: " + throwable);
+                }
+            });
+        }
+    }
+
+    // Check if Episode already exist in the Parse Server
+    // Requires making a query for Episodes within the server that contain the same unique TMDB ID #
+    private void updateParseServer(List<List<String>> newEpisodeInformation) throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Episode");
+
+        for (List<String> episodeInfo : newEpisodeInformation) {
+            Integer titleID = Integer.valueOf(episodeInfo.get(0));
+            query.whereEqualTo(Title.KEY_TMDB_ID, titleID);
+            if (query.count() == 0) {
+                saveEpisode(episodeInfo);
+            }
+        }
+    }
+
+    // Save Episode in the Parse Server if it does not exist
+    private void saveEpisode(List<String> episodeInfo) {
+        Episode newEpisode = new Episode();
+        newEpisode.setID(Integer.valueOf(episodeInfo.get(0)));
+        newEpisode.setName(episodeInfo.get(1));
+        newEpisode.setTitleName(titleName);
+        newEpisode.setStillPath(episodeInfo.get(2));
+        newEpisode.setSeasonNumber(Integer.valueOf(episodeInfo.get(3)));
+        newEpisode.setEpisodeNumber(Integer.valueOf(episodeInfo.get(4)));
+        newEpisode.setDescription(episodeInfo.get(5));
+        newEpisode.setReleaseDate(episodeInfo.get(6));
+
+        newEpisode.saveInBackground(e -> {
+            if (e != null){
+                Log.e(TAG, "Issue saving episode / Episode: " + episodeInfo.get(1) + " / Message: " + e.getMessage());
+            } else {
+                Log.i(TAG, "Success saving the episode: " + episodeInfo.get(1));
+            }
+        });
+    }
+
 
     // TODO: IS THIS NEEDED 4 LATER?
 //    private void getTitleObject() throws ParseException {

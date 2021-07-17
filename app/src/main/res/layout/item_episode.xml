@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="600dp"
+    android:background="@color/black_light"
+    android:paddingEnd="10dp">
+
+    <ImageView
+        android:id="@+id/ivEpisodeCover_TV_Show"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvEpisodeName_TV_Show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEpisodeCover_TV_Show"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        tools:text="Episode Title" />
+
+    <TextView
+        android:id="@+id/tvEpisodeSE_TV_Show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEpisodeCover_TV_Show"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/tvEpisodeName_TV_Show"
+        android:textColor="@color/white"
+        tools:text="- S1 E1" />
+
+    <TextView
+        android:id="@+id/tvEpisodeDetails_TV_Show"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEpisodeName_TV_Show"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        tools:text="Gimpose of episode overview" />
+</RelativeLayout>

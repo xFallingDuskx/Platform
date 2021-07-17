@@ -116,7 +116,7 @@ public class HomeFragment_TvShows extends Fragment {
                     List<Title> newTitles = Title.fromJsonArray(results);
                     List<List<String>> newTitleInformation = Title.getStringFormattedData(newTitles); // Purpose of saving to Parse
                     updateParseServer(newTitleInformation); // Purpose of saving to Parse
-                    allTitles.addAll(Title.fromJsonArray(results));
+                    allTitles.addAll(newTitles);
                     adapter.notifyDataSetChanged();
                     Log.i(TAG, "Titles: " + allTitles.size());
                 } catch (JSONException e) {
@@ -154,20 +154,14 @@ public class HomeFragment_TvShows extends Fragment {
     // Save Title in the Parse Server if it does not exist
     private void saveTitle(List<String> titleInfo) {
         Title newTitle = new Title();
-        newTitle.put(Title.KEY_TMDB_ID, Integer.valueOf(titleInfo.get(0)));
-        newTitle.put(Title.KEY_NAME, titleInfo.get(1));
-        newTitle.put(Title.KEY_COVER_PATH, titleInfo.get(2));
-        newTitle.put(Title.KEY_TYPE, titleInfo.get(3));
-        newTitle.put(Title.KEY_DESCRIPTION, titleInfo.get(4));
-        // TODO: Genres
-        // TODO: Actors
-        newTitle.put(Title.KEY_RELEASE_DATE, titleInfo.get(5));
-        // TODO: Available on
-        newTitle.put(Title.KEY_LIKES, 0);
-        // TODO: Comments
-        newTitle.put(Title.KEY_SHARES, 0);
-        // TODO: Seasons
-        // TODO: Episodes
+        newTitle.setId(Integer.valueOf(titleInfo.get(0)));
+        newTitle.setName(titleInfo.get(1));
+        newTitle.setCoverPath(titleInfo.get(2));
+        newTitle.setType(titleInfo.get(3));
+        newTitle.setDescription(titleInfo.get(4));
+        newTitle.setReleaseDate(titleInfo.get(5));
+        newTitle.setLikes();
+        newTitle.setShares();
 
         newTitle.saveInBackground(e -> {
             if (e != null){

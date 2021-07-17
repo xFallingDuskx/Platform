@@ -70,7 +70,6 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-
         public ImageView ivCover;
         public TextView tvName;
         public TextView tvDescription;
