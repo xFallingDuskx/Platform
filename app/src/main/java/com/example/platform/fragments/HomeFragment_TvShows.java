@@ -49,7 +49,6 @@ public class HomeFragment_TvShows extends Fragment {
 
     RecyclerView rvTitles;
     List<Title> allTitles;
-    Set<Integer> savedTitles;
     TitlesAdapter adapter;
     ProgressBar progressBar;
     TextView tvLoadingMessage;
@@ -90,7 +89,6 @@ public class HomeFragment_TvShows extends Fragment {
 
         rvTitles = view.findViewById(R.id.rvTitles_TV_Shows);
         allTitles = new ArrayList<>();
-        savedTitles = new HashSet<>();
         adapter = new TitlesAdapter(getContext(), allTitles);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTitles.setLayoutManager(linearLayoutManager);
@@ -114,8 +112,7 @@ public class HomeFragment_TvShows extends Fragment {
                     JSONArray results = jsonObject.getJSONArray("results");
                     Log.i(TAG, "Results: " + results.toString());
                     List<Title> newTitles = Title.fromJsonArray(results);
-                    List<List<String>> newTitleInformation = Title.getStringFormattedData(newTitles); // Purpose of saving to Parse
-                    updateParseServer(newTitleInformation); // Purpose of saving to Parse
+                    updateParseServer(newTitles);
                     allTitles.addAll(newTitles);
                     adapter.notifyDataSetChanged();
                     Log.i(TAG, "Titles: " + allTitles.size());
@@ -123,7 +120,7 @@ public class HomeFragment_TvShows extends Fragment {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
                     e.printStackTrace();
                 } catch (ParseException e) {
-                    Log.e(TAG, "Hit ParseException while attempting to updateParseServer / Message: " + e.getMessage());
+                    Log.e(TAG, "Issue updating Parse Server");
                     e.printStackTrace();
                 }
                 hideProgressBar(); // Make progressBar invisible
@@ -138,38 +135,41 @@ public class HomeFragment_TvShows extends Fragment {
 
     // First check if Title already exist in the Parse Server
     // Requires making a query for Titles within the server that contain the same unique TMDB ID #
-    private void updateParseServer(List<List<String>> newTitles) throws ParseException {
+    private void updateParseServer(List<Title> newTitles) throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
 
-        for (List<String> titleInfo : newTitles) {
-            Integer titleID = Integer.valueOf(titleInfo.get(0));
-            query.whereEqualTo(Title.KEY_TMDB_ID, titleID);
+        for (Title title : newTitles) {
+            query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
             if (query.count() == 0) {
-                savedTitles.add(titleID);
-                saveTitle(titleInfo);
+                saveTitle(title);
             }
         }
     }
 
     // Save Title in the Parse Server if it does not exist
-    private void saveTitle(List<String> titleInfo) {
-        Title newTitle = new Title();
-        newTitle.setId(Integer.valueOf(titleInfo.get(0)));
-        newTitle.setName(titleInfo.get(1));
-        newTitle.setCoverPath(titleInfo.get(2));
-        newTitle.setType(titleInfo.get(3));
-        newTitle.setDescription(titleInfo.get(4));
-        newTitle.setReleaseDate(titleInfo.get(5));
-        newTitle.setLikes();
-        newTitle.setShares();
+    private void saveTitle(Title title) {
+        title.setId(title.getId());
+//        title.setLikes(0);
+//        title.setShares(0);
 
-        newTitle.saveInBackground(e -> {
+        title.saveInBackground(e -> {
             if (e != null){
-                Log.e(TAG, "Issue saving title / Title: " + titleInfo.get(1) + " / Message: " + e.getMessage());
+                Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
-                Log.i(TAG, "Success saving the title: " + titleInfo.get(1));
+                Log.i(TAG, "Success saving the title: " + title.getName());
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+                ParseQuery<ParseObject> updateQuery = query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
+                try {
+                    ParseObject parseObject = updateQuery.getFirst();
+                    title.setLikes(3);
+                    title.setParseObject(parseObject);
+                    adapter.notifyDataSetChanged();
+                } catch (ParseException parseException) {
+                    parseException.printStackTrace();
+                }
             }
         });
+
     }
 
     public void showProgressBar() {

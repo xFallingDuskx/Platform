@@ -87,16 +87,16 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     private void getTitleInformation() {
         // First get information that was sent from previous activity
         Log.i(TAG, "Getting title information...");
-        titleName = (String) getIntent().getStringExtra(Title.KEY_NAME);
-        titleTmdbID = (Integer) getIntent().getIntExtra( Title.KEY_TMDB_ID, 0);
-        titleCoverPath = (String) getIntent().getStringExtra(Title.KEY_COVER_PATH);
-        titleType = (String) getIntent().getStringExtra(Title.KEY_TYPE);
-        titleDescription = (String) getIntent().getStringExtra(Title.KEY_DESCRIPTION);
-        titleReleaseDate = (String) getIntent().getStringExtra(Title.KEY_RELEASE_DATE);
+        titleName = (String) getIntent().getStringExtra("name");
+        titleTmdbID = (Integer) getIntent().getIntExtra("id", 0);
+        titleCoverPath = (String) getIntent().getStringExtra("posterPath");
+        titleType = (String) getIntent().getStringExtra("type");
+        titleDescription = (String) getIntent().getStringExtra("description");
+        titleReleaseDate = (String) getIntent().getStringExtra("releaseDate");
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in TV Details");
 
         // Then get additional information from TMDB API
-        Movie_DETAILS_URL = "https://api.themoviedb.org/3/movie/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+        Movie_DETAILS_URL = "https://api.themoviedb.org/3/movie/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar";
         Log.i(TAG, "Movie Details URL: " + Movie_DETAILS_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 

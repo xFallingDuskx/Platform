@@ -156,12 +156,12 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                             Log.i(TAG, "Type is: " + title.getType() + " for Movies");
                             intent = new Intent(context, MovieTitleDetailsActivity.class);
                         }
-                        intent.putExtra(Title.KEY_TMDB_ID, title.getId());
-                        intent.putExtra(Title.KEY_NAME, title.getName());
-                        intent.putExtra(Title.KEY_COVER_PATH, title.getCoverPath());
-                        intent.putExtra(Title.KEY_TYPE, title.getType());
-                        intent.putExtra(Title.KEY_DESCRIPTION, title.getDescription());
-                        intent.putExtra(Title.KEY_RELEASE_DATE, title.getReleaseDate());
+                        intent.putExtra("id", title.getId());
+                        intent.putExtra("name", title.getName());
+                        intent.putExtra("posterPath", title.getPosterPath());
+                        intent.putExtra("type", title.getType());
+                        intent.putExtra("description", title.getDescription());
+                        intent.putExtra("releaseDate", title.getReleaseDate());
                         context.startActivity(intent);
                         Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
                     }
@@ -182,7 +182,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             handleTitleData(title, ivLike);
 
             Glide.with(context)
-                    .load(title.getCoverPath())
+                    .load(title.getPosterPath())
                     //.placeholder(placeholder)
                     //.error(placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
