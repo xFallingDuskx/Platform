@@ -136,10 +136,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     genres = "- " + getGenresFormatted(jsonObject.getJSONArray("genres"));
                     networks = getNetworksFormatted(jsonObject.getJSONArray("networks"));
                     similarTitles = Title.fromJsonArray(jsonObject.getJSONObject("similar").getJSONArray("results"));
-                    Log.i(TAG, "The similar titles for " + titleName + " are: ");
-                    for (Title title : similarTitles) {
-                        Log.i(TAG, title.getName());
-                    }
 
                     // Now set Title information
                     setTitleInformation();
@@ -268,10 +264,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     public void displaySimilarTitlesInDisplay() {
         rvSimilarTitlesDisplay = findViewById(R.id.rvSimilarTitlesDisplay_TV);
         titlesAdapter = new SimilarTitlesAdapter(context, similarTitles);
-        Log.i(TAG, "The titles being sent to the adapter are: ");
-        for (Title title : similarTitles) {
-            Log.i(TAG, title.getName());
-        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rvSimilarTitlesDisplay.setLayoutManager(linearLayoutManager);
         rvSimilarTitlesDisplay.setAdapter(titlesAdapter);

@@ -250,6 +250,40 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/tvViewSimilarMovies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Similar Movies"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_below="@+id/rlTopDisplay_Movie_Details"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSimilarTitlesDisplay_Movie"
+                android:scrollbars="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvViewSimilarMovies"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@color/white"/>
+
+            <TextView
+                android:id="@+id/tvCommentsText_Movie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rvSimilarTitlesDisplay_Movie"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/comment_section_header"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
         </RelativeLayout>
 
     </ScrollView>

@@ -1,6 +1,9 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
+import com.example.platform.adapters.SimilarTitlesAdapter;
 import com.example.platform.models.Title;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -20,6 +24,8 @@ import com.parse.ParseQuery;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import okhttp3.Headers;
 
@@ -54,6 +60,10 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     TextView tvComment;
     TextView tvRuntime;
 
+    RecyclerView rvSimilarTitlesDisplay;
+    List<Title> similarTitles;
+    SimilarTitlesAdapter titlesAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,10 +88,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
         // Get Title information
         getTitleInformation();
-
-        // Set Title information
-        setTitleInformation();
-
     }
 
     private void getTitleInformation() {
@@ -109,8 +115,12 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 try {
                     runtime = getRuntimeFormatted(jsonObject.getInt("runtime"));
                     genres = "- " + getGenresFormatted(jsonObject.getJSONArray("genres"));
+                    similarTitles = Title.fromJsonArray(jsonObject.getJSONObject("similar").getJSONArray("results"));
                     // Now set Title information
                     setTitleInformation();
+
+                    // Display similar Titles in RecyclerView
+                    displaySimilarTitlesInDisplay();
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
                     e.printStackTrace();
@@ -175,5 +185,13 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 .centerCrop() // scale image to fill the entire ImageView
                 //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
+    }
+
+    public void displaySimilarTitlesInDisplay() {
+        rvSimilarTitlesDisplay = findViewById(R.id.rvSimilarTitlesDisplay_Movie);
+        titlesAdapter = new SimilarTitlesAdapter(context, similarTitles);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false);
+        rvSimilarTitlesDisplay.setLayoutManager(gridLayoutManager);
+        rvSimilarTitlesDisplay.setAdapter(titlesAdapter);
     }
 }
