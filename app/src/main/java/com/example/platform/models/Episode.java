@@ -49,15 +49,20 @@ public class Episode extends ParseObject {
         id = jsonObject.getInt("id");
         seasonNumber = jsonObject.getInt("season_number");
         episodeNumber = jsonObject.getInt("episode_number");
-        description = jsonObject.getString("overview");
         releaseDate = convertDate(jsonObject.getString("air_date"));
+
+        // In case there is no description for a title
+        description = jsonObject.getString("overview");
+        if (description.isEmpty()) {
+            description = "Sorry! There is no description available!";
+        }
 
         // To read Parse object for data
         ParseQuery<ParseObject> updateQuery = query.whereEqualTo(KEY_TMDB_ID, id);
         try {
             parseObject = updateQuery.getFirst();
         } catch (ParseException e) {
-            Log.d(TAG, "Issue reading Parse Object");
+            Log.d(TAG, "Issue reading Parse Object / Title: " + name + " / TMDB ID: " + id);
             e.printStackTrace();
         }
     }
@@ -68,6 +73,9 @@ public class Episode extends ParseObject {
         for(int i = 0; i < episodeJsonArray.length(); i++) {
             Episode episode = new Episode(episodeJsonArray.getJSONObject(i));
             episodes.add(episode);
+            if (i == 5) { // TODO: handle episode breaks and add endless scrolling
+                return episodes;
+            }
         }
         return episodes;
     }
@@ -97,7 +105,6 @@ public class Episode extends ParseObject {
         List<String> dateList = new ArrayList<>(Arrays.asList(dateArray));
         String year = dateList.remove(0);
         dateList.add(year); // Move year of title to the end
-        Log.i(TAG, "The new form is: " + String.valueOf(dateList));
         String newForm = dateList.get(0) + "/" + dateList.get(1) + "/" + dateList.get(2);
         return newForm;
     }
@@ -105,7 +112,7 @@ public class Episode extends ParseObject {
     // Getters and setters
 
     public String getStillPath() {
-        return parseObject.getString(KEY_STILL_PATH);
+        return stillPath;
     }
 
     public void setStillPath(String stillPath) {
@@ -113,7 +120,7 @@ public class Episode extends ParseObject {
     }
 
     public String getName() {
-        return parseObject.getString(KEY_NAME);
+        return name;
     }
 
     public void setName(String name) {
@@ -129,7 +136,7 @@ public class Episode extends ParseObject {
     }
 
     public Integer getId() {
-        return parseObject.getInt(KEY_TMDB_ID);
+        return id;
     }
 
     public void setID(Integer id) {
@@ -137,7 +144,7 @@ public class Episode extends ParseObject {
     }
 
     public Integer getSeasonNumber() {
-        return parseObject.getInt(KEY_SEASON_NUMBER);
+        return seasonNumber;
     }
 
     public void setSeasonNumber(Integer seasonNumber) {
@@ -145,7 +152,7 @@ public class Episode extends ParseObject {
     }
 
     public Integer getEpisodeNumber() {
-        return parseObject.getInt(KEY_EPISODE_NUMBER);
+        return episodeNumber;
     }
 
     public void setEpisodeNumber(Integer episodeNumber) {
@@ -153,7 +160,7 @@ public class Episode extends ParseObject {
     }
 
     public String getDescription() {
-        return parseObject.getString(KEY_DESCRIPTION);
+        return description;
     }
 
     public void setDescription(String description) {
@@ -161,7 +168,7 @@ public class Episode extends ParseObject {
     }
 
     public String getReleaseDate() {
-        return parseObject.getString(KEY_RELEASE_DATE);
+        return releaseDate;
     }
 
     public void setReleaseDate(String releaseDate) {

@@ -40,7 +40,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     public String TV_SHOW_DETAILS_URL;
     public String SEASON_DETAILS_URL;
     public Integer seasonNumberAccessible;
-    public String EPISODE_DETAILS_URL;
+    Integer episodeBreak = 5; // number of episodes to load at once
     Context context;
 
     Integer titleTmdbID;
@@ -237,7 +237,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     try {
                         JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
                         Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
-                        List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes);
+                        List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes); // TODO: only first 5 episodes are returned for now
                         List<List<String>> newEpisodeInformation = Episode.getStringFormattedData(newEpisodes);
                         updateParseServer(newEpisodeInformation); // Purpose of saving to Parse
                         allEpisodes.addAll(newEpisodes);

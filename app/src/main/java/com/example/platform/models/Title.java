@@ -143,8 +143,7 @@ public class Title extends ParseObject implements Serializable {
 
     // Getters and setters method for each key value
     public Integer getId() {
-        Log.i(TAG, "Getting... Title: " + getName() + " / TMDB ID: " + parseObject.getInt(KEY_TMDB_ID) + " / Object ID: " + parseObject.getObjectId());
-        return parseObject.getInt(KEY_TMDB_ID);
+        return id;
     }
 
     public void setId(Integer tmdbID) {
@@ -155,7 +154,7 @@ public class Title extends ParseObject implements Serializable {
 //    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
 
     public String getCoverPath() {
-        return parseObject.getString(KEY_COVER_PATH);
+        return posterPath;
     }
 
     public void setCoverPath(String posterPath) {
@@ -163,7 +162,7 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public String getName() {
-        return parseObject.getString(KEY_NAME);
+        return name;
     }
 
     public void setName(String name) {
@@ -171,7 +170,7 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public String getDescription() {
-        return parseObject.getString(KEY_DESCRIPTION);
+        return description;
     }
 
     public void setDescription(String description) {
@@ -180,7 +179,7 @@ public class Title extends ParseObject implements Serializable {
 
     // Change date format from YYYY-DD-MM to DD/MM/YYYY
     public String getReleaseDate() {
-        return parseObject.getString(KEY_RELEASE_DATE);
+        return releaseDate;
     }
 
     public void setReleaseDate(String releaseDate) {
@@ -201,7 +200,7 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public String getType() {
-        return parseObject.getString(KEY_TYPE);
+        return type;
     }
 
     public void setType(String type) {
