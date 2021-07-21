@@ -32,8 +32,7 @@ public class Title extends ParseObject implements Serializable {
     public static final String KEY_SHARES = "shares";
 
     // Default, empty constructor
-    public Title() {
-    }
+    public Title() {}
 
     public Title(JSONObject jsonObject) throws JSONException{
         backdropPath = String.format("https://image.tmdb.org/t/p/w342/%s", jsonObject.getString("backdrop_path"));
@@ -69,6 +68,12 @@ public class Title extends ParseObject implements Serializable {
     public static List<Title> fromJsonArray(JSONArray titleJsonArray) throws JSONException {
         List<Title> titles = new ArrayList<>();
         for(int i = 0; i < titleJsonArray.length(); i++) {
+            JSONObject jsonObject = titleJsonArray.getJSONObject(i);
+            if (jsonObject.has("media_type")) { // ignore Person media types when searching for Titles to only get TV Shows and Movies
+                if (jsonObject.getString("media_type").equals("person")) {
+                    continue;
+                }
+            }
             Title title = new Title(titleJsonArray.getJSONObject(i));
             titles.add(title);
         }

@@ -222,6 +222,10 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
     // Formatted the actors (credits) JSON data into a String to be displayed in the app
     private String getActorsFormatted(JSONArray actors) throws JSONException {
+        if (actors.isNull(0)) { // If there is no cast information for the title
+            return "No cast available";
+        }
+
         StringBuilder formattedActors = new StringBuilder();
 
         for (int i = 0; i < 3; i++) {

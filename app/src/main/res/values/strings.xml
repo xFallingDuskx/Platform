@@ -18,4 +18,6 @@
     <string name="episode_number">episode_number</string>
 
     <string name="comment_section_header"><u>Comments</u></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

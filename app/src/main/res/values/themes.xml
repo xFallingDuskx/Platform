@@ -11,11 +11,13 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <!--This line changes the color of icons in toolbar (back, overflow menu icons)-->
+        <item name="android:textColorSecondary">@color/white</item>
+
     </style>
 
     <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabBackground">@color/black</item>
+        <item name="tabBackground">@color/black_light</item>
         <item name="tabIndicatorColor">@color/white</item>
         <item name="tabTextColor">@color/white</item>
     </style>

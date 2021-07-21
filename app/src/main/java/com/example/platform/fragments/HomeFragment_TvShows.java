@@ -169,7 +169,6 @@ public class HomeFragment_TvShows extends Fragment {
                 }
             }
         });
-
     }
 
     public void showProgressBar() {

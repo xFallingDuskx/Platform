@@ -160,7 +160,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     // Display similar Titles in RecyclerView
                     displaySimilarTitlesInDisplay();
                 } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    Log.e(TAG, "Hit json exception for TV show details" + " Exception: " + e);
                     e.printStackTrace();
                 } catch (ParseException e) {
                     Log.i(TAG, "Issue saving similar TV Show titles to parse server");
@@ -247,6 +247,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
     // Formatted the actors (credits) JSON data into a String to be displayed in the app
     private String getActorsFormatted(JSONArray actors) throws JSONException {
+        if (actors.isNull(0)) { // If there is no cast information for the title
+            return "No cast available";
+        }
+
         StringBuilder formattedActors = new StringBuilder();
 
         for (int i = 0; i < 3; i++) {
@@ -322,7 +326,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                         Log.i(TAG, "Episodes: " + allEpisodes.size());
                     } catch (JSONException e) {
-                        Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                        Log.e(TAG, "Hit json exception for season details" + " Exception: " + e);
                         e.printStackTrace();
                     } catch (ParseException e) {
                         Log.i(TAG, "Issue saving Episode to parse server");
