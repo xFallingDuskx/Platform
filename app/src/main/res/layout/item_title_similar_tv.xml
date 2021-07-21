@@ -10,7 +10,9 @@
     <ImageView
         android:id="@+id/ivTitleCover_Similar_TV"
         android:layout_width="342dp"
-        android:layout_height="wrap_content"
+        android:layout_height="185dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         tools:srcCompat="@tools:sample/avatars" />

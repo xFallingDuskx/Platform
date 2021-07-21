@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.platform.R;
 import com.example.platform.activities.MovieTitleDetailsActivity;
 import com.example.platform.activities.TvTitleDetailsActivity;
