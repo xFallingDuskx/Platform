@@ -133,7 +133,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
                     // Display similar Titles in RecyclerView
                     displaySimilarTitlesInDisplay();
-                    hideProgressBar();
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
                     e.printStackTrace();
@@ -252,6 +251,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 .centerCrop() // scale image to fill the entire ImageView
                 //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
+        hideProgressBar();
     }
 
     public void displaySimilarTitlesInDisplay() {

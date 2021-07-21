@@ -1,6 +1,7 @@
 package com.example.platform.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.platform.R;
+import com.example.platform.activities.EpisodeDetailsActivity;
 import com.example.platform.models.Episode;
 import com.example.platform.models.Title;
 import com.example.platform.models.User;
@@ -72,6 +74,25 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
             tvEpisodeName = itemView.findViewById(R.id.tvEpisodeName_TV_Show);
             tvSeasonAndEpisode = itemView.findViewById(R.id.tvEpisodeSE_TV_Show);
             tvEpisodeDetails = itemView.findViewById(R.id.tvEpisodeDetails_TV_Show);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Episode episode = episodes.get(position);
+                        Intent intent = new Intent(context, EpisodeDetailsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("cover", episode.getStillPath());
+                        intent.putExtra("name", episode.getName());
+                        intent.putExtra("description", episode.getDescription());
+                        intent.putExtra("releaseDate", episode.getReleaseDate());
+                        intent.putExtra("id", episode.getId());
+                        context.startActivity(intent);
+                        Log.i(TAG, "Opening EpisodeDetailsActivity w/ episode: " + episode + " name: " + episode.getName() + " and TMDB ID: " + episode.getId() + " at position: " + position + " within the list: " + episodes.toString());
+                    }
+                }
+            });
         }
 
         public void bind(Episode episode) {
