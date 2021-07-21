@@ -152,4 +152,12 @@ public class Episode extends ParseObject {
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+    public void setParseObject(ParseObject parseObject) {
+        this.parseObject = parseObject;
+    }
+
+    public ParseObject getParseObject() {
+        return parseObject;
+    }
 }

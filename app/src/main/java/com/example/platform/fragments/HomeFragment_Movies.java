@@ -44,7 +44,7 @@ import okhttp3.Headers;
 public class HomeFragment_Movies extends Fragment {
 
     public static final String TAG = "HomeFragment_Movies";
-    public String POPULAR_MOVIES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2b0127db9175584999a612837ae77b1";
+    public String TRENDING_MOVIES_URL = "https://api.themoviedb.org/3/trending/movie/day?api_key=e2b0127db9175584999a612837ae77b1";
 
     RecyclerView rvTitles;
     List<Title> allTitles;
@@ -102,7 +102,7 @@ public class HomeFragment_Movies extends Fragment {
         showProgressBar(); // Make progressBar visible
         AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get(POPULAR_MOVIES_URL, new JsonHttpResponseHandler() {
+        client.get(TRENDING_MOVIES_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "onSuccess to display titles");
@@ -148,8 +148,8 @@ public class HomeFragment_Movies extends Fragment {
     // Save Title in the Parse Server if it does not exist
     private void saveTitle(Title title) {
         title.setId(title.getId());
-//        title.setLikes(0);
-//        title.setShares(0);
+        title.setLikes(0);
+        title.setShares(0);
 
         title.saveInBackground(e -> {
             if (e != null){

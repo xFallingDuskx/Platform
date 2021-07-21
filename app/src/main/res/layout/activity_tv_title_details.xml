@@ -123,7 +123,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="40dp"
+                    android:layout_marginBottom="30dp"
+                    android:ellipsize="end"
+                    android:maxLines="5"
+                    android:minLines="3"
                     android:scrollHorizontally="true"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -141,6 +144,15 @@
                     android:textSize="36sp"
                     android:textStyle="bold"
                     tools:text="Name of Title" />
+
+                <ProgressBar
+                    android:id="@+id/pbDetails_TV"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvName_TV_Details"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="-30dp"/>
 
             </RelativeLayout>
 
@@ -259,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="50sp"
+                    android:textSize="44sp"
                     android:textStyle="bold"
                     tools:text="2" />
 
@@ -272,24 +284,24 @@
                     android:gravity="center"
                     android:text="seasons"
                     android:textColor="@color/white"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvEpisodes_TV_Details"
-                    android:layout_width="100dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_toRightOf="@+id/tvSeasons_TV_Details"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="50sp"
+                    android:textSize="44sp"
                     android:textStyle="bold"
                     tools:text="24" />
 
                 <TextView
                     android:id="@+id/tvEpisodesText_TV_Details"
-                    android:layout_width="100dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvEpisodes_TV_Details"
                     android:layout_marginStart="30dp"
@@ -298,7 +310,7 @@
                     android:gravity="center"
                     android:text="episodes"
                     android:textColor="@color/white"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>

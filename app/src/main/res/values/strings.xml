@@ -1,6 +1,21 @@
 <resources>
     <string name="app_name">Platform</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="backdrop_path">backdrop_path</string>
+    <string name="poster_path">poster_path</string>
+    <string name="description">overview</string>
+    <string name="description_unavailable">Sorry! No overview is available for the title.</string>
+    <string name="id">id</string>
+    <string name="movie_name">title</string>
+    <string name="tv_name">name</string>
+    <string name="movie_release_date">release_date</string>
+    <string name="tv_release_date">first_air_date</string>
+    <string name="episode_release_date">air_date</string>
+    <string name="movie_type">Movie</string>
+    <string name="tv_type">TV Show</string>
+    <string name="episode_type">Episode</string>
+    <string name="still_path">still_path</string>
+    <string name="season_number">season_number</string>
+    <string name="episode_number">episode_number</string>
+
     <string name="comment_section_header"><u>Comments</u></string>
 </resources>

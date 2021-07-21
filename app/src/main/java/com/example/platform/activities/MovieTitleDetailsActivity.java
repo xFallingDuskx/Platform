@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -34,6 +37,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     private static final String TAG = "MovieTitleDetailsActivity";
     public String Movie_DETAILS_URL;
     Context context;
+    Intent intent;
 
     Integer titleTmdbID;
     String titleName;
@@ -43,6 +47,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     String titleReleaseDate;
     String runtime;
     String genres;
+    String actors;
 
     ImageView ivCover;
     TextView tvName;
@@ -59,6 +64,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     ImageView ivComment;
     TextView tvComment;
     TextView tvRuntime;
+    ProgressBar progressBar;
 
     RecyclerView rvSimilarTitlesDisplay;
     List<Title> similarTitles;
@@ -69,6 +75,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_title_details);
         context = getApplicationContext();
+        intent = getIntent();
 
         ivCover = findViewById(R.id.ivCover_Movie_Details);
         tvName = findViewById(R.id.tvName_Movie_Details);
@@ -85,24 +92,26 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment_Movie_Details);
         tvComment = findViewById(R.id.tvCommentText_Movie_Details);
         tvRuntime = findViewById(R.id.tvRuntime_Movie_Details);
+        progressBar = findViewById(R.id.pbDetails_Movie);
 
         // Get Title information
         getTitleInformation();
     }
 
     private void getTitleInformation() {
+        showProgressBar();
         // First get information that was sent from previous activity
         Log.i(TAG, "Getting title information...");
-        titleName = (String) getIntent().getStringExtra("name");
-        titleTmdbID = (Integer) getIntent().getIntExtra("id", 0);
-        titleCoverPath = (String) getIntent().getStringExtra("posterPath");
-        titleType = (String) getIntent().getStringExtra("type");
-        titleDescription = (String) getIntent().getStringExtra("description");
-        titleReleaseDate = (String) getIntent().getStringExtra("releaseDate");
+        titleName = (String) intent.getStringExtra("name");
+        titleTmdbID = (Integer) intent.getIntExtra("id", 0);
+        titleCoverPath = (String) intent.getStringExtra("posterPath");
+        titleType = (String) intent.getStringExtra("type");
+        titleDescription = (String) intent.getStringExtra("description");
+        titleReleaseDate = (String) intent.getStringExtra("releaseDate");
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in TV Details");
 
         // Then get additional information from TMDB API
-        Movie_DETAILS_URL = "https://api.themoviedb.org/3/movie/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar";
+        Movie_DETAILS_URL = "https://api.themoviedb.org/3/movie/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar,credits";
         Log.i(TAG, "Movie Details URL: " + Movie_DETAILS_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -116,13 +125,20 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     runtime = getRuntimeFormatted(jsonObject.getInt("runtime"));
                     genres = "- " + getGenresFormatted(jsonObject.getJSONArray("genres"));
                     similarTitles = Title.fromJsonArray(jsonObject.getJSONObject("similar").getJSONArray("results"));
+                    actors = getActorsFormatted(jsonObject.getJSONObject("credits").getJSONArray("cast"));
+                    updateParseServer(similarTitles);
+
                     // Now set Title information
                     setTitleInformation();
 
                     // Display similar Titles in RecyclerView
                     displaySimilarTitlesInDisplay();
+                    hideProgressBar();
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.i(TAG, "Issue saving similar Movie titles to parse server");
                     e.printStackTrace();
                 }
                 Log.i(TAG, "Successful receive information / Title: " + titleName + " / Runtime: " + runtime  + " / Genres: " + genres);
@@ -131,6 +147,42 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.d(TAG, "onFailure to get additional title information / Response: " + response + " / Error: " + throwable);
+            }
+        });
+    }
+
+    // First check if Title already exist in the Parse Server
+    // Requires making a query for Titles within the server that contain the same unique TMDB ID #
+    private void updateParseServer(List<Title> newTitles) throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+
+        for (Title title : newTitles) {
+            query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
+            if (query.count() == 0) {
+                saveTitle(title);
+            }
+        }
+    }
+
+    // Save Title in the Parse Server if it does not exist
+    private void saveTitle(Title title) {
+        title.setId(title.getId());
+//        title.setLikes(0);
+//        title.setShares(0);
+
+        title.saveInBackground(e -> {
+            if (e != null){
+                Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
+            } else {
+                Log.i(TAG, "Success saving the title: " + title.getName());
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+                ParseQuery<ParseObject> updateQuery = query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
+                try {
+                    ParseObject parseObject = updateQuery.getFirst();
+                    title.setParseObject(parseObject);
+                } catch (ParseException parseException) {
+                    parseException.printStackTrace();
+                }
             }
         });
     }
@@ -169,10 +221,25 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         return formattedGenres.toString();
     }
 
+    // Formatted the actors (credits) JSON data into a String to be displayed in the app
+    private String getActorsFormatted(JSONArray actors) throws JSONException {
+        StringBuilder formattedActors = new StringBuilder();
+
+        for (int i = 0; i < 3; i++) {
+            JSONObject actorObject = actors.getJSONObject(i);
+            String actor = actorObject.getString("name");
+            formattedActors.append(actor);
+            if (i != 2) {
+                formattedActors.append(", ");
+            }
+        }
+        return formattedActors.toString();
+    }
+
     private void setTitleInformation() {
         tvName.setText(titleName);
         tvDescription.setText(titleDescription);
-        tvStarring.setText("Actor, Actor, ..."); //todo
+        tvStarring.setText(actors);
         tvGenres.setText(genres);
         tvReleaseDate.setText(titleReleaseDate);
         tvRuntime.setText(runtime);
@@ -193,5 +260,13 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false);
         rvSimilarTitlesDisplay.setLayoutManager(gridLayoutManager);
         rvSimilarTitlesDisplay.setAdapter(titlesAdapter);
+    }
+
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }

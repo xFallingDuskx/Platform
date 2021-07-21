@@ -1,35 +1,18 @@
 package com.example.platform.models;
 
-import android.graphics.Movie;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.example.platform.activities.LoginActivity;
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.parceler.Parcel;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-//@Parcel (analyze = Title.class)
+
 @ParseClassName("Title")
 public class Title extends ParseObject implements Serializable {
 

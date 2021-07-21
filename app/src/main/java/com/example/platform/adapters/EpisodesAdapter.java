@@ -86,7 +86,6 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
                     .load(episode.getStillPath())
                     .placeholder(R.drawable.backdrop_placeholder)
                     .fitCenter()
-//                    .apply(new RequestOptions().transforms(new RoundedCorners(10)))
                     .into(ivEpisodeCover);
         }
     }

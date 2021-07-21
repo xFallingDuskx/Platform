@@ -11,16 +11,18 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:context=".activities.MovieTitleDetailsActivity">
 
+
             <RelativeLayout
                 android:id="@+id/rlContainer_Movie_Details"
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
-                android:background="@color/purple_200">
+                android:background="@color/black_light">
 
                 <ImageView
                     android:id="@+id/ivCover_Movie_Details"
@@ -98,6 +100,9 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="30dp"
                     android:layout_marginBottom="40dp"
+                    android:ellipsize="end"
+                    android:maxLines="5"
+                    android:minLines="3"
                     android:scrollHorizontally="true"
                     android:textColor="@color/white"
                     android:textSize="16sp"
@@ -115,6 +120,15 @@
                     android:textSize="36sp"
                     android:textStyle="bold"
                     tools:text="Name of Title" />
+
+                <ProgressBar
+                    android:id="@+id/pbDetails_Movie"
+                    style="?android:attr/progressBarStyleLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/tvName_Movie_Details"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="-30dp"/>
 
             </RelativeLayout>
 

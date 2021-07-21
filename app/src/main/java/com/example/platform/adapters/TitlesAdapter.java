@@ -183,10 +183,8 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
             Glide.with(context)
                     .load(title.getPosterPath())
-                    //.placeholder(placeholder)
-                    //.error(placeholder)
+                    .placeholder(R.drawable.poster_placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
-                    //.transform(new RoundedCornersTransformation(radius, margin))
                     .into(ivCover);
         }
     }
