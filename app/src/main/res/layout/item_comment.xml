@@ -25,7 +25,7 @@
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Username" />
 
@@ -35,12 +35,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/tvUsername_Comment"
         android:textColor="@color/grey_light"
-        android:textSize="18sp"
-        android:textStyle="bold"
+        android:textSize="16sp"
         tools:text="Timestamp" />
 
     <TextView
@@ -62,7 +61,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/tvCommentText_Comment"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/ivReplyTo"
         android:src="@drawable/ic_heart_empty" />
 
@@ -73,7 +72,7 @@
         android:layout_below="@+id/tvCommentText_Comment"
         android:layout_alignParentEnd="false"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/ivLike_Comment"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -86,7 +85,7 @@
         android:layout_below="@+id/tvCommentText_Comment"
         android:layout_alignParentEnd="false"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/ivLike_Comment"
         android:src="@drawable/ic_comment" />
 
@@ -97,7 +96,7 @@
         android:layout_below="@+id/tvCommentText_Comment"
         android:layout_alignParentEnd="false"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_toEndOf="@+id/ivReplies_Comments"
         android:textColor="@color/white"
         android:textStyle="bold"
@@ -110,7 +109,7 @@
         android:layout_below="@+id/tvCommentText_Comment"
         android:layout_alignParentBottom="false"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
         android:src="@drawable/ic_share_1" />
 </RelativeLayout>

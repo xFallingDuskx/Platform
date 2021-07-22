@@ -167,6 +167,81 @@
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
+            <RelativeLayout
+                android:id="@+id/rlCommentKeywords_Episode"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@id/tvCommentsText_Episode"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/grey_light">
+
+                <TextView
+                    android:id="@+id/tvCommentKeywordsHeading_Episode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="106dp"
+                    android:text="Users often mention..."
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlMakeComment_Episode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:layout_below="@id/rlCommentKeywords_Episode"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/grey_dark">
+
+                <ImageView
+                    android:id="@+id/ivProfileIcon_MakeComment"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/ic_profile" />
+
+                <EditText
+                    android:id="@+id/etCommentInput_Episode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ivProfileIcon_MakeComment"
+                    android:layout_toLeftOf="@+id/ivPostComment_Episode"
+                    android:textColor="@color/white"
+                    android:hint="Make a comment"
+                    android:textColorHint="@color/grey_light" />
+
+                <ImageView
+                    android:id="@+id/ivPostComment_Episode"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_post_comment" />
+
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvComments_Episode"
+                android:layout_width="match_parent"
+                android:minHeight="120dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rlMakeComment_Episode"
+                android:layout_marginTop="5dp"
+                android:background="@color/black_light"
+                android:scrollbars="horizontal"/>
+
         </RelativeLayout>
 
     </ScrollView>

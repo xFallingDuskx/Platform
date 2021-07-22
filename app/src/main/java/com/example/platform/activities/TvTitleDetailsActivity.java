@@ -401,6 +401,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         rvSimilarTitlesDisplay.setAdapter(titlesAdapter);
     }
 
+    // Set up view for displaying comments
     public void displayComments() throws ParseException {
         rvComments = findViewById(R.id.rvComments_TV);
         allComments = new ArrayList<>();
@@ -412,7 +413,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         // Specify that we want Comments from the server
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
         // Only want Comments that match the current title
-        query.whereEqualTo(Comment.KEY_TITLE, titleTmdbID);
+        query.whereEqualTo(Comment.KEY_TMDB_ID, titleTmdbID);
         // Sort comments first by likes then by their creation date
         query.addDescendingOrder(Comment.KEY_LIKES); // Most likes closer to the top
         query.addDescendingOrder("createdAt"); // Newest comments to the top
@@ -427,7 +428,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 Log.d(TAG, "Number of comment returned: " + comments.size());
                 for (Comment comment : comments) {
                     Log.d(TAG, "The comment is " + comment.toString());
-                    Log.d(TAG, "The comment user is: " + comment.getUser() + " for the comment: " + comment.getText() + " belong to the title: " + comment.getTitle());
+                    Log.d(TAG, "The comment user is: " + comment.getUser() + " for the comment: " + comment.getText() + " belong to the title: " + comment.getTmdbId());
                     Log.i(TAG, "Post: " + comment.getText() + "/ Username: " + comment.getUser());
                 }
                 allComments.addAll(comments);
@@ -453,11 +454,11 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     // Save and post the comment
-    public void saveComment(String commentText, String currentUser, Integer title) {
+    public void saveComment(String commentText, String currentUser, Integer tmdbId) {
         Comment comment = new Comment();
         comment.setText(commentText);
         comment.setUser(currentUser);
-        comment.setTitle(title);
+        comment.setTmdbId(tmdbId);
         comment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

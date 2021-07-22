@@ -19,7 +19,7 @@ public class Comment extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_TIMESTAMP = "createdAt";
     public static final String KEY_TEXT = "text";
-    public static final String KEY_TITLE = "titleTmdbId";
+    public static final String KEY_TMDB_ID = "tmdbId";
     public static final String KEY_IN_REPLY_TO = "repliedCommentId";
     public static final String KEY_LIKES = "likes";
     public static final String KEY_REPLIES = "replies";
@@ -84,12 +84,12 @@ public class Comment extends ParseObject {
         put(KEY_TEXT, text);
     }
 
-    public Integer getTitle() {
-        return getInt(KEY_TITLE);
+    public Integer getTmdbId() {
+        return getInt(KEY_TMDB_ID);
     }
 
-    public void setTitle(Integer title) {
-        put(KEY_TITLE, title);
+    public void setTmdbId(Integer tmdbId) {
+        put(KEY_TMDB_ID, tmdbId);
     }
 
     public String getInReplyTo() {
