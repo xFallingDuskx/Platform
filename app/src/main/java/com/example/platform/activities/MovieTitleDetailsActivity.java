@@ -37,7 +37,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     private static final String TAG = "MovieTitleDetailsActivity";
     public String Movie_DETAILS_URL;
     Context context;
-    Intent intent;
 
     Integer titleTmdbID;
     String titleName;
@@ -75,7 +74,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_title_details);
         context = getApplicationContext();
-        intent = getIntent();
 
         ivCover = findViewById(R.id.ivCover_Movie_Details);
         tvName = findViewById(R.id.tvName_Movie_Details);
@@ -102,6 +100,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         showProgressBar();
         // First get information that was sent from previous activity
         Log.i(TAG, "Getting title information...");
+        Intent intent = getIntent();
         titleName = (String) intent.getStringExtra("name");
         titleTmdbID = (Integer) intent.getIntExtra("id", 0);
         titleCoverPath = (String) intent.getStringExtra("posterPath");
@@ -166,22 +165,14 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     // Save Title in the Parse Server if it does not exist
     private void saveTitle(Title title) {
         title.setId(title.getId());
-//        title.setLikes(0);
-//        title.setShares(0);
+        title.setLikes(1);
+        title.setShares(0);
 
         title.saveInBackground(e -> {
             if (e != null){
                 Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
                 Log.i(TAG, "Success saving the title: " + title.getName());
-                ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
-                ParseQuery<ParseObject> updateQuery = query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
-                try {
-                    ParseObject parseObject = updateQuery.getFirst();
-                    title.setParseObject(parseObject);
-                } catch (ParseException parseException) {
-                    parseException.printStackTrace();
-                }
             }
         });
     }

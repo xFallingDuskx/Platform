@@ -25,7 +25,7 @@ public class Title extends ParseObject implements Serializable {
     Integer id;
     String releaseDate;
     String type;
-    ParseObject parseObject;
+//    ParseObject parseObject;
 
     public static final String KEY_TMDB_ID = "tmdbID";
     public static final String KEY_LIKES = "likes";
@@ -154,10 +154,11 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public Integer getLikes() {
-        if (parseObject == null) {
-            return 0;
-        }
-        return parseObject.getInt(KEY_LIKES);
+//        if (parseObject == null) {
+//            return 0;
+//        }
+//        return parseObject.getInt(KEY_LIKES);
+        return  getInt(KEY_LIKES);
     }
 
     public void setLikes(Integer integer) {
@@ -165,23 +166,24 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public Integer getShare() {
-        if (parseObject == null) {
-            return 0;
-        }
-         return parseObject.getInt(KEY_SHARES);
+//        if (parseObject == null) {
+//            return 0;
+//        }
+//         return parseObject.getInt(KEY_SHARES);
+        return getInt(KEY_SHARES);
     }
 
     public void setShares(Integer integer) {
         put(KEY_SHARES, integer);
     }
 
-    public void setParseObject(ParseObject parseObject) {
-        this.parseObject = parseObject;
-    }
-
-    public ParseObject getParseObject() {
-        return parseObject;
-    }
+//    public void setParseObject(ParseObject parseObject) {
+//        this.parseObject = parseObject;
+//    }
+//
+//    public ParseObject getParseObject() {
+//        return parseObject;
+//    }
 
     // TODO: MAKE SURE TO DO BOTH GETTERS AND SETTERS
 //    public Array getGenres() {

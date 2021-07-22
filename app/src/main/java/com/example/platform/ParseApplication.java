@@ -2,6 +2,7 @@ package com.example.platform;
 
 import android.app.Application;
 
+import com.example.platform.models.Comment;
 import com.example.platform.models.Episode;
 import com.example.platform.models.Title;
 import com.example.platform.models.User;
@@ -18,6 +19,7 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Title.class);
         ParseObject.registerSubclass(User.class);
         ParseObject.registerSubclass(Episode.class);
+        ParseObject.registerSubclass(Comment.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId(getResources().getString(R.string.parseApplicationID))

@@ -60,4 +60,8 @@ dependencies {
 
     // TabLayout
     implementation 'com.google.android.material:material:1.1.0'
+
+    // For Jackson .jar files
+//    implementation fileTree(dir: 'libs', include: '*.jar')
+//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.8.9'
 }
