@@ -148,8 +148,8 @@ public class HomeFragment_Movies extends Fragment {
     // Save Title in the Parse Server if it does not exist
     private void saveTitle(Title title) {
         title.setId(title.getId());
-        title.setLikes(1);
-        title.setShares(0);
+//        title.setLikes(0);
+//        title.setShares(0);
 
         title.saveInBackground(e -> {
             if (e != null){

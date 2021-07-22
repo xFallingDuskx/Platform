@@ -22,8 +22,12 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.platform.R;
 import com.example.platform.activities.MovieTitleDetailsActivity;
 import com.example.platform.activities.TvTitleDetailsActivity;
+import com.example.platform.models.Comment;
 import com.example.platform.models.Title;
 import com.example.platform.models.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -31,6 +35,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.Serializable;
@@ -47,6 +52,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
     private List<Title> titles;
     ParseUser currentUser = ParseUser.getCurrentUser();
     Boolean titleLiked;
+    HashMap<String, Object> userLikedTitles;
 
 
     public TitlesAdapter(Context context, List<Title> titles) {
@@ -107,6 +113,8 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
                     int position = getAdapterPosition();
                     Title title = titles.get(position);
+                    Log.i(TAG, "The title " + title.getName() + " has a position of: " + position);
+
                     Integer titleTmdbID = title.getId();
                     Integer currentLikes = Integer.valueOf(String.valueOf(title.getLikes()));
 
@@ -114,24 +122,39 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     if (titleLiked) {
                         ivLike.setImageResource(R.drawable.ic_heart_empty); // Change to empty heart
                         title.setLikes(currentLikes - 1); // Decrease the likes for the Title (as displayed to the User) by 1
-
-
+                        userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
+                        currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+                        Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + title.getName());
                     } else {  // Title is currently not liked by the User and they desire to like it
                         ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
                         title.setLikes(currentLikes + 1); // Increment the likes for the Title (as displayed to the User) by 1
-
+                        userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
+                        currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+                        Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + title.getName());
                     }
+
+                    currentUser.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.d(TAG, "User: Issue saving like action by user " + e.getMessage());
+                            } else {
+                                Log.i(TAG, "User: Success saving like action by user");
+                            }
+                        }
+                    });
 
                     title.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
                             if (e != null) {
-                                Log.d(TAG, "Issue saving like action by user");
+                                Log.d(TAG, "Title: Issue saving like action by user " + e.getMessage());
                             } else {
-                                Log.i(TAG, "Success saving like action by user");
+                                Log.i(TAG, "Title: Success saving like action by user");
                             }
                         }
                     });
+                    Log.i(TAG, "Title currently liked by the user after clicking are: " + currentUser.getMap(User.KEY_LIKED_TITLES));
                     notifyDataSetChanged();
 //                    notifyItemChanged(position);
                 }
@@ -189,21 +212,34 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
     }
 
     private void handleTitleData(Title title, ImageView ivLike) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("User");
-        query.whereEqualTo("objectId", currentUser.getObjectId());
-        query.whereContains("titleLikes", String.valueOf(title.getId()));
+        JSONObject jsonObject = currentUser.getJSONObject(User.KEY_LIKED_TITLES);
+        if (jsonObject == null) { // If the user has liked no titles
+            Log.i(TAG, "No titles currently liked by the user");
+            userLikedTitles = new HashMap<>();
+            titleLiked = false;
+            ivLike.setImageResource(R.drawable.ic_heart_empty);
+        } else {
+            String json = jsonObject.toString();
+            Log.i(TAG, "String format of the json Map Object: " + json);
+            ObjectMapper mapper = new ObjectMapper();
 
-        try {
-            if (query.count() == 0) { // Returns 0 if a user has not liked a title
+            //Convert Map to JSON
+            try {
+                userLikedTitles = mapper.readValue(json, new TypeReference<HashMap<String, Object>>(){});
+            } catch (JsonProcessingException e) {
+                Log.d(TAG, "Issue accessing tiles liked by user");
+                e.printStackTrace();
+            }
+
+            Log.i(TAG, "The returned query is: " + userLikedTitles.toString());
+
+            if (!userLikedTitles.containsKey(String.valueOf(title.getId()))) { // If a user has not liked a title
                 titleLiked = false;
                 ivLike.setImageResource(R.drawable.ic_heart_empty);
             } else { // If user has liked a title
                 titleLiked = true;
                 ivLike.setImageResource(R.drawable.ic_heart_filled);
             }
-        } catch (ParseException e) {
-            Log.d(TAG, "Issue getting title data for " + title.getName() + "for the user " + currentUser.getUsername());
-            e.printStackTrace();
         }
 
         Log.i(TAG, "The title " + title.getName() + " is liked by the user " + currentUser.getUsername() + ": " + titleLiked);

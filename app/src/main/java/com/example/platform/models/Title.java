@@ -1,7 +1,9 @@
 package com.example.platform.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -62,6 +64,12 @@ public class Title extends ParseObject implements Serializable {
             releaseDate = convertDate(releaseDate);
             type = "Episode";
         }
+
+//        try {
+//            parseObject = ParseQuery.getQuery("Title").whereEqualTo(KEY_TMDB_ID, id).getFirst();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
 
     // Convert JSONArray into List<Titles>
@@ -154,10 +162,6 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public Integer getLikes() {
-//        if (parseObject == null) {
-//            return 0;
-//        }
-//        return parseObject.getInt(KEY_LIKES);
         return  getInt(KEY_LIKES);
     }
 
@@ -166,10 +170,6 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public Integer getShare() {
-//        if (parseObject == null) {
-//            return 0;
-//        }
-//         return parseObject.getInt(KEY_SHARES);
         return getInt(KEY_SHARES);
     }
 

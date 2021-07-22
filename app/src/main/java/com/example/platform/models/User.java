@@ -33,24 +33,22 @@ public class User extends ParseObject {
     public static final String KEY_USERNAME = "username";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_TITLE_LIKES = "titleLikes";
     public static final String KEY_LIKED_TITLES = "likedTitles";
     public static final String KEY_COMMENT_LIKES = "commentLikes";
     public static final String KEY_FOLLOWING = "following";
     public static final String KEY_CHATS = "chats";
     public static final String KEY_COMMUNITIES = "communities";
 
-
-    // Getter methods for each value
-    public String getFullname() {
-        return getString(KEY_FULLNAME);
+    //TODO
+    public Map<String, Object> getLikedTitles() {
+        return getMap(KEY_LIKED_TITLES);
     }
 
-    public String getUsername() {return getString(KEY_USERNAME);}
-
-    public Date getCreatedAt() {return getDate(KEY_CREATED_AT);}
-
-    public String getEmail() {return getString(KEY_EMAIL);}
-
+    public void setLikedTitles(Map<String, Object> likedTitles) {
+        JSONObject jsonMap = new ObjectMapper().convertValue(likedTitles, JSONObject.class);
+        put(KEY_LIKED_TITLES, jsonMap);
+    }
 
     // Get Titles liked by User based on the Titles' TMDB ID
 //    public List<Integer> getTitleLikes() throws JSONException {
@@ -145,6 +143,17 @@ public class User extends ParseObject {
 //        currentUser.saveInBackground();
 //        Log.i(TAG, "Unlike has been handled for User");
 //    }
+
+    // Getter methods for each value
+    public String getFullname() {
+        return getString(KEY_FULLNAME);
+    }
+
+    public String getUsername() {return getString(KEY_USERNAME);}
+
+    public Date getCreatedAt() {return getDate(KEY_CREATED_AT);}
+
+    public String getEmail() {return getString(KEY_EMAIL);}
 
     public String getKeyCommentLikes() {
         return getString(KEY_COMMENT_LIKES);
