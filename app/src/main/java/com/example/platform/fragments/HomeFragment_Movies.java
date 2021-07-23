@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.platform.EndlessRecyclerViewScrollListener;
 import com.example.platform.R;
 import com.example.platform.adapters.TitlesAdapter;
 import com.example.platform.models.Title;
@@ -44,13 +45,15 @@ import okhttp3.Headers;
 public class HomeFragment_Movies extends Fragment {
 
     public static final String TAG = "HomeFragment_Movies";
-    public String TRENDING_MOVIES_URL = "https://api.themoviedb.org/3/trending/movie/day?api_key=e2b0127db9175584999a612837ae77b1";
+    int desiredPage = 1;
+    public String TRENDING_MOVIES_URL = "https://api.themoviedb.org/3/trending/movie/day?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + desiredPage;
 
     RecyclerView rvTitles;
     List<Title> allTitles;
     TitlesAdapter adapter;
     ProgressBar progressBar;
     TextView tvLoadingMessage;
+    EndlessRecyclerViewScrollListener scrollListener;
 
     public HomeFragment_Movies() {
         // Required empty public constructor
@@ -96,6 +99,18 @@ public class HomeFragment_Movies extends Fragment {
         tvLoadingMessage = view.findViewById(R.id.tvLoadingMessage_Movies);
 
         displayTitles();
+
+        // Endless Scrolling
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                loadNextDataFromApi();
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvTitles.addOnScrollListener(scrollListener);
     }
 
     private void displayTitles() {
@@ -154,6 +169,48 @@ public class HomeFragment_Movies extends Fragment {
                 Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
                 Log.i(TAG, "Success saving the title: " + title.getName());
+            }
+        });
+    }
+
+    // Endless Scrolling
+    // Append the next page of data into the adapter
+    public void loadNextDataFromApi() {
+        showProgressBar();
+        // Desire the next page
+        desiredPage++;
+        int startingPosition = (desiredPage - 1) * 20;
+        // Send an API request to retrieve appropriate paginated data
+        TRENDING_MOVIES_URL = "https://api.themoviedb.org/3/trending/movie/day?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + desiredPage;
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(TRENDING_MOVIES_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "The trending URL for page " + desiredPage + " is: " + TRENDING_MOVIES_URL);
+
+                Log.d(TAG, "onSuccess to update home feed");
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    Log.i(TAG, "Results: " + results.toString());
+                    List<Title> newTitles = Title.fromJsonArray(results);
+                    updateParseServer(newTitles);
+                    allTitles.addAll(newTitles);
+                    adapter.notifyItemRangeInserted(startingPosition, 20);
+                    Log.i(TAG, "Titles: " + allTitles.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.e(TAG, "Issue updating Parse Server");
+                    e.printStackTrace();
+                }
+                hideProgressBar(); // Make progressBar invisible
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
     }
