@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -105,58 +107,32 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             ivShare = itemView.findViewById(R.id.ivShare_Home);
             tvShares = itemView.findViewById(R.id.tvShares_Home);
 
-            // User clicks on Like
+            // User clicks on Heart icon to like the title
             ivLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.i(TAG, "Entering onClickListener for likes");
-
                     int position = getAdapterPosition();
-                    Title title = titles.get(position);
-                    Log.i(TAG, "The title " + title.getName() + " has a position of: " + position);
+                    handleUserLikeAction(position, ivLike);
+                }
+            });
 
-                    Integer titleTmdbID = title.getId();
-                    Integer currentLikes = Integer.valueOf(String.valueOf(title.getLikes()));
-
-                    // If the Title is currently liked by the User and they desire to unlike it
-                    if (titleLiked) {
-                        ivLike.setImageResource(R.drawable.ic_heart_empty); // Change to empty heart
-                        title.setLikes(currentLikes - 1); // Decrease the likes for the Title (as displayed to the User) by 1
-                        userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
-                        currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
-                        Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + title.getName());
-                    } else {  // Title is currently not liked by the User and they desire to like it
-                        ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
-                        title.setLikes(currentLikes + 1); // Increment the likes for the Title (as displayed to the User) by 1
-                        userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
-                        currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
-                        Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + title.getName());
+            // User double-taps screen to like the title
+            // Source: https://stackoverflow.com/questions/4804798/doubletap-in-android
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        Log.d(TAG, "onDoubleTap");
+                        int position = getAdapterPosition();
+                        handleUserLikeAction(position, ivLike);
+                        return super.onDoubleTap(e);
                     }
-
-                    currentUser.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.d(TAG, "User: Issue saving like action by user " + e.getMessage());
-                            } else {
-                                Log.i(TAG, "User: Success saving like action by user");
-                            }
-                        }
-                    });
-
-                    title.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.d(TAG, "Title: Issue saving like action by user " + e.getMessage());
-                            } else {
-                                Log.i(TAG, "Title: Success saving like action by user");
-                            }
-                        }
-                    });
-                    Log.i(TAG, "Title currently liked by the user after clicking are: " + currentUser.getMap(User.KEY_LIKED_TITLES));
-                    notifyDataSetChanged();
-//                    notifyItemChanged(position);
+                });
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Log.d(TAG, "Raw event: " + event.getAction() + ", (" + event.getRawX() + ", " + event.getRawY() + ")");
+                    gestureDetector.onTouchEvent(event);
+                    return true;
                 }
             });
 
@@ -243,5 +219,55 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
         }
 
         Log.i(TAG, "The title " + title.getName() + " is liked by the user " + currentUser.getUsername() + ": " + titleLiked);
+    }
+
+    private void handleUserLikeAction(int position, ImageView ivLike) {
+        Log.i(TAG, "Entering onClickListener for likes");
+
+        Title title = titles.get(position);
+        Log.i(TAG, "The title " + title.getName() + " has a position of: " + position);
+
+        Integer titleTmdbID = title.getId();
+        Integer currentLikes = Integer.valueOf(String.valueOf(title.getLikes()));
+
+        // If the Title is currently liked by the User and they desire to unlike it
+        if (titleLiked) {
+            ivLike.setImageResource(R.drawable.ic_heart_empty); // Change to empty heart
+            title.setLikes(currentLikes - 1); // Decrease the likes for the Title (as displayed to the User) by 1
+            userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
+            currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+            Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + title.getName());
+        } else {  // Title is currently not liked by the User and they desire to like it
+            ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
+            title.setLikes(currentLikes + 1); // Increment the likes for the Title (as displayed to the User) by 1
+            userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
+            currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+            Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + title.getName());
+        }
+
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "User: Issue saving like action by user " + e.getMessage());
+                } else {
+                    Log.i(TAG, "User: Success saving like action by user");
+                }
+            }
+        });
+
+        title.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "Title: Issue saving like action by user " + e.getMessage());
+                } else {
+                    Log.i(TAG, "Title: Success saving like action by user");
+                }
+            }
+        });
+        Log.i(TAG, "Title currently liked by the user after clicking are: " + currentUser.getMap(User.KEY_LIKED_TITLES));
+        notifyDataSetChanged();
+//        notifyItemChanged(position);
     }
 }
