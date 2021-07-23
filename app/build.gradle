@@ -62,11 +62,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
 
     // For Jackson .jar files
-
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.4'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.4'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.4'
+
+    // For free pager (scrolling to swiping)
+    implementation 'pro.alexzaitsev:freepager:1.0.1'
 }
