@@ -83,6 +83,11 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     List<Comment> allComments;
     CommentsAdapter commentsAdapter;
 
+    ParseUser currentUser = ParseUser.getCurrentUser();
+    JSONArray userFollowingTitles;
+    int jsonPosition;
+    boolean currentlyFollowing;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +126,22 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
         // Handle comment posting by user
         handleComment();
+
+        // Handle following status (whether a user is currently following a title or not)
+        try {
+            handleFollowingStatus();
+        } catch (JSONException e) {
+            Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        // Handle following action (when a user clicks on the following icon)
+        try {
+            handleFollowingAction();
+        } catch (JSONException e) {
+            Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void getTitleInformation() {
@@ -359,6 +380,90 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     // want to scroll to the top of recyclerview after each new tweet
                     rvComments.smoothScrollToPosition(0);
                 }
+            }
+        });
+    }
+
+    // Handles the Following status for the title
+    public void handleFollowingStatus() throws JSONException {
+        // First check if the user is following the current title
+        userFollowingTitles = currentUser.getJSONArray("following");
+        currentlyFollowing = false;
+
+        if (userFollowingTitles == null) { // if the user is not currently following any titles
+            userFollowingTitles = new JSONArray();
+            Log.i(TAG, "The user is not currently following any titles");
+        } else { // the user is currently following at least one title
+            for (int i = 0; i < userFollowingTitles.length(); i++) {
+                JSONObject jsonObject = new JSONObject(userFollowingTitles.getString(i));
+                Integer objectTmdbId = jsonObject.getInt("tmdbId");
+                Log.d(TAG, "The jsonobject returned is: " + jsonObject.toString() + " with a TMDB id of " + objectTmdbId);
+                if (objectTmdbId.equals(titleTmdbID)) { // if the current title is currently liked by the user
+                    jsonPosition = i;
+                    currentlyFollowing = true;
+                    break;
+                }
+            }
+        }
+
+        // If the user is following the title
+        if (currentlyFollowing) {
+            ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
+            tvFollowingStatus.setText("Following");
+        }
+    }
+
+    // If the user selects the following status icon
+    public void handleFollowingAction() throws JSONException {
+        ivFollowingStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                // If the user is following the title and wishes to unfollow it
+                if (currentlyFollowing) {
+                    userFollowingTitles.remove(jsonPosition);
+                    Log.i(TAG, "User desires to unfollow the title");
+                    currentlyFollowing = false;
+                } else {
+                    Log.i(TAG, "User desires to follow the title");
+                    // If the user is not following the title and wish to follow it
+                    // Create a new JSONObject for that title and add it to the jsonArray
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("tmdbId", titleTmdbID);
+                        jsonObject.put("name", titleName);
+                        jsonObject.put("posterPath", titleCoverPath);
+                        jsonObject.put("type", titleType);
+                        jsonObject.put("description", titleDescription);
+                        jsonObject.put("releaseDate", titleReleaseDate);
+                    } catch (JSONException e) {
+                        Log.d(TAG, "Issue creating new JSONObject for user following titles");
+                        e.printStackTrace();
+                    }
+                    userFollowingTitles.put(jsonObject.toString());
+                    currentlyFollowing = true;
+                }
+
+                // Change and update the user following titles within the parse server
+                currentUser.put("following", userFollowingTitles);
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.d(TAG, "Issue saving following action by user");
+                        } else {
+                            if (currentlyFollowing) { // If the user is now following the item
+                                ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
+                                tvFollowingStatus.setText("Following");
+                                Toast.makeText(context, "You're now following the movie " + titleName, Toast.LENGTH_SHORT).show();
+                            } else { // If the user is no longer following the title
+                                ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
+                                tvFollowingStatus.setText("Not Following");
+                                Toast.makeText(context, "You're no longer following the movie " + titleName, Toast.LENGTH_SHORT).show();
+                            }
+                            Log.i(TAG, "Success saving following action by user");
+                        }
+                    }
+                });
             }
         });
     }

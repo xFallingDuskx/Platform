@@ -1,5 +1,7 @@
 package com.example.platform.models;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -102,12 +104,18 @@ public class Title extends ParseObject implements Serializable {
 
     // Getters and setters method for each key value
     public Integer getId() {
+        Log.d(TAG, "Getting the ID");
         return id;
     }
 
     public void setId(Integer tmdbID) {
+        Log.d(TAG, "Setting the ID");
         this.id = tmdbID;
         put(KEY_TMDB_ID, tmdbID);
+    }
+
+    public String getObjectID() {
+        return getObjectId();
     }
 
 //    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
@@ -162,10 +170,12 @@ public class Title extends ParseObject implements Serializable {
     }
 
     public Integer getLikes() {
-        return  getInt(KEY_LIKES);
+        Log.d(TAG, "Getting the likes for the title " + name + ": " + getInt(KEY_LIKES));
+        return getInt(KEY_LIKES);
     }
 
     public void setLikes(Integer integer) {
+        Log.d(TAG, "Saving the likes for the title " + name + ": " + getInt(KEY_LIKES));
         put(KEY_LIKES, integer);
     }
 

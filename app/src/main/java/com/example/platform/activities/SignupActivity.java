@@ -83,7 +83,7 @@ public class SignupActivity extends AppCompatActivity {
         EMAIL_VERIFY_URL = "https://emailverification.whoisxmlapi.com/api/v1?apiKey=at_q49YobOASp4bKDhec8CdDDqfApDef&emailAddress=" + email;
         Log.i(TAG, "Email Verify URL: " + EMAIL_VERIFY_URL);
         AsyncHttpClient client = new AsyncHttpClient();
-        final Boolean[] valid = {false};
+        final Boolean[] valid = {null};
 
         client.get(EMAIL_VERIFY_URL, new JsonHttpResponseHandler() {
             @Override
@@ -115,6 +115,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+//        Log.i(TAG, "The response from the API is: " + valid[0]);
         return valid[0];
     }
 

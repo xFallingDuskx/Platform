@@ -127,6 +127,36 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         handleUserLikeAction(position, ivLike);
                         return super.onDoubleTap(e);
                     }
+
+                    @Override
+                    public boolean onSingleTapUp(MotionEvent e) {
+                        Log.d(TAG, "onSingleTap");
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Title title = titles.get(position);
+                            Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId() + " /Object ID:" + title.getObjectId());
+                            Intent intent;
+
+                            // Determine where to send Intent based of the type associated with a Title
+                            if (title.getType().equals("TV Show")) { // TV Show type
+                                Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
+                                intent = new Intent(context, TvTitleDetailsActivity.class);
+                            } else { // Movie type
+                                Log.i(TAG, "Type is: " + title.getType() + " for Movies");
+                                intent = new Intent(context, MovieTitleDetailsActivity.class);
+                            }
+                            // TODO: Put extra - Share titleLiked status
+                            intent.putExtra("id", title.getId());
+                            intent.putExtra("name", title.getName());
+                            intent.putExtra("posterPath", title.getPosterPath());
+                            intent.putExtra("type", title.getType());
+                            intent.putExtra("description", title.getDescription());
+                            intent.putExtra("releaseDate", title.getReleaseDate());
+                            context.startActivity(intent);
+                            Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
+                        }
+                        return super.onSingleTapUp(e);
+                    }
                 });
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -137,34 +167,34 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             });
 
             // User clicks on View
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        Title title = titles.get(position);
-                        Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId() + " /Object ID:" + title.getObjectId());
-                        Intent intent;
-
-                        // Determine where to send Intent based of the type associated with a Title
-                        if (title.getType().equals("TV Show")) { // TV Show type
-                            Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
-                            intent = new Intent(context, TvTitleDetailsActivity.class);
-                        } else { // Movie type
-                            Log.i(TAG, "Type is: " + title.getType() + " for Movies");
-                            intent = new Intent(context, MovieTitleDetailsActivity.class);
-                        }
-                        intent.putExtra("id", title.getId());
-                        intent.putExtra("name", title.getName());
-                        intent.putExtra("posterPath", title.getPosterPath());
-                        intent.putExtra("type", title.getType());
-                        intent.putExtra("description", title.getDescription());
-                        intent.putExtra("releaseDate", title.getReleaseDate());
-                        context.startActivity(intent);
-                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
-                    }
-                }
-            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = getAdapterPosition();
+//                    if (position != RecyclerView.NO_POSITION) {
+//                        Title title = titles.get(position);
+//                        Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId() + " /Object ID:" + title.getObjectId());
+//                        Intent intent;
+//
+//                        // Determine where to send Intent based of the type associated with a Title
+//                        if (title.getType().equals("TV Show")) { // TV Show type
+//                            Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
+//                            intent = new Intent(context, TvTitleDetailsActivity.class);
+//                        } else { // Movie type
+//                            Log.i(TAG, "Type is: " + title.getType() + " for Movies");
+//                            intent = new Intent(context, MovieTitleDetailsActivity.class);
+//                        }
+//                        intent.putExtra("id", title.getId());
+//                        intent.putExtra("name", title.getName());
+//                        intent.putExtra("posterPath", title.getPosterPath());
+//                        intent.putExtra("type", title.getType());
+//                        intent.putExtra("description", title.getDescription());
+//                        intent.putExtra("releaseDate", title.getReleaseDate());
+//                        context.startActivity(intent);
+//                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
+//                    }
+//                }
+//            });
         }
 
         public void bind(Title title) {
