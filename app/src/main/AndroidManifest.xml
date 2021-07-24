@@ -13,12 +13,25 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Platform">
-        <activity android:name=".activities.SearchActivity" android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activities.ProfileLikesActivity"></activity>
+        <activity android:name=".activities.ProfileCommentsActivity" />
+        <activity android:name=".activities.ProfileFollowingActivity" />
+        <activity android:name=".activities.ProfileSecurityActivity" />
+        <activity android:name=".activities.ProfileGeneralActivity" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.EpisodeDetailsActivity" android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.MovieTitleDetailsActivity" android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.EpisodeDetailsActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.MovieTitleDetailsActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.TvTitleDetailsActivity" />
-        <activity android:name=".activities.BaseActivity" android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.BaseActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.LaunchActivity">

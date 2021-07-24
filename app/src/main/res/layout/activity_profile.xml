@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ProfileActivity"
-    android:background="@color/grey_dark">
+    android:background="@color/black_lighter">
 
     <RelativeLayout
         android:id="@+id/rlProfile_TopSection"
@@ -48,9 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ivProfileIcon_Profile"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="20sp"
             tools:text="Username" />
 
         <TextView
@@ -60,8 +60,8 @@
             android:layout_below="@+id/tvUsername_Profile"
             android:layout_centerHorizontal="true"
             android:textColor="@color/grey_light"
-            android:textSize="14sp"
-            tools:text="Platform user since ...." />
+            android:textSize="16sp"
+            tools:text="Platform member since ...." />
     </RelativeLayout>
 
     <RelativeLayout

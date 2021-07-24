@@ -83,10 +83,21 @@ public class User extends ParseObject {
         return getString(KEY_COMMUNITIES);
     }
 
-    public String getTime() {
-        Date createdAt = getCreatedAt();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+    public static String getTime(Date createdAt) {
+        DateFormat dateFormat = new SimpleDateFormat("MMMM YYYY");
         String strDate = dateFormat.format(createdAt);
+        String[] strDateSplit = strDate.split("-");
+//        String month = strDateSplit[0];
+//        String year = strDateSplit[2];
+//
+////        if(month.equals("01")) {
+//            month = "January";
+//        } else if (month.equals("02")) {
+//            month = "February";
+//        } else if (month.equals("03")) {
+//            month = "March";
+//        } else if ()
+
         return strDate;
     }
 }
