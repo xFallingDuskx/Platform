@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.example.platform.R;
 import com.example.platform.adapters.CommentsAdapter;
 import com.example.platform.models.Comment;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -50,7 +52,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     TextView tvReleaseDate;
     ImageView ivFollowingStatus;
     TextView tvFollowingStatus;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
 
     EditText etCommentInput;
     ImageView ivPostComment;
@@ -63,6 +65,9 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     int jsonPosition;
     boolean currentlyFollowing;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+    ScrollView svEntireScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,13 +75,23 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         context = getApplicationContext();
         intent = getIntent();
 
+        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+        svEntireScreen = findViewById(R.id.svEpisodeDetails);
+        svEntireScreen.setVisibility(View.INVISIBLE);
+
         ivCover = findViewById(R.id.ivCover_Episode_Details);
         tvName = findViewById(R.id.tvName_Episode_Details);
         tvDescription = findViewById(R.id.tvDescription_Episode_Details);
         tvReleaseDate = findViewById(R.id.tvReleaseDate_Episode_Details);
         ivFollowingStatus = findViewById(R.id.ivFollowingStatus_Episode_Details);
         tvFollowingStatus = findViewById(R.id.tvFollowingStatusText_Episode_Details);
-        progressBar = findViewById(R.id.pbDetails_Episode);
+//        progressBar = findViewById(R.id.pbDetails_Episode);
         etCommentInput = findViewById(R.id.etCommentInput_Episode);
         ivPostComment = findViewById(R.id.ivPostComment_Episode);
 
@@ -125,6 +140,9 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         episodeTmdbId = (Integer) intent.getIntExtra("id", 0);
         Log.i(TAG, "Opening the Episode " + episodeName + " and TMDB ID: " + episodeTmdbId + " in Episode Details");
 
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        svEntireScreen.setVisibility(View.VISIBLE);
         hideProgressBar();
     }
 
@@ -303,10 +321,10 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     }
 
     public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
     }
 }

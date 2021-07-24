@@ -6,23 +6,39 @@
     android:background="@color/black"
     tools:context=".fragments.HomeFragment_TvShows">
 
-    <TextView
-        android:id="@+id/tvLoadingMessage_TV_Shows"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fetching those titles for you"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"/>
-
-    <ProgressBar
-        android:id="@+id/pbHome_TV_Shows"
-        style="?android:attr/progressBarStyleLarge"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerFrameLayout_TV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"/>
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/item_title_shimmer_placeholder" />
+
+        </RelativeLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvLoadingMessage_TV_Shows"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Fetching those titles for you"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginBottom="10dp"/>-->
+
+<!--    <ProgressBar-->
+<!--        android:id="@+id/pbHome_TV_Shows"-->
+<!--        style="?android:attr/progressBarStyleLarge"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="60dp"/>-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTitles_TV_Shows"

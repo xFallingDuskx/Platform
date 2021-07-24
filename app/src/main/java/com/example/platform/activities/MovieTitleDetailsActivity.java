@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.example.platform.adapters.CommentsAdapter;
 import com.example.platform.adapters.SimilarTitlesAdapter;
 import com.example.platform.models.Comment;
 import com.example.platform.models.Title;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -71,7 +74,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     ImageView ivComment;
     TextView tvComment;
     TextView tvRuntime;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
 
     RecyclerView rvSimilarTitlesDisplay;
     List<Title> similarTitles;
@@ -88,11 +91,24 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     int jsonPosition;
     boolean currentlyFollowing;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+    ScrollView svEntireScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_title_details);
         context = getApplicationContext();
+
+        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+        svEntireScreen = findViewById(R.id.svMovieDetails);
+        svEntireScreen.setVisibility(View.INVISIBLE);
 
         ivCover = findViewById(R.id.ivCover_Movie_Details);
         tvName = findViewById(R.id.tvName_Movie_Details);
@@ -109,39 +125,44 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment_Movie_Details);
         tvComment = findViewById(R.id.tvCommentText_Movie_Details);
         tvRuntime = findViewById(R.id.tvRuntime_Movie_Details);
-        progressBar = findViewById(R.id.pbDetails_Movie);
+//        progressBar = findViewById(R.id.pbDetails_Movie);
         etCommentInput = findViewById(R.id.etCommentInput_Movie);
         ivPostComment = findViewById(R.id.ivPostComment_Movie);
 
-        // Get Title information
-        getTitleInformation();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Get Title information
+                getTitleInformation();
 
-        // Set up the comment section for the title
-        try {
-            displayComments();
-        } catch (ParseException e) {
-            Log.d(TAG, "Issue fetching and displaying comments");
-            e.printStackTrace();
-        }
+                // Set up the comment section for the title
+                try {
+                    displayComments();
+                } catch (ParseException e) {
+                    Log.d(TAG, "Issue fetching and displaying comments");
+                    e.printStackTrace();
+                }
 
-        // Handle comment posting by user
-        handleComment();
+                // Handle comment posting by user
+                handleComment();
 
-        // Handle following status (whether a user is currently following a title or not)
-        try {
-            handleFollowingStatus();
-        } catch (JSONException e) {
-            Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Handle following status (whether a user is currently following a title or not)
+                try {
+                    handleFollowingStatus();
+                } catch (JSONException e) {
+                    Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
 
-        // Handle following action (when a user clicks on the following icon)
-        try {
-            handleFollowingAction();
-        } catch (JSONException e) {
-            Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Handle following action (when a user clicks on the following icon)
+                try {
+                    handleFollowingAction();
+                } catch (JSONException e) {
+                    Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }, 10000);
     }
 
     private void getTitleInformation() {
@@ -294,6 +315,10 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 .centerCrop() // scale image to fill the entire ImageView
                 //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
+
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        svEntireScreen.setVisibility(View.VISIBLE);
         hideProgressBar();
     }
 
@@ -469,10 +494,10 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     }
 
     public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
     }
 }

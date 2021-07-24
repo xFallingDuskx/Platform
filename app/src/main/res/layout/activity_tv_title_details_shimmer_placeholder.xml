@@ -53,41 +53,32 @@
 
                 <TextView
                     android:id="@+id/tvStarring_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tvRelease_Date_TV_Details"
                     android:layout_toRightOf="@+id/tvStarringText_TV_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="3dp"
+                    android:layout_marginEnd="250dp"
                     android:layout_marginBottom="2dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    tools:text="Starring: Actor, Actor, ..." />
+                    tools:text="Starring: Actor, ..." />
 
                 <TextView
                     android:id="@+id/tvRelease_Date_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tvAvailable_On_TV_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="300dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="12/10/2014" />
-
-                <TextView
-                    android:id="@+id/tvGenres_TV_Details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvAvailable_On_TV_Details"
-                    android:layout_toRightOf="@+id/tvRelease_Date_TV_Details"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginBottom="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    tools:text="Genre, Genre, ..." />
 
                 <TextView
                     android:id="@+id/tvAvailable_On_Text_TV_Details"
@@ -104,12 +95,14 @@
 
                 <TextView
                     android:id="@+id/tvAvailable_On_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/tvAvailable_On_Text_TV_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="3dp"
+                    android:layout_marginEnd="240dp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
@@ -117,6 +110,7 @@
 
                 <TextView
                     android:id="@+id/tvDescription_TV_Details"
+                    android:background="@color/grey_light"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tvStarring_TV_Details"
@@ -134,25 +128,18 @@
 
                 <TextView
                     android:id="@+id/tvName_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tvDescription_TV_Details"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
+                    android:layout_marginEnd="100dp"
                     android:layout_marginBottom="3dp"
                     android:textColor="@color/white"
                     android:textSize="36sp"
                     android:textStyle="bold"
                     tools:text="Name of Title" />
-
-<!--                <ProgressBar-->
-<!--                    android:id="@+id/pbDetails_TV"-->
-<!--                    style="?android:attr/progressBarStyleLarge"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_above="@+id/tvName_TV_Details"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="-30dp"/>-->
 
             </RelativeLayout>
 
@@ -448,21 +435,4 @@
         </RelativeLayout>
 
     </ScrollView>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerFrameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/activity_tv_title_details_shimmer_placeholder" />
-
-        </RelativeLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
-
 </RelativeLayout>

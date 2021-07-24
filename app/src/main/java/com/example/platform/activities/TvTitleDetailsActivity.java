@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import com.example.platform.models.Comment;
 import com.example.platform.models.Episode;
 import com.example.platform.models.Title;
 import com.example.platform.models.User;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -81,7 +85,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     TextView tvSeasonsText;
     TextView tvEpisodes;
     TextView tvEpisodesText;
-    ProgressBar progressBar;
+//    ProgressBar progressBar;
 
     RecyclerView rvEpisodesDisplay;
     List<Episode> allEpisodes;
@@ -102,11 +106,25 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     int jsonPosition;
     boolean currentlyFollowing;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+    ScrollView svEntireScreen;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_title_details);
         context = getApplicationContext();
+
+        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+        svEntireScreen = findViewById(R.id.svTVDetails);
+        svEntireScreen.setVisibility(View.INVISIBLE);
+
 
         ivCover = findViewById(R.id.ivCover_TV_Details);
         tvName = findViewById(R.id.tvName_TV_Details);
@@ -127,42 +145,47 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvSeasonsText = findViewById(R.id.tvSeasonsText_TV_Details);
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
         tvEpisodesText = findViewById(R.id.tvEpisodesText_TV_Details);
-        progressBar = findViewById(R.id.pbDetails_TV);
+//        progressBar = findViewById(R.id.pbDetails_TV);
         etCommentInput = findViewById(R.id.etCommentInput_TV);
         ivPostComment = findViewById(R.id.ivPostComment_TV);
 
-        // Get Title information
-        getTitleInformation();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Get Title information
+                getTitleInformation();
 
-        // Set up the Recycler View for episodes display
-        setEpisodeDisplay();
+                // Set up the Recycler View for episodes display
+                setEpisodeDisplay();
 
-        // Set up the comment section for the title
-        try {
-            displayComments();
-        } catch (ParseException e) {
-            Log.d(TAG, "Issue fetching and displaying comments");
-            e.printStackTrace();
-        }
+                // Set up the comment section for the title
+                try {
+                    displayComments();
+                } catch (ParseException e) {
+                    Log.d(TAG, "Issue fetching and displaying comments");
+                    e.printStackTrace();
+                }
 
-        // Handle comment posting by user
-        handleComment();
+                // Handle comment posting by user
+                handleComment();
 
-        // Handle following status (whether a user is currently following a title or not)
-        try {
-            handleFollowingStatus();
-        } catch (JSONException e) {
-            Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Handle following status (whether a user is currently following a title or not)
+                try {
+                    handleFollowingStatus();
+                } catch (JSONException e) {
+                    Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
 
-        // Handle following action (when a user clicks on the following icon)
-        try {
-            handleFollowingAction();
-        } catch (JSONException e) {
-            Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Handle following action (when a user clicks on the following icon)
+                try {
+                    handleFollowingAction();
+                } catch (JSONException e) {
+                    Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }, 10000);
     }
 
     private void getTitleInformation() {
@@ -327,6 +350,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
 
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        svEntireScreen.setVisibility(View.VISIBLE);
         hideProgressBar();
     }
 
@@ -587,10 +613,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
     }
 }

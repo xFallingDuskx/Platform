@@ -7,23 +7,25 @@
     android:background="@color/black_light">
 
     <ScrollView
-        android:id="@+id/svTVDetails"
+        android:id="@+id/svMovieDetails"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".activities.TvTitleDetailsActivity">
+            tools:context=".activities.MovieTitleDetailsActivity">
+
 
             <RelativeLayout
-                android:id="@+id/rlContainer_TV_Details"
+                android:id="@+id/rlContainer_Movie_Details"
                 android:layout_width="match_parent"
                 android:layout_height="600dp"
                 android:background="@color/black_light">
 
                 <ImageView
-                    android:id="@+id/ivCover_TV_Details"
+                    android:id="@+id/ivCover_Movie_Details"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="false"
@@ -31,7 +33,7 @@
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <ImageView
-                    android:id="@+id/ivGradient_TV_Details"
+                    android:id="@+id/ivGradient_Movie_Details"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -39,10 +41,10 @@
                     app:srcCompat="@drawable/gradient_two" />
 
                 <TextView
-                    android:id="@+id/tvStarringText_TV_Details"
+                    android:id="@+id/tvStarringText_Movie_Details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvRelease_Date_TV_Details"
+                    android:layout_above="@+id/tvRelease_Date_Movie_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="2dp"
@@ -52,78 +54,44 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/tvStarring_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvStarring_Movie_Details"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvRelease_Date_TV_Details"
-                    android:layout_toRightOf="@+id/tvStarringText_TV_Details"
+                    android:layout_above="@+id/tvRelease_Date_Movie_Details"
+                    android:layout_toRightOf="@+id/tvStarringText_Movie_Details"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="3dp"
+                    android:layout_marginEnd="250dp"
                     android:layout_marginBottom="2dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
-                    tools:text="Starring: Actor, Actor, ..." />
+                    tools:text="Starring: Actor, ..." />
 
                 <TextView
-                    android:id="@+id/tvRelease_Date_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvRelease_Date_Movie_Details"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvAvailable_On_TV_Details"
+                    android:layout_alignParentBottom="true"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="300dp"
                     android:textColor="@color/white"
                     android:textSize="12sp"
                     tools:text="12/10/2014" />
 
                 <TextView
-                    android:id="@+id/tvGenres_TV_Details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvAvailable_On_TV_Details"
-                    android:layout_toRightOf="@+id/tvRelease_Date_TV_Details"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginBottom="20dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    tools:text="Genre, Genre, ..." />
-
-                <TextView
-                    android:id="@+id/tvAvailable_On_Text_TV_Details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    android:text="Available on:"
-                    android:textStyle="bold"/>
-
-                <TextView
-                    android:id="@+id/tvAvailable_On_TV_Details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tvAvailable_On_Text_TV_Details"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginBottom="10dp"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
-                    tools:text="Available On:" />
-
-                <TextView
-                    android:id="@+id/tvDescription_TV_Details"
+                    android:id="@+id/tvDescription_Movie_Details"
+                    android:background="@color/grey_light"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvStarring_TV_Details"
+                    android:layout_above="@+id/tvStarring_Movie_Details"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="30dp"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="40dp"
                     android:ellipsize="end"
                     android:maxLines="5"
                     android:minLines="3"
@@ -133,38 +101,40 @@
                     tools:text="Description of the title" />
 
                 <TextView
-                    android:id="@+id/tvName_TV_Details"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvName_Movie_Details"
+                    android:background="@color/grey_light"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/tvDescription_TV_Details"
+                    android:layout_above="@+id/tvDescription_Movie_Details"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="3dp"
+                    android:layout_marginEnd="100dp"
                     android:textColor="@color/white"
                     android:textSize="36sp"
                     android:textStyle="bold"
                     tools:text="Name of Title" />
 
 <!--                <ProgressBar-->
-<!--                    android:id="@+id/pbDetails_TV"-->
+<!--                    android:id="@+id/pbDetails_Movie"-->
 <!--                    style="?android:attr/progressBarStyleLarge"-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_above="@+id/tvName_TV_Details"-->
+<!--                    android:layout_above="@+id/tvName_Movie_Details"-->
 <!--                    android:layout_gravity="center"-->
 <!--                    android:layout_marginTop="-30dp"/>-->
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlIcons_TV_Details"
+                android:id="@+id/rlIcons_Movie_Details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rlContainer_TV_Details"
+                android:layout_below="@+id/rlContainer_Movie_Details"
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/ivFollowingStatus_TV_Details"
+                    android:id="@+id/ivFollowingStatus_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="20dp"
@@ -172,10 +142,10 @@
                     app:srcCompat="@drawable/ic_following_false" />
 
                 <TextView
-                    android:id="@+id/tvFollowingStatusText_TV_Details"
+                    android:id="@+id/tvFollowingStatusText_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivFollowingStatus_TV_Details"
+                    android:layout_below="@+id/ivFollowingStatus_Movie_Details"
                     android:layout_marginTop="3dp"
                     android:gravity="center"
                     android:text="Not Following"
@@ -184,24 +154,23 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/ivShare_TV_Details"
+                    android:id="@+id/ivShare_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
-                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="0dp"
-                    android:layout_toRightOf="@+id/ivFollowingStatus_TV_Details"
+                    android:layout_toRightOf="@+id/ivFollowingStatus_Movie_Details"
                     app:srcCompat="@drawable/ic_share_2" />
 
                 <TextView
-                    android:id="@+id/tvShareText_TV_Details"
+                    android:id="@+id/tvShareText_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivShare_TV_Details"
+                    android:layout_below="@+id/ivShare_Movie_Details"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="3dp"
-                    android:layout_toRightOf="@+id/ivFollowingStatus_TV_Details"
+                    android:layout_toRightOf="@+id/ivFollowingStatus_Movie_Details"
                     android:gravity="center"
                     android:text="Share"
                     android:textColor="@color/white"
@@ -209,23 +178,23 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/ivLikeStatus_TV_Details"
+                    android:id="@+id/ivLikeStatus_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="0dp"
-                    android:layout_toRightOf="@+id/ivShare_TV_Details"
+                    android:layout_toRightOf="@+id/ivShare_Movie_Details"
                     app:srcCompat="@drawable/ic_heart_empty" />
 
                 <TextView
-                    android:id="@+id/tvLikeStatusText_TV_Details"
+                    android:id="@+id/tvLikeStatusText_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivLikeStatus_TV_Details"
+                    android:layout_below="@+id/ivLikeStatus_Movie_Details"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="3dp"
-                    android:layout_toRightOf="@+id/ivShare_TV_Details"
+                    android:layout_toRightOf="@+id/ivShare_Movie_Details"
                     android:gravity="center"
                     android:text="Like"
                     android:textColor="@color/white"
@@ -233,23 +202,23 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/ivComment_TV_Details"
+                    android:id="@+id/ivComment_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="0dp"
-                    android:layout_toRightOf="@+id/ivLikeStatus_TV_Details"
+                    android:layout_toRightOf="@+id/ivLikeStatus_Movie_Details"
                     app:srcCompat="@drawable/ic_comment" />
 
                 <TextView
-                    android:id="@+id/tvCommentText_TV_Details"
+                    android:id="@+id/tvCommentText_Movie_Details"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ivComment_TV_Details"
+                    android:layout_below="@+id/ivComment_Movie_Details"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="3dp"
-                    android:layout_toRightOf="@+id/ivLikeStatus_TV_Details"
+                    android:layout_toRightOf="@+id/ivLikeStatus_Movie_Details"
                     android:gravity="center"
                     android:text="Comment"
                     android:textColor="@color/white"
@@ -258,110 +227,63 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlTopDisplay_TV_Details"
+                android:id="@+id/rlTopDisplay_Movie_Details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/rlIcons_TV_Details"
+                android:layout_below="@id/rlIcons_Movie_Details"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="20dp">
 
                 <TextView
-                    android:id="@+id/tvSeasons_TV_Details"
-                    android:layout_width="100dp"
+                    android:id="@+id/tvRuntime_Movie_Details"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:textSize="44sp"
+                    android:textSize="40sp"
                     android:textStyle="bold"
-                    tools:text="2" />
+                    tools:text="1 hour" />
 
                 <TextView
-                    android:id="@+id/tvSeasonsText_TV_Details"
-                    android:layout_width="100dp"
+                    android:id="@+id/tvRuntimeText_Movie_Details"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvSeasons_TV_Details"
+                    android:layout_below="@+id/tvRuntime_Movie_Details"
                     android:layout_marginTop="-8dp"
                     android:gravity="center"
-                    android:text="seasons"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvEpisodes_TV_Details"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="30dp"
-                    android:layout_toRightOf="@+id/tvSeasons_TV_Details"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="44sp"
-                    android:textStyle="bold"
-                    tools:text="24" />
-
-                <TextView
-                    android:id="@+id/tvEpisodesText_TV_Details"
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tvEpisodes_TV_Details"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="-8dp"
-                    android:layout_toRightOf="@+id/tvSeasons_TV_Details"
-                    android:gravity="center"
-                    android:text="episodes"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"
+                    android:text="Watchtime"
+                    android:textColor="@color/grey_light"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/tvViewEpisodes"
+                android:id="@+id/tvViewSimilarMovies"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="All Episodes"
+                android:text="Similar Movies"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:layout_below="@+id/rlTopDisplay_TV_Details"
+                android:layout_below="@+id/rlTopDisplay_Movie_Details"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="10dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvEpisodesDisplay"
+                android:id="@+id/rvSimilarTitlesDisplay_Movie"
                 android:scrollbars="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvViewEpisodes"
+                android:layout_below="@+id/tvViewSimilarMovies"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:background="@color/white"/>
 
             <TextView
-                android:id="@+id/tvViewSimilarShows"
+                android:id="@+id/tvCommentsText_Movie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Similar TV Shows"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:layout_below="@+id/rvEpisodesDisplay"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="10dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvSimilarTitlesDisplay_TV"
-                android:scrollbars="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvViewSimilarShows"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@color/white"/>
-
-            <TextView
-                android:id="@+id/tvCommentsText_TV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/rvSimilarTitlesDisplay_TV"
+                android:layout_below="@+id/rvSimilarTitlesDisplay_Movie"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
@@ -371,17 +293,17 @@
                 android:textStyle="bold" />
 
             <RelativeLayout
-                android:id="@+id/rlCommentKeywords_TV"
+                android:id="@+id/rlCommentKeywords_Movie"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:layout_below="@id/tvCommentsText_TV"
+                android:layout_below="@id/tvCommentsText_Movie"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/grey_light">
 
                 <TextView
-                    android:id="@+id/tvCommentKeywordsHeading_TV"
+                    android:id="@+id/tvCommentKeywordsHeading_Movie"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
@@ -397,11 +319,11 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rlMakeComment_TV"
+                android:id="@+id/rlMakeComment_Movie"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="50dp"
-                android:layout_below="@id/rlCommentKeywords_TV"
+                android:layout_below="@id/rlCommentKeywords_Movie"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@color/grey_dark">
@@ -415,17 +337,17 @@
                     android:src="@drawable/ic_profile" />
 
                 <EditText
-                    android:id="@+id/etCommentInput_TV"
+                    android:id="@+id/etCommentInput_Movie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivProfileIcon_MakeComment"
-                    android:layout_toLeftOf="@+id/ivPostComment_TV"
+                    android:layout_toLeftOf="@+id/ivPostComment_Movie"
                     android:textColor="@color/white"
                     android:hint="Make a comment"
                     android:textColorHint="@color/grey_light" />
 
                 <ImageView
-                    android:id="@+id/ivPostComment_TV"
+                    android:id="@+id/ivPostComment_Movie"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
@@ -436,11 +358,11 @@
             </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvComments_TV"
+                android:id="@+id/rvComments_Movie"
                 android:layout_width="match_parent"
                 android:minHeight="120dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rlMakeComment_TV"
+                android:layout_below="@+id/rlMakeComment_Movie"
                 android:layout_marginTop="5dp"
                 android:background="@color/black_light"
                 android:scrollbars="horizontal"/>
@@ -448,21 +370,5 @@
         </RelativeLayout>
 
     </ScrollView>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerFrameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/activity_tv_title_details_shimmer_placeholder" />
-
-        </RelativeLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </RelativeLayout>

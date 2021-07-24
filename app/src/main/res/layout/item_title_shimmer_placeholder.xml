@@ -13,21 +13,22 @@
         android:paddingBottom="10dp"
         android:background="@color/black_light">
 
-        <ImageView
-            android:id="@+id/ivCover_Home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="false"
-            android:layout_alignParentTop="false"
-            tools:srcCompat="@tools:sample/avatars" />
+<!--        <ImageView-->
+<!--            android:id="@+id/ivCover_Home"-->
+<!--            android:background="@color/white"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentStart="false"-->
+<!--            android:layout_alignParentTop="false"-->
+<!--            tools:srcCompat="@tools:sample/avatars" />-->
 
-        <ImageView
-            android:id="@+id/ivGradient_Home"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            app:srcCompat="@drawable/gradient_one" />
+<!--        <ImageView-->
+<!--            android:id="@+id/ivGradient_Home"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            app:srcCompat="@drawable/gradient_one" />-->
 
         <ImageView
             android:id="@+id/ivLike_Home"
@@ -42,6 +43,7 @@
 
         <TextView
             android:id="@+id/tvGenres_Home"
+            android:background="@color/grey_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -54,6 +56,7 @@
 
         <TextView
             android:id="@+id/tvDescription_Home"
+            android:background="@color/grey_light"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tvGenres_Home"
@@ -71,6 +74,7 @@
 
         <TextView
             android:id="@+id/tvName_Home"
+            android:background="@color/grey_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tvDescription_Home"
@@ -84,11 +88,12 @@
 
         <TextView
             android:id="@+id/tvShares_Home"
-            android:layout_width="40dp"
+            android:background="@color/grey_light"
+            android:layout_width="23dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="18dp"
             android:layout_marginBottom="120dp"
             android:gravity="center"
             android:textColor="@color/white"
@@ -108,11 +113,12 @@
 
         <TextView
             android:id="@+id/tvComments_Home"
-            android:layout_width="40dp"
+            android:background="@color/grey_light"
+            android:layout_width="23dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/ivShare_Home"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="18dp"
             android:layout_marginBottom="15dp"
             android:gravity="center"
             android:textColor="@color/white"
@@ -132,12 +138,13 @@
 
         <TextView
             android:id="@+id/tvLikes_Home"
-            android:layout_width="40dp"
+            android:background="@color/grey_light"
+            android:layout_width="23dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/ivComment_Home"
             android:layout_alignParentTop="false"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="18dp"
             android:layout_marginBottom="15dp"
             android:gravity="center"
             android:textColor="@color/white"

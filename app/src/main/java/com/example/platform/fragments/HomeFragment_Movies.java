@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.example.platform.EndlessRecyclerViewScrollListener;
 import com.example.platform.R;
 import com.example.platform.adapters.TitlesAdapter;
 import com.example.platform.models.Title;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -51,9 +53,10 @@ public class HomeFragment_Movies extends Fragment {
     RecyclerView rvTitles;
     List<Title> allTitles;
     TitlesAdapter adapter;
-    ProgressBar progressBar;
-    TextView tvLoadingMessage;
+//    ProgressBar progressBar;
+//    TextView tvLoadingMessage;
     EndlessRecyclerViewScrollListener scrollListener;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     public HomeFragment_Movies() {
         // Required empty public constructor
@@ -89,16 +92,29 @@ public class HomeFragment_Movies extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout_Movies);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+
         rvTitles = view.findViewById(R.id.rvTitles_Movies);
         allTitles = new ArrayList<>();
         adapter = new TitlesAdapter(getContext(), allTitles);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTitles.setLayoutManager(linearLayoutManager);
         rvTitles.setAdapter(adapter);
-        progressBar = view.findViewById(R.id.pbHome_Movies);
-        tvLoadingMessage = view.findViewById(R.id.tvLoadingMessage_Movies);
+//        progressBar = view.findViewById(R.id.pbHome_Movies);
+//        tvLoadingMessage = view.findViewById(R.id.tvLoadingMessage_Movies);
 
-        displayTitles();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayTitles();
+            }
+        }, 10000);
 
         // Endless Scrolling
         // Retain an instance so that you can call `resetState()` for fresh searches
@@ -129,6 +145,8 @@ public class HomeFragment_Movies extends Fragment {
                     updateParseServer(newTitles);
                     allTitles.addAll(newTitles);
                     adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                     Log.i(TAG, "Titles: " + allTitles.size());
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
@@ -216,12 +234,12 @@ public class HomeFragment_Movies extends Fragment {
     }
 
     public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-        tvLoadingMessage.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
+//        tvLoadingMessage.setVisibility(View.VISIBLE);
     }
 
     public void hideProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
-        tvLoadingMessage.setVisibility(View.INVISIBLE);
+//        progressBar.setVisibility(View.INVISIBLE);
+//        tvLoadingMessage.setVisibility(View.INVISIBLE);
     }
 }

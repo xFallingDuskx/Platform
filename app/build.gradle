@@ -76,4 +76,7 @@ dependencies {
 
     // For free pager (scrolling to swiping)
     implementation 'pro.alexzaitsev:freepager:1.0.1'
+
+    // Shimmer effect
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 }
