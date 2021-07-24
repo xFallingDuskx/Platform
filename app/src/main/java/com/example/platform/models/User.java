@@ -30,6 +30,7 @@ public class User extends ParseObject {
     }
 
     public static final String KEY_FULLNAME = "fullName";
+    public static final String KEY_PASSWORD = "password";
     public static final String KEY_USERNAME = "username";
     public static final String KEY_CREATED_AT = "createdAt";
     public static final String KEY_EMAIL = "email";
