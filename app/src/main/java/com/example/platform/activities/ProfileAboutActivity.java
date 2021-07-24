@@ -9,22 +9,22 @@ import android.widget.ImageView;
 
 import com.example.platform.R;
 
-public class ProfileSecurityActivity extends AppCompatActivity {
+public class ProfileAboutActivity extends AppCompatActivity {
 
-    public static final String TAG = "ProfileSecurityActivity";
+    public static final String TAG = "ProfileAboutActivity";
     ImageView ivBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_security);
+        setContentView(R.layout.activity_profile_about);
 
         // Setting up the toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_ProfileSecurity);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_ProfileAbout);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        ivBack = findViewById(R.id.ivBack_ProfileSecurity);
+        ivBack = findViewById(R.id.ivBack_ProfileAbout);
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

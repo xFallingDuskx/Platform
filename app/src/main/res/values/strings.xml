@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Platform</string>
+    <string name="copyright">&#169; 2021 Platform</string>
+
     <string name="backdrop_path">backdrop_path</string>
     <string name="poster_path">poster_path</string>
     <string name="description">overview</string>

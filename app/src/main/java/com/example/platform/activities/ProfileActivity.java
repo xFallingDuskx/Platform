@@ -22,7 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextView tvUsername;
     TextView tvCreatedAt;
     RelativeLayout rlGeneral;
-    RelativeLayout rlSecurity;
+    RelativeLayout rlAbout;
     RelativeLayout rlFollowing;
     RelativeLayout rlComments;
     RelativeLayout rlLikes;
@@ -50,11 +50,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        rlSecurity = findViewById(R.id.rlProfileOption_Security);
-        rlSecurity.setOnClickListener(new View.OnClickListener() {
+        rlAbout = findViewById(R.id.rlProfileOption_About);
+        rlAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, ProfileSecurityActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, ProfileAboutActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }

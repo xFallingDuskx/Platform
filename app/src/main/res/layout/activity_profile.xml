@@ -74,66 +74,11 @@
         android:layout_marginEnd="20dp">
 
         <RelativeLayout
-            android:id="@+id/rlProfileOption_General"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:background="@color/black_light">
-            <TextView
-                android:id="@+id/tvProfileOption_General_Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:layout_marginStart="10dp"
-                android:text="General"
-                android:textColor="@color/white_dimmer"
-                android:textSize="18sp"/>
-            <ImageView
-                android:id="@+id/ivProfileOption_General_Arrow"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_forward_arrow"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rlProfileOption_Security"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="1dp"
-            android:layout_below="@+id/rlProfileOption_General"
-            android:background="@color/black_light" >
-            <TextView
-                android:id="@+id/tvProfileOption_Security_Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:layout_marginStart="10dp"
-                android:text="Security"
-                android:textColor="@color/white_dimmer"
-                android:textSize="18sp"/>
-            <ImageView
-                android:id="@+id/ivProfileOption_Security_Arrow"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/ic_forward_arrow"/>
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/rlProfileOption_Following"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="1dp"
-            android:layout_below="@+id/rlProfileOption_Security"
             android:background="@color/black_light" >
             <TextView
                 android:id="@+id/tvProfileOption_Following_Text"
@@ -211,6 +156,67 @@
                 android:src="@drawable/ic_forward_arrow"/>
         </RelativeLayout>
 
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlProfileOption_General"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_below="@+id/rlProfileOptionsContainer"
+        android:background="@color/black_light">
+        <TextView
+            android:id="@+id/tvProfileOption_General_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginStart="10dp"
+            android:text="General"
+            android:textColor="@color/white_dimmer"
+            android:textSize="18sp"/>
+        <ImageView
+            android:id="@+id/ivProfileOption_General_Arrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_forward_arrow"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlProfileOption_About"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_below="@+id/rlProfileOption_General"
+        android:background="@color/black_light" >
+        <TextView
+            android:id="@+id/tvProfileOption_About_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:layout_marginStart="10dp"
+            android:text="About"
+            android:textColor="@color/white_dimmer"
+            android:textSize="18sp"/>
+        <ImageView
+            android:id="@+id/btnProfileOption_About_Arrow"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_forward_arrow"/>
     </RelativeLayout>
 
     <Button
