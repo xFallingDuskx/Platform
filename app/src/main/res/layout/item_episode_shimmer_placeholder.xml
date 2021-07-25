@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="342dp"
+    android:layout_height="wrap_content"
+    android:background="@color/black_light"
+    android:paddingEnd="10dp">
+
+    <ImageView
+        android:id="@+id/ivEpisodeCover_TV_Show"
+        android:background="@color/grey_light"
+        android:layout_width="342dp"
+        android:layout_height="185dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvEpisodeName_TV_Show"
+        android:background="@color/grey_light"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivEpisodeCover_TV_Show"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        tools:text="Episode Title" />
+
+    <TextView
+        android:id="@+id/tvEpisodeDetails_TV_Show"
+        android:background="@color/grey_light"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEpisodeName_TV_Show"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:minLines="3"
+        android:scrollHorizontally="true"
+        android:textColor="@color/white"
+        tools:text="Gimpose of episode overview - Lorem ipsum dolor sit amet, qui ut veniam eruditi, dicit mundi percipit et qui, eos zril suavitate ne. Tacimates intellegebat et pri, cu harum labore ius. Illum legimus appetere id sea. " />
+</RelativeLayout>

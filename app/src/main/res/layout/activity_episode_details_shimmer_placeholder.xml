@@ -52,7 +52,8 @@
 
                 <TextView
                     android:id="@+id/tvReleaseDate_Episode_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_toRightOf="@+id/tvReleaseDateText_Episode_Details"
@@ -64,7 +65,8 @@
 
                 <TextView
                     android:id="@+id/tvName_Episode_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/tvReleaseDate_Episode_Details"
                     android:layout_marginStart="10dp"
@@ -142,6 +144,7 @@
 
             <TextView
                 android:id="@+id/tvDescription_Episode_Details"
+                android:background="@color/grey_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rlIcons_Episode_Details"

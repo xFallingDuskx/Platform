@@ -162,7 +162,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, 10000);
+        }, 5000);
     }
 
     private void getTitleInformation() {

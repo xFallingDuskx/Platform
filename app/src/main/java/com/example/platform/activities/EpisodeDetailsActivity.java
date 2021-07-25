@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -75,7 +76,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         context = getApplicationContext();
         intent = getIntent();
 
-        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout);
+        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayoutEpisode);
         if(!shimmerFrameLayout.isShimmerVisible()) {
             shimmerFrameLayout.setVisibility(View.VISIBLE);
         }
@@ -95,38 +96,44 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         etCommentInput = findViewById(R.id.etCommentInput_Episode);
         ivPostComment = findViewById(R.id.ivPostComment_Episode);
 
-        // Get Episode information
-        getEpisodeInformation();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Get Episode information
+                getEpisodeInformation();
 
-        // Set Episode information within the view
-        setEpisodeInformation();
+                // Set Episode information within the view
+                setEpisodeInformation();
 
-        // Set up the comment section for the title
-        try {
-            displayComments();
-        } catch (ParseException e) {
-            Log.d(TAG, "Issue fetching and displaying comments");
-            e.printStackTrace();
-        }
+                // Set up the comment section for the title
+                try {
+                    displayComments();
+                } catch (ParseException e) {
+                    Log.d(TAG, "Issue fetching and displaying comments");
+                    e.printStackTrace();
+                }
 
-        // Handle comment posting by user
-        handleComment();
+                // Handle comment posting by user
+                handleComment();
 
-        // Handle following status (whether a user is currently following a title or not)
-        try {
-            handleFollowingStatus();
-        } catch (JSONException e) {
-            Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Handle following status (whether a user is currently following a title or not)
+                try {
+                    handleFollowingStatus();
+                } catch (JSONException e) {
+                    Log.d(TAG, "Issue handling the following status for the user /Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
 
-        // Handle following action (when a user clicks on the following icon)
-        try {
-            handleFollowingAction();
-        } catch (JSONException e) {
-            Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+                // Handle following action (when a user clicks on the following icon)
+                try {
+                    handleFollowingAction();
+                } catch (JSONException e) {
+                    Log.d(TAG, "Issue handling user following action /Error: " + e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }, 5000);
+
     }
 
     private void getEpisodeInformation() {
