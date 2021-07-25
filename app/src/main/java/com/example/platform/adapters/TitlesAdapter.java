@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -97,6 +99,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             super(itemView);
 
             ivCover = itemView.findViewById(R.id.ivCover_Home);
+
             tvName = itemView.findViewById(R.id.tvName_Home);
             tvDescription = itemView.findViewById(R.id.tvDescription_Home);
             tvGenres = itemView.findViewById(R.id.tvGenres_Home);
@@ -214,6 +217,26 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     .placeholder(R.drawable.poster_placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
                     .into(ivCover);
+
+            // Change slide in effect on title cover depending on its position
+            // Source: https://stackoverflow.com/questions/31562833/how-to-slide-an-imageview-from-left-to-right-smoothly-in-android
+            // Source: https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
+            if (getAdapterPosition() % 2 == 0) { // title slides in from right to left if at an even position
+                // Load the animation like this
+                Animation animSlide = AnimationUtils.loadAnimation(context,
+                        R.anim.right_to_left);
+
+                // Start the animation like this
+                ivCover.startAnimation(animSlide);
+            } else { // title slides in from left to right if at an odd position
+                // Load the animation like this
+                Animation animSlide = AnimationUtils.loadAnimation(context,
+                        R.anim.left_to_right);
+
+                // Start the animation like this
+                ivCover.startAnimation(animSlide);
+            }
+
         }
     }
 
