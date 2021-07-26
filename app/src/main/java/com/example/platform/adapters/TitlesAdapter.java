@@ -118,15 +118,17 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                 private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
-                        Log.d(TAG, "onDoubleTap");
+                        Log.i(TAG, "onDoubleTap");
                         int position = getAdapterPosition();
                         handleUserLikeAction(position, ivLike);
                         return super.onDoubleTap(e);
                     }
 
+
+
                     @Override
-                    public boolean onSingleTapUp(MotionEvent e) {
-                        Log.d(TAG, "onSingleTap");
+                    public boolean onSingleTapConfirmed(MotionEvent e) {
+                        Log.i(TAG, "onSingleTap");
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             Title title = titles.get(position);
