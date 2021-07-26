@@ -17,7 +17,6 @@ import com.example.platform.R;
 import com.example.platform.activities.MovieTitleDetailsActivity;
 import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Title;
-import com.example.platform.models.User;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +28,6 @@ public class SimilarTitlesAdapter extends RecyclerView.Adapter<SimilarTitlesAdap
 
     private Context context;
     private List<Title> titles;
-    User currentUser = new User();
 
 
     public SimilarTitlesAdapter(Context context, List<Title> titles) {

@@ -19,7 +19,6 @@ import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Title;
 
 import org.jetbrains.annotations.NotNull;
-import org.w3c.dom.Text;
 
 import java.util.List;
 

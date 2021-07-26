@@ -1,13 +1,7 @@
 package com.example.platform.models;
 
-import android.util.Log;
-
-import com.facebook.stetho.json.ObjectMapper;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,9 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @ParseClassName("User")
 public class User extends ParseObject {
@@ -87,18 +79,6 @@ public class User extends ParseObject {
     public static String getTime(Date createdAt) {
         DateFormat dateFormat = new SimpleDateFormat("MMMM YYYY");
         String strDate = dateFormat.format(createdAt);
-        String[] strDateSplit = strDate.split("-");
-//        String month = strDateSplit[0];
-//        String year = strDateSplit[2];
-//
-////        if(month.equals("01")) {
-//            month = "January";
-//        } else if (month.equals("02")) {
-//            month = "February";
-//        } else if (month.equals("03")) {
-//            month = "March";
-//        } else if ()
-
         return strDate;
     }
 }

@@ -10,11 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.webkit.ServiceWorkerWebSettings;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +46,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Headers;
 
 public class TvTitleDetailsActivity extends AppCompatActivity {
@@ -93,7 +89,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     TextView tvSeasonsText;
     TextView tvEpisodes;
     TextView tvEpisodesText;
-//    ProgressBar progressBar;
 
     RecyclerView rvEpisodesDisplay;
     List<Episode> allEpisodes;
@@ -153,7 +148,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         tvSeasonsText = findViewById(R.id.tvSeasonsText_TV_Details);
         tvEpisodes = findViewById(R.id.tvEpisodes_TV_Details);
         tvEpisodesText = findViewById(R.id.tvEpisodesText_TV_Details);
-//        progressBar = findViewById(R.id.pbDetails_TV);
         etCommentInput = findViewById(R.id.etCommentInput_TV);
         ivPostComment = findViewById(R.id.ivPostComment_TV);
 
@@ -206,7 +200,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     private void getTitleInformation() {
-        showProgressBar();
         // First get information that was sent from previous activity
         Log.i(TAG, "Getting title information...");
         Intent intent = getIntent();
@@ -361,16 +354,12 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
         Glide.with(context)
                 .load(titleCoverPath)
-                //.placeholder(placeholder)
-                //.error(placeholder)
                 .centerCrop() // scale image to fill the entire ImageView
-                //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
 
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
         svEntireScreen.setVisibility(View.VISIBLE);
-        hideProgressBar();
     }
 
     // Set up the RecyclerView to display the episodes for the title
@@ -438,8 +427,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     // Save Title in the Parse Server if it does not exist
     private void saveTitle(Episode episode) {
         episode.setId(episode.getId());
-//        title.setLikes(0);
-//        title.setShares(0);
 
         episode.saveInBackground(e -> {
             if (e != null){
@@ -707,13 +694,5 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + titleName));
             }
         });
-    }
-
-    public void showProgressBar() {
-//        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressBar() {
-//        progressBar.setVisibility(View.INVISIBLE);
     }
 }

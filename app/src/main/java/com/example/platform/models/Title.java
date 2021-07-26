@@ -1,17 +1,12 @@
 package com.example.platform.models;
 
-import android.util.Log;
-
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +24,6 @@ public class Title extends ParseObject {
     Integer id;
     String releaseDate;
     String type;
-//    ParseObject parseObject;
 
     public static final String KEY_TMDB_ID = "tmdbID";
     public static final String KEY_LIKES = "likes";
@@ -66,12 +60,6 @@ public class Title extends ParseObject {
             releaseDate = convertDate(releaseDate);
             type = "Episode";
         }
-
-//        try {
-//            parseObject = ParseQuery.getQuery("Title").whereEqualTo(KEY_TMDB_ID, id).getFirst();
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
     }
 
     // Convert JSONArray into List<Titles>
@@ -111,10 +99,6 @@ public class Title extends ParseObject {
         this.id = tmdbID;
         put(KEY_TMDB_ID, tmdbID);
     }
-
-
-
-//    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
 
     public String getPosterPath() {
         return posterPath;
@@ -164,68 +148,4 @@ public class Title extends ParseObject {
     public void setType(String type) {
         this.type = type;
     }
-
-//    public Integer getLikes() {
-//        Log.d(TAG, "Getting the likes for the title " + name + ": " + getInt(KEY_LIKES));
-//        return getInt(KEY_LIKES);
-//    }
-//
-//    public void setLikes(Integer integer) {
-//        //Log.d(TAG, "Saving the likes for the title " + name + ": " + getInt(KEY_LIKES));
-//        put(KEY_LIKES, integer);
-//    }
-//
-//    public Integer getShare() {
-//        return getInt(KEY_SHARES);
-//    }
-//
-//    public void setShares(Integer integer) {
-//        put(KEY_SHARES, integer);
-//    }
-
-//    public void setParseObject(ParseObject parseObject) {
-//        this.parseObject = parseObject;
-//    }
-//
-//    public ParseObject getParseObject() {
-//        return parseObject;
-//    }
-
-    // TODO: MAKE SURE TO DO BOTH GETTERS AND SETTERS
-//    public Array getGenres() {
-//        JSONArray genres = getJSONArray(KEY_GENRES);
-//        return;
-//    }
-//
-//    public Array getActors() {
-//        JSONArray actors = getJSONArray(KEY_ACTORS);
-//        return;
-//    }
-//
-//    public Array getAvailableOn() {
-//        JSONArray providers = getJSONArray(KEY_AVAILABLE_ON);
-//        return;
-//    }
-//
-//    public int getLikes() {
-//        return getInt(KEY_LIKES);
-//    }
-//
-//    public Array getComments() {
-//        JSONArray comments = getJSONArray(KEY_COMMENTS);
-//        return;
-//    }
-//
-//    public int getShares() {
-//        return getInt(KEY_SHARES);
-//    }
-//
-//    public Array getSeasons() {
-//        JSONArray seasons = getJSONArray(KEY_SEASONS);
-//        return;
-//    }
-//
-//    public int getNumberOfEpisodes() {
-//        return getInt(KEY_NUMBER_OF_EPISODES);
-//    }
 }

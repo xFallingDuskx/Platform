@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +80,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     ImageView ivComment;
     TextView tvComment;
     TextView tvRuntime;
-//    ProgressBar progressBar;
 
     RecyclerView rvSimilarTitlesDisplay;
     List<Title> similarTitles;
@@ -132,7 +130,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         ivComment = findViewById(R.id.ivComment_Movie_Details);
         tvComment = findViewById(R.id.tvCommentText_Movie_Details);
         tvRuntime = findViewById(R.id.tvRuntime_Movie_Details);
-//        progressBar = findViewById(R.id.pbDetails_Movie);
         etCommentInput = findViewById(R.id.etCommentInput_Movie);
         ivPostComment = findViewById(R.id.ivPostComment_Movie);
 
@@ -182,7 +179,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     }
 
     private void getTitleInformation() {
-        showProgressBar();
         // First get information that was sent from previous activity
         Log.i(TAG, "Getting title information...");
         Intent intent = getIntent();
@@ -325,16 +321,12 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
         Glide.with(context)
                 .load(titleCoverPath)
-                //.placeholder(placeholder)
-                //.error(placeholder)
                 .centerCrop() // scale image to fill the entire ImageView
-                //.transform(new RoundedCornersTransformation(radius, margin))
                 .into(ivCover);
 
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
         svEntireScreen.setVisibility(View.VISIBLE);
-        hideProgressBar();
     }
 
     public void displaySimilarTitlesInDisplay() {
@@ -585,13 +577,5 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + titleName));
             }
         });
-    }
-
-    public void showProgressBar() {
-//        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressBar() {
-//        progressBar.setVisibility(View.INVISIBLE);
     }
 }

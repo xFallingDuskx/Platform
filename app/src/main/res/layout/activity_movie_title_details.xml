@@ -121,15 +121,6 @@
                     android:textStyle="bold"
                     tools:text="Name of Title" />
 
-<!--                <ProgressBar-->
-<!--                    android:id="@+id/pbDetails_Movie"-->
-<!--                    style="?android:attr/progressBarStyleLarge"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_above="@+id/tvName_Movie_Details"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="-30dp"/>-->
-
             </RelativeLayout>
 
             <RelativeLayout

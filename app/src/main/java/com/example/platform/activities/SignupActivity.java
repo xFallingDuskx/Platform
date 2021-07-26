@@ -2,7 +2,6 @@ package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,16 +13,11 @@ import android.widget.Toast;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
-import com.example.platform.models.Title;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import okhttp3.Headers;
 
@@ -115,7 +109,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-//        Log.i(TAG, "The response from the API is: " + valid[0]);
         return valid[0];
     }
 

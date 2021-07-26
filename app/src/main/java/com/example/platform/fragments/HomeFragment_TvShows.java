@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -23,7 +21,6 @@ import com.example.platform.R;
 import com.example.platform.adapters.TitlesAdapter;
 import com.example.platform.models.Title;
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -34,15 +31,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import okhttp3.Headers;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment_TvShows#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class HomeFragment_TvShows extends Fragment {
@@ -54,27 +48,11 @@ public class HomeFragment_TvShows extends Fragment {
     RecyclerView rvTitles;
     List<Title> allTitles;
     TitlesAdapter adapter;
-//    ProgressBar progressBar;
-//    TextView tvLoadingMessage;
     EndlessRecyclerViewScrollListener scrollListener;
     ShimmerFrameLayout shimmerFrameLayout;
 
     public HomeFragment_TvShows() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment HomeFragment_TvShows.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment_TvShows newInstance(int page) {
-        Bundle args = new Bundle();
-        HomeFragment_TvShows fragment = new HomeFragment_TvShows();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -142,7 +120,6 @@ public class HomeFragment_TvShows extends Fragment {
     }
 
     private void displayTitles() {
-        showProgressBar(); // Make progressBar visible
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get(TRENDING_TV_SHOWS_URL, new JsonHttpResponseHandler() {
@@ -167,7 +144,6 @@ public class HomeFragment_TvShows extends Fragment {
                     Log.e(TAG, "Issue updating Parse Server");
                     e.printStackTrace();
                 }
-                hideProgressBar(); // Make progressBar invisible
             }
 
             @Override
@@ -206,7 +182,6 @@ public class HomeFragment_TvShows extends Fragment {
     // Endless Scrolling
     // Append the next page of data into the adapter
     public void loadNextDataFromApi() {
-        showProgressBar();
         // Desire the next page
         desiredPage++;
         int startingPosition = (desiredPage - 1) * 20;
@@ -235,7 +210,6 @@ public class HomeFragment_TvShows extends Fragment {
                     Log.e(TAG, "Issue updating Parse Server");
                     e.printStackTrace();
                 }
-                hideProgressBar(); // Make progressBar invisible
             }
 
             @Override
@@ -243,15 +217,5 @@ public class HomeFragment_TvShows extends Fragment {
                 Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
-    }
-
-    public void showProgressBar() {
-//        progressBar.setVisibility(View.VISIBLE);
-//        tvLoadingMessage.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressBar() {
-//        progressBar.setVisibility(View.INVISIBLE);
-//        tvLoadingMessage.setVisibility(View.INVISIBLE);
     }
 }

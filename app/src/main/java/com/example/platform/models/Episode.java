@@ -1,9 +1,6 @@
 package com.example.platform.models;
 
-import android.util.Log;
-
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 

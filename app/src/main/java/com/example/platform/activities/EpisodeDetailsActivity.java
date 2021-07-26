@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +52,6 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     TextView tvReleaseDate;
     ImageView ivFollowingStatus;
     TextView tvFollowingStatus;
-//    ProgressBar progressBar;
 
     EditText etCommentInput;
     ImageView ivPostComment;
@@ -92,7 +90,6 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         tvReleaseDate = findViewById(R.id.tvReleaseDate_Episode_Details);
         ivFollowingStatus = findViewById(R.id.ivFollowingStatus_Episode_Details);
         tvFollowingStatus = findViewById(R.id.tvFollowingStatusText_Episode_Details);
-//        progressBar = findViewById(R.id.pbDetails_Episode);
         etCommentInput = findViewById(R.id.etCommentInput_Episode);
         ivPostComment = findViewById(R.id.ivPostComment_Episode);
 
@@ -137,7 +134,6 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     }
 
     private void getEpisodeInformation() {
-        showProgressBar();
         // First get information that was sent from previous activity
         Log.i(TAG, "Getting episode information...");
         episodeCover = (String) intent.getStringExtra("cover");
@@ -150,7 +146,6 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
         svEntireScreen.setVisibility(View.VISIBLE);
-        hideProgressBar();
     }
 
     public void setEpisodeInformation() {
@@ -327,11 +322,4 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         });
     }
 
-    public void showProgressBar() {
-//        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressBar() {
-//        progressBar.setVisibility(View.INVISIBLE);
-    }
 }
