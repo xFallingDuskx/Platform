@@ -50,9 +50,5 @@ public class ProfileGeneralActivity extends AppCompatActivity {
 
         tvEmail = findViewById(R.id.tvProfileGeneral_Email_Text);
         tvEmail.setText("Email: " + currentUser.getEmail());
-
-//        tvPassword = findViewById(R.id.tvProfileGeneral_Password_Text);
-//        tvPassword.setText(currentUser.getString(User.KEY_PASSWORD));
-//        Log.i(TAG, "The password is: " + currentUser.getString(User.KEY_PASSWORD));
     }
 }
