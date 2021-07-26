@@ -7,6 +7,7 @@
     <string name="successful_signup">Successfully signed up!</string>
     <string name="incorrect_login">Incorrect username and/or password</string>
     <string name="successful_login">Successfully logged in!</string>
+    <string name="successful_logout">You\'ve been logged out</string>
 
     <string name="description_unavailable">Sorry! No overview is available for the title.</string>
     <string name="now_following_title">You are now following the title&#160;</string>
