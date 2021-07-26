@@ -9,7 +9,9 @@ import com.parse.ParseUser;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Comment")
 public class Comment extends ParseObject {
@@ -25,6 +27,17 @@ public class Comment extends ParseObject {
     public static final String KEY_REPLIES = "replies";
 
     public Comment() {}
+
+    // Get keywords from the title
+    public static List<String> getKeywords(String comment) {
+        List<String> keywords = new ArrayList<>();
+        String[] commentSentences = comment.split("[.!?]+\\s*"); // Split comment by end punctuations (.!?) to get sentences
+        for (String sentence : commentSentences) {
+            String[] commentWords = sentence.split(" "); // Get all the words from the sentence
+        }
+
+        return keywords;
+    }
 
     // Timestamp
     public static String calculateTimeAgo(Date createdAt) {

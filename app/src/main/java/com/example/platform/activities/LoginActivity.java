@@ -49,11 +49,11 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Issue with login", e);
-                    Toast.makeText(LoginActivity.this, "Incorrect username/password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, getString(R.string.incorrect_login), Toast.LENGTH_LONG).show();
                     return;
                 }
                 goMainActivity();
-                Toast.makeText(LoginActivity.this, "Successfully logged in!", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, getString(R.string.successful_login), Toast.LENGTH_LONG).show();
             }
         });
     }

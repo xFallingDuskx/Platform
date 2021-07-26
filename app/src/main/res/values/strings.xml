@@ -2,33 +2,29 @@
     <string name="app_name">Platform</string>
     <string name="copyright">&#169; 2021 Platform</string>
 
-    <string name="backdrop_path">backdrop_path</string>
-    <string name="poster_path">poster_path</string>
-    <string name="description">overview</string>
+    <string name="unmatched_passwords">Password are not the same</string>
+    <string name="invalid_email">Please use a valid email address</string>
+    <string name="successful_signup">Successfully signed up!</string>
+    <string name="incorrect_login">Incorrect username and/or password</string>
+    <string name="successful_login">Successfully logged in!</string>
+
     <string name="description_unavailable">Sorry! No overview is available for the title.</string>
-    <string name="id">id</string>
-    <string name="movie_name">title</string>
-    <string name="tv_name">name</string>
-    <string name="movie_release_date">release_date</string>
-    <string name="tv_release_date">first_air_date</string>
-    <string name="episode_release_date">air_date</string>
-    <string name="movie_type">Movie</string>
-    <string name="tv_type">TV Show</string>
-    <string name="episode_type">Episode</string>
-    <string name="still_path">still_path</string>
-    <string name="season_number">season_number</string>
-    <string name="episode_number">episode_number</string>
+    <string name="now_following_title">You are now following the title&#160;</string>
+    <string name="now_unfollowing_title">You are no longer following the title&#160;</string>
+    <string name="now_following_episode">You are now following the episode&#160;</string>
+    <string name="now_unfollowing_episode">You are no longer following the episode&#160;</string>
+    <string name="following">Following</string>
+    <string name="not_following">Not Following</string>
+    <string name="liked_title">You liked the title&#160;</string>
+    <string name="unliked_title">You unliked the title&#160;</string>
+    <string name="comment_is_empty">Comment cannot be empty</string>
+    <string name="cannot_save_comment">Unable to save comment</string>
 
     <string name="comment_section_header"><u>Comments</u></string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_profile_security">ProfileSecurityActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

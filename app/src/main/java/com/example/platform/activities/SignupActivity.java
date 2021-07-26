@@ -63,14 +63,14 @@ public class SignupActivity extends AppCompatActivity {
                 // Confirm password
                 if (! password.equals(passwordConfirmation)) {
                     Log.i(TAG, "Password entered in by user are not the same");
-                    Toast.makeText(SignupActivity.this, "Passwords are not the same", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, getString(R.string.unmatched_passwords), Toast.LENGTH_LONG).show();
                     return;
                 }
 
                 // Verify the email address
                 if(! validEmail(email)) {
                     Log.i(TAG, "Email address entered in by user is not valid");
-                    Toast.makeText(SignupActivity.this, "Please use a valid email address", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -135,7 +135,7 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
                 goMainActivity();
-                Toast.makeText(SignupActivity.this, "Successfully signed up!", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignupActivity.this, getString(R.string.successful_signup), Toast.LENGTH_LONG).show();
             }
         });
     }

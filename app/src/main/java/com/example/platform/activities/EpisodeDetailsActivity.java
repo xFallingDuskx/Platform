@@ -207,7 +207,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String commentText = etCommentInput.getText().toString();
                 if (commentText.isEmpty()) { // Prevent user from making a comment without text
-                    Toast.makeText(context, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.comment_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
@@ -227,7 +227,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error while saving comment", e);
-                    Toast.makeText(context, "Unable to save", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.cannot_save_comment), Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i(TAG, "Comment was saved successfully");
                     // Rest description and post image after post has been made by user
@@ -312,12 +312,12 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                         } else {
                             if (currentlyFollowing) { // If the user is now following the item
                                 ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
-                                tvFollowingStatus.setText("Following");
-                                Toast.makeText(context, "You're now following the episode " + episodeName, Toast.LENGTH_SHORT).show();
+                                tvFollowingStatus.setText(R.string.following);
+                                Toast.makeText(context, getString(R.string.now_following_episode) + episodeName, Toast.LENGTH_SHORT).show();
                             } else { // If the user is no longer following the title
                                 ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
-                                tvFollowingStatus.setText("Not Following");
-                                Toast.makeText(context, "You're no longer following the episode " + episodeName, Toast.LENGTH_SHORT).show();
+                                tvFollowingStatus.setText(R.string.not_following);
+                                Toast.makeText(context, getString(R.string.now_unfollowing_episode) + episodeName, Toast.LENGTH_SHORT).show();
                             }
                             Log.i(TAG, "Success saving following action by user");
                         }

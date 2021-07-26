@@ -509,7 +509,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String commentText = etCommentInput.getText().toString();
                 if (commentText.isEmpty()) { // Prevent user from making a comment without text
-                    Toast.makeText(context, "Comment cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.comment_is_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
@@ -529,7 +529,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error while saving comment", e);
-                    Toast.makeText(context, "Unable to save", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.cannot_save_comment), Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i(TAG, "Comment was saved successfully");
                     // Rest description and post image after post has been made by user
@@ -614,12 +614,12 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                         } else {
                             if (currentlyFollowing) { // If the user is now following the item
                                 ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
-                                tvFollowingStatus.setText("Following");
-                                Toast.makeText(context, "You're now following the show " + titleName, Toast.LENGTH_SHORT).show();
+                                tvFollowingStatus.setText(R.string.following);
+                                Toast.makeText(context, getString(R.string.now_following_title) + titleName, Toast.LENGTH_SHORT).show();
                             } else { // If the user is no longer following the title
                                 ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
-                                tvFollowingStatus.setText("Not Following");
-                                Toast.makeText(context, "You're no longer following the show " + titleName, Toast.LENGTH_SHORT).show();
+                                tvFollowingStatus.setText(R.string.not_following);
+                                Toast.makeText(context, getString(R.string.now_unfollowing_title) + titleName, Toast.LENGTH_SHORT).show();
                             }
                             Log.i(TAG, "Success saving following action by user");
                         }
@@ -667,7 +667,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
                     currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
                     titleLiked = false; // Title is no longer liked by the user
-                    Toast.makeText(context, "You unliked the title " + titleName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.unliked_title) + titleName, Toast.LENGTH_SHORT).show();
                     Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + titleName);
                 } else {  // Title is currently not liked by the User and they desire to like it
                     ivLikeStatus.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
@@ -675,7 +675,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
                     currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
                     titleLiked = true; // Title is now liked by the user
-                    Toast.makeText(context, "You liked the title " + titleName, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.liked_title) + titleName, Toast.LENGTH_SHORT).show();
                     Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + titleName);
                 }
 
