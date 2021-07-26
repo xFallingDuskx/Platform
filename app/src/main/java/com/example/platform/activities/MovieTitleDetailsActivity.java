@@ -159,6 +159,9 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 // Handle the user changing their liked status
                 handleLikeAction();
 
+                // Handle the user can share content
+                handleShareAction();
+
                 // Handle following status (whether a user is currently following a title or not)
                 try {
                     handleFollowingStatus();
@@ -565,6 +568,21 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     }
                 });
                 Log.i(TAG, "Title currently liked by the user after clicking are: " + currentUser.getMap(User.KEY_LIKED_TITLES));
+            }
+        });
+    }
+
+    public void handleShareAction() {
+        ivShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String shareText = titleName + System.lineSeparator() + System.lineSeparator() + titleDescription;
+
+                Intent shareIntent = new Intent();
+                shareIntent.setType("text/plain");
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + titleName));
             }
         });
     }

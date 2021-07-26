@@ -2,8 +2,14 @@ package com.example.platform.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcel;
+import android.text.Html;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -43,6 +49,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,14 +183,12 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Title title = titles.get(position);
+                        String shareText = title.getName() + System.lineSeparator() + System.lineSeparator() + title.getDescription();
 
                         Intent shareIntent = new Intent();
+                        shareIntent.setType("text/plain");
                         shareIntent.setAction(Intent.ACTION_SEND);
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, title.getPosterPath());
-                        shareIntent.setType("image/*");
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, title.getName());
-                        shareIntent.putExtra(Intent.EXTRA_TEXT, title.getDescription());
-                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
                         context.startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + title.getName()));
                     }
                 }

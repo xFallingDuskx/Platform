@@ -120,8 +120,6 @@ public class HomeFragment_TvShows extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvTitles.setLayoutManager(linearLayoutManager);
         rvTitles.setAdapter(adapter);
-//        progressBar = view.findViewById(R.id.pbHome_TV_Shows);
-//        tvLoadingMessage = view.findViewById(R.id.tvLoadingMessage_TV_Shows);
 
         new Handler().postDelayed(new Runnable() {
             @Override

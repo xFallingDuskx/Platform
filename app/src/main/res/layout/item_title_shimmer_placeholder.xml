@@ -77,8 +77,8 @@
 
             <ImageView
                 android:id="@+id/ivShare_Home"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginEnd="10dp"
@@ -88,8 +88,8 @@
 
             <ImageView
                 android:id="@+id/ivComment_Home"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_above="@+id/ivShare_Home"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
@@ -98,8 +98,8 @@
 
             <ImageView
                 android:id="@+id/ivLike_Home"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_above="@+id/ivComment_Home"
                 android:layout_alignParentTop="false"
                 android:layout_alignParentEnd="true"
