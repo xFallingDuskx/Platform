@@ -86,6 +86,7 @@ public class HomeFragment_TvShows extends Fragment {
     public void onResume() {
         super.onResume();
         shimmerFrameLayout.startShimmer();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

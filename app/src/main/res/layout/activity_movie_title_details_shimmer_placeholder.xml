@@ -196,7 +196,7 @@
                     android:layout_marginTop="3dp"
                     android:layout_toRightOf="@+id/ivShare_Movie_Details"
                     android:gravity="center"
-                    android:text="Like"
+                    android:text="Not liked"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />

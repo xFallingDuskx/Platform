@@ -145,15 +145,6 @@
                     android:textStyle="bold"
                     tools:text="Name of Title" />
 
-<!--                <ProgressBar-->
-<!--                    android:id="@+id/pbDetails_TV"-->
-<!--                    style="?android:attr/progressBarStyleLarge"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_above="@+id/tvName_TV_Details"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="-30dp"/>-->
-
             </RelativeLayout>
 
             <RelativeLayout
@@ -227,7 +218,7 @@
                     android:layout_marginTop="3dp"
                     android:layout_toRightOf="@+id/ivShare_TV_Details"
                     android:gravity="center"
-                    android:text="Like"
+                    android:text="Not liked"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />

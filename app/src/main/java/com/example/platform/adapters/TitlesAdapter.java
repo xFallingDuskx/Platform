@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -55,7 +56,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
     private Context context;
     private List<Title> titles;
     ParseUser currentUser = ParseUser.getCurrentUser();
-    Boolean titleLiked;
+    Boolean titleLiked = false;
     HashMap<String, Object> userLikedTitles;
 
 
@@ -87,13 +88,9 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
         public ImageView ivCover;
         public TextView tvName;
         public TextView tvDescription;
-        public TextView tvGenres;
         public ImageView ivLike;
-        public TextView tvLikes;
         public ImageView ivComment;
-        public TextView tvComments;
         public ImageView ivShare;
-        public TextView tvShares;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -102,13 +99,9 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
             tvName = itemView.findViewById(R.id.tvName_Home);
             tvDescription = itemView.findViewById(R.id.tvDescription_Home);
-            tvGenres = itemView.findViewById(R.id.tvGenres_Home);
             ivLike = itemView.findViewById(R.id.ivLike_Home);
-            tvLikes = itemView.findViewById(R.id.tvLikes_Home);
             ivComment = itemView.findViewById(R.id.ivComment_Home);
-            tvComments = itemView.findViewById(R.id.tvComments_Home);
             ivShare = itemView.findViewById(R.id.ivShare_Home);
-            tvShares = itemView.findViewById(R.id.tvShares_Home);
 
             // User clicks on Heart icon to like the title
             ivLike.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +130,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         int position = getAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
                             Title title = titles.get(position);
-                            Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId() + " /Object ID:" + title.getObjectId());
+                            Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId());
                             Intent intent;
 
                             // Determine where to send Intent based of the type associated with a Title
@@ -148,15 +141,17 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                                 Log.i(TAG, "Type is: " + title.getType() + " for Movies");
                                 intent = new Intent(context, MovieTitleDetailsActivity.class);
                             }
-                            // TODO: Put extra - Share titleLiked status
+                            // Put extra - Share titleLiked status
                             intent.putExtra("id", title.getId());
                             intent.putExtra("name", title.getName());
                             intent.putExtra("posterPath", title.getPosterPath());
                             intent.putExtra("type", title.getType());
                             intent.putExtra("description", title.getDescription());
                             intent.putExtra("releaseDate", title.getReleaseDate());
+                            intent.putExtra("titleLiked", titleLiked);
+                            intent.putExtra("userLikedTitles", userLikedTitles);
                             context.startActivity(intent);
-                            Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
+                            Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " with like status: " + titleLiked);
                         }
                         return super.onSingleTapUp(e);
                     }
@@ -169,45 +164,33 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                 }
             });
 
-            // User clicks on View
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION) {
-//                        Title title = titles.get(position);
-//                        Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId() + " /Object ID:" + title.getObjectId());
-//                        Intent intent;
-//
-//                        // Determine where to send Intent based of the type associated with a Title
-//                        if (title.getType().equals("TV Show")) { // TV Show type
-//                            Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
-//                            intent = new Intent(context, TvTitleDetailsActivity.class);
-//                        } else { // Movie type
-//                            Log.i(TAG, "Type is: " + title.getType() + " for Movies");
-//                            intent = new Intent(context, MovieTitleDetailsActivity.class);
-//                        }
-//                        intent.putExtra("id", title.getId());
-//                        intent.putExtra("name", title.getName());
-//                        intent.putExtra("posterPath", title.getPosterPath());
-//                        intent.putExtra("type", title.getType());
-//                        intent.putExtra("description", title.getDescription());
-//                        intent.putExtra("releaseDate", title.getReleaseDate());
-//                        context.startActivity(intent);
-//                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
-//                    }
-//                }
-//            });
+            // User clicks on share icon
+            ivShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "clicked on Share icon");
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Title title = titles.get(position);
+
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, title.getPosterPath());
+                        shareIntent.setType("image/*");
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, title.getName());
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, title.getDescription());
+                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        context.startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + title.getName()));
+                    }
+                }
+            });
+
         }
 
         public void bind(Title title) {
             Log.i(TAG, "Binding for the title: " + title);
             tvName.setText(title.getName());
             tvDescription.setText(title.getDescription());
-            //TODO: tvGenres.setText(title.getGenres);
-            tvLikes.setText(String.valueOf(title.getLikes()));
-            tvComments.setText(String.valueOf(0));
-            tvShares.setText(String.valueOf(title.getShare()));
 
             // Handle unique User information about each Title (i.e Like status)
             handleTitleData(title, ivLike);
@@ -246,7 +229,6 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             Log.i(TAG, "No titles currently liked by the user");
             userLikedTitles = new HashMap<>();
             titleLiked = false;
-            ivLike.setImageResource(R.drawable.ic_heart_empty);
         } else {
             String json = jsonObject.toString();
             Log.i(TAG, "String format of the json Map Object: " + json);
@@ -262,12 +244,13 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
             Log.i(TAG, "The returned query is: " + userLikedTitles.toString());
 
-            if (!userLikedTitles.containsKey(String.valueOf(title.getId()))) { // If a user has not liked a title
-                titleLiked = false;
-                ivLike.setImageResource(R.drawable.ic_heart_empty);
-            } else { // If user has liked a title
+            if (userLikedTitles.containsKey(String.valueOf(title.getId()))) { // If a user has liked a title
+                Log.i(TAG, "The title: " + title.getName() + " has an ID of: " + title.getId());
                 titleLiked = true;
                 ivLike.setImageResource(R.drawable.ic_heart_filled);
+            } else { // If a user has not liked a title
+                titleLiked = false;
+                ivLike.setImageResource(R.drawable.ic_heart_empty);
             }
         }
 
@@ -276,25 +259,23 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
     private void handleUserLikeAction(int position, ImageView ivLike) {
         Log.i(TAG, "Entering onClickListener for likes");
-
         Title title = titles.get(position);
-        Log.i(TAG, "The title " + title.getName() + " has a position of: " + position);
-
         Integer titleTmdbID = title.getId();
-        Integer currentLikes = Integer.valueOf(String.valueOf(title.getLikes()));
 
         // If the Title is currently liked by the User and they desire to unlike it
         if (titleLiked) {
             ivLike.setImageResource(R.drawable.ic_heart_empty); // Change to empty heart
-            title.setLikes(currentLikes - 1); // Decrease the likes for the Title (as displayed to the User) by 1
             userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
             currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+            titleLiked = false; // Title is no longer liked by the user
+            Toast.makeText(context, "You unliked the title " + title.getName(), Toast.LENGTH_SHORT).show();
             Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + title.getName());
         } else {  // Title is currently not liked by the User and they desire to like it
             ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
-            title.setLikes(currentLikes + 1); // Increment the likes for the Title (as displayed to the User) by 1
             userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
             currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+            titleLiked = true; // Title is now liked by the user
+            Toast.makeText(context, "You liked the title " + title.getName(), Toast.LENGTH_SHORT).show();
             Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + title.getName());
         }
 
@@ -308,19 +289,8 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                 }
             }
         });
-
-        title.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e != null) {
-                    Log.d(TAG, "Title: Issue saving like action by user " + e.getMessage());
-                } else {
-                    Log.i(TAG, "Title: Success saving like action by user");
-                }
-            }
-        });
         Log.i(TAG, "Title currently liked by the user after clicking are: " + currentUser.getMap(User.KEY_LIKED_TITLES));
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
 //        notifyItemChanged(position);
     }
 }

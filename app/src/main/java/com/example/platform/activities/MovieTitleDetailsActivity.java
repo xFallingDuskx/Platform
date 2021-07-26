@@ -26,7 +26,11 @@ import com.example.platform.adapters.CommentsAdapter;
 import com.example.platform.adapters.SimilarTitlesAdapter;
 import com.example.platform.models.Comment;
 import com.example.platform.models.Title;
+import com.example.platform.models.User;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -39,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -55,6 +60,8 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     String titleType;
     String titleDescription;
     String titleReleaseDate;
+    Boolean titleLiked;
+    HashMap<String, Object> userLikedTitles;
     String runtime;
     String genres;
     String actors;
@@ -146,6 +153,12 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 // Handle comment posting by user
                 handleComment();
 
+                // Handle the current liked status of the title for the user
+                handleLikeStatus();
+
+                // Handle the user changing their liked status
+                handleLikeAction();
+
                 // Handle following status (whether a user is currently following a title or not)
                 try {
                     handleFollowingStatus();
@@ -176,6 +189,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         titleType = (String) intent.getStringExtra("type");
         titleDescription = (String) intent.getStringExtra("description");
         titleReleaseDate = (String) intent.getStringExtra("releaseDate");
+        titleLiked = (Boolean) intent.getBooleanExtra("titleLiked", false);
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in TV Details");
 
         // Then get additional information from TMDB API
@@ -234,8 +248,6 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     // Save Title in the Parse Server if it does not exist
     private void saveTitle(Title title) {
         title.setId(title.getId());
-        title.setLikes(0);
-        title.setShares(0);
 
         title.saveInBackground(e -> {
             if (e != null){
@@ -489,6 +501,70 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+        });
+    }
+
+    public void handleLikeStatus() {
+        if (titleLiked) {
+            ivLikeStatus.setImageResource(R.drawable.ic_heart_filled);
+            tvLikeStatus.setText("Liked");
+        }
+
+        JSONObject jsonObject = currentUser.getJSONObject(User.KEY_LIKED_TITLES);
+        if (jsonObject == null) { // If the user has liked no titles
+            Log.i(TAG, "No titles currently liked by the user");
+            userLikedTitles = new HashMap<>();
+        } else {
+            String json = jsonObject.toString();
+            Log.i(TAG, "String format of the json Map Object: " + json);
+            ObjectMapper mapper = new ObjectMapper();
+
+            //Convert Map to JSON
+            try {
+                userLikedTitles = mapper.readValue(json, new TypeReference<HashMap<String, Object>>() {
+                });
+            } catch (JsonProcessingException e) {
+                Log.d(TAG, "Issue accessing tiles liked by user");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void handleLikeAction() {
+        // If the Title is currently liked by the User and they desire to unlike it
+        ivLikeStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (titleLiked) {
+                    ivLikeStatus.setImageResource(R.drawable.ic_heart_empty); // Change to empty heart
+                    tvLikeStatus.setText("Not liked");
+                    userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
+                    currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+                    titleLiked = false; // Title is no longer liked by the user
+                    Toast.makeText(context, "You unliked the title " + titleName, Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + titleName);
+                } else {  // Title is currently not liked by the User and they desire to like it
+                    ivLikeStatus.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
+                    tvLikeStatus.setText("Liked");
+                    userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
+                    currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
+                    titleLiked = true; // Title is now liked by the user
+                    Toast.makeText(context, "You liked the title " + titleName, Toast.LENGTH_SHORT).show();
+                    Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + titleName);
+                }
+
+                currentUser.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.d(TAG, "User: Issue saving like action by user " + e.getMessage());
+                        } else {
+                            Log.i(TAG, "User: Success saving like action by user");
+                        }
+                    }
+                });
+                Log.i(TAG, "Title currently liked by the user after clicking are: " + currentUser.getMap(User.KEY_LIKED_TITLES));
             }
         });
     }

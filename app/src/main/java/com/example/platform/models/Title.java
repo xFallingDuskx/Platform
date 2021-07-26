@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @ParseClassName("Title")
-public class Title extends ParseObject implements Serializable {
+public class Title extends ParseObject {
 
     private static final String TAG = "Title";
 
@@ -104,19 +104,15 @@ public class Title extends ParseObject implements Serializable {
 
     // Getters and setters method for each key value
     public Integer getId() {
-        Log.d(TAG, "Getting the ID");
         return id;
     }
 
     public void setId(Integer tmdbID) {
-        Log.d(TAG, "Setting the ID");
         this.id = tmdbID;
         put(KEY_TMDB_ID, tmdbID);
     }
 
-    public String getObjectID() {
-        return getObjectId();
-    }
+
 
 //    public String getBackdropPath() {return String.format("https://image.tmdb.org/t/p/w342/%s", backdropPath);}
 
@@ -169,23 +165,23 @@ public class Title extends ParseObject implements Serializable {
         this.type = type;
     }
 
-    public Integer getLikes() {
-        Log.d(TAG, "Getting the likes for the title " + name + ": " + getInt(KEY_LIKES));
-        return getInt(KEY_LIKES);
-    }
-
-    public void setLikes(Integer integer) {
-        Log.d(TAG, "Saving the likes for the title " + name + ": " + getInt(KEY_LIKES));
-        put(KEY_LIKES, integer);
-    }
-
-    public Integer getShare() {
-        return getInt(KEY_SHARES);
-    }
-
-    public void setShares(Integer integer) {
-        put(KEY_SHARES, integer);
-    }
+//    public Integer getLikes() {
+//        Log.d(TAG, "Getting the likes for the title " + name + ": " + getInt(KEY_LIKES));
+//        return getInt(KEY_LIKES);
+//    }
+//
+//    public void setLikes(Integer integer) {
+//        //Log.d(TAG, "Saving the likes for the title " + name + ": " + getInt(KEY_LIKES));
+//        put(KEY_LIKES, integer);
+//    }
+//
+//    public Integer getShare() {
+//        return getInt(KEY_SHARES);
+//    }
+//
+//    public void setShares(Integer integer) {
+//        put(KEY_SHARES, integer);
+//    }
 
 //    public void setParseObject(ParseObject parseObject) {
 //        this.parseObject = parseObject;
