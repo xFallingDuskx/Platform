@@ -1,6 +1,7 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,9 +23,11 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
 import com.example.platform.adapters.CommentsAdapter;
 import com.example.platform.adapters.EpisodesAdapter;
+import com.example.platform.adapters.KeywordsAdapter;
 import com.example.platform.adapters.SimilarTitlesAdapter;
 import com.example.platform.models.Comment;
 import com.example.platform.models.Episode;
+import com.example.platform.models.Keyword;
 import com.example.platform.models.Title;
 import com.example.platform.models.User;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -116,6 +119,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
     HashMap<String, Integer> titleKeywordsMap;
     ParseObject titleParseObject;
+    RecyclerView  rvCommentKeywords;
+    List<Keyword> allKeywords;
+    KeywordsAdapter keywordsAdapter;
+    TextView tvNoComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +180,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                // Handle keywords for comment section
+                // Handle and display keywords for comment section
                 try {
                     handleCommentKeywords();
                 } catch (ParseException e) {
@@ -717,17 +724,31 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     public void handleCommentKeywords() throws ParseException {
+        allKeywords = new ArrayList<>();
+        tvNoComments = findViewById(R.id.tvNoComments_TV);
+        rvCommentKeywords = findViewById(R.id.rvCommentKeywords_TV);
+        keywordsAdapter = new KeywordsAdapter(context, allKeywords);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false);
+        rvCommentKeywords.setLayoutManager(gridLayoutManager);
+        rvCommentKeywords.setAdapter(keywordsAdapter);
+
+
         titleParseObject = ParseQuery.getQuery("Title").include(Title.KEY_KEYWORDS).whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID).getFirst();
         JSONObject jsonObject = titleParseObject.getJSONObject(Title.KEY_KEYWORDS);
         if (jsonObject == null) { // If the user has liked no titles
             Log.i(TAG, "No keywords currently exist for the title");
             titleKeywordsMap = new HashMap<>();
         } else {
+            tvNoComments.setVisibility(View.INVISIBLE); // hide message if comment keywords do exist
             String json = jsonObject.toString();
             Log.i(TAG, "String format of the json Map Object: " + json);
             ObjectMapper mapper = new ObjectMapper();
 
-            //Convert Map to JSON
+            // Clear List<Keyword> and notify keywordAdapter - Needed just in case to avoid duplication as a user makes a new comment and this method runs
+            allKeywords.clear();
+            keywordsAdapter.notifyDataSetChanged();
+
+            //Convert Map to JSON and update the RecyclerView
             try {
                 titleKeywordsMap = mapper.readValue(json, new TypeReference<HashMap<String, Integer>>() {});
                 Log.i(TAG, "The current keywords for the title are: " + titleKeywordsMap.toString());
@@ -736,12 +757,14 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                         Log.i(TAG, "The keyword within the initial keyword hashmap: " + entry.getKey());
                     }
                 }
-                List<String> orderedKeywords = Comment.getWordsToDisplay(titleKeywordsMap);
-                for (String keyword : orderedKeywords) {
+                List<String> orderedKeywords = Comment.getWordsToDisplay(titleKeywordsMap); // Get the chosen keywords to display to users
+                for (int i = 0; i < orderedKeywords.size(); i++) {
+                    String keyword = orderedKeywords.get(i);
                     Log.i(TAG, "Keyword is: " + keyword);
-                    TextView commentKeyword = findViewById(R.id.tvCommentKeywordsHeading_TV);
-                    commentKeyword.setText(commentKeyword.getText() + keyword);
+                    Keyword keywordObject = new Keyword(keyword);
+                    allKeywords.add(keywordObject);
                 }
+                keywordsAdapter.notifyDataSetChanged();
             } catch (JsonProcessingException e) {
                 Log.d(TAG, "Issue accessing keywords for the title");
                 e.printStackTrace();
