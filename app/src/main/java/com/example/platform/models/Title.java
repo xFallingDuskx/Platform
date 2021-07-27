@@ -25,6 +25,7 @@ public class Title extends ParseObject {
     String releaseDate;
     String type;
 
+
     public static final String KEY_TMDB_ID = "tmdbID";
     public static final String KEY_TMDBID_LOWER = "tmdbId";
     public static final String KEY_NAME = "name";

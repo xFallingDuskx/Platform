@@ -56,11 +56,11 @@ public class Comment extends ParseObject {
             int iterations = sentencesWords.length - 1; // always iterate one-less of the total word count for 2-word clusters
             int thirdWordLimit = sentencesWords.length - 2; // at this index, a third word does not exist
             for (int i = 0; i < iterations; i++) {
-                String[] wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 2);
+                String[] wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 2); //TODO: change
                 String firstWord = wordCluster[0].toLowerCase();
                 String secondWord = wordCluster[1].toLowerCase();
 
-                // Check if first word - skip this cluster if it fails the test
+                // Check first word - skip this cluster if it fails the test
                 if (avoid.contains(firstWord)) {
                     continue;
                 }
@@ -70,12 +70,12 @@ public class Comment extends ParseObject {
                     continue;
                 }
 
-                // Check if second word - attempt to make a 3-word cluster if it fails the test
+                // Check second word - attempt to make a 3-word cluster if it fails the test
                 if (avoid.contains(secondWord)) {
                     // Only add a 3rd to the cluster (making it a 3-word cluster) if it exist
                     // If this word does not exist, do not add this word cluster to the set of keywords
                     if (! (i == (thirdWordLimit))) {
-                        wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 3);
+                        wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 3); //TODO: change
 
                         // If the third word happens to also be one that should be avoided, continue on to next cluster
                         if(avoid.contains(wordCluster[2])) {
@@ -85,6 +85,7 @@ public class Comment extends ParseObject {
                 }
 
                 // Custom String.join() method
+                // TODO: change
                 String wordClusterString = "";
                 for (int j = 0; j < wordCluster.length; j++) {
                     wordClusterString += wordCluster[j];

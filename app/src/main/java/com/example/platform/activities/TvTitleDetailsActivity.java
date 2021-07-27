@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Headers;
 
@@ -716,7 +717,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     public void handleCommentKeywords() throws ParseException {
-        titleParseObject = ParseQuery.getQuery("Title").whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID).getFirst();
+        titleParseObject = ParseQuery.getQuery("Title").include(Title.KEY_KEYWORDS).whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID).getFirst();
         JSONObject jsonObject = titleParseObject.getJSONObject(Title.KEY_KEYWORDS);
         if (jsonObject == null) { // If the user has liked no titles
             Log.i(TAG, "No keywords currently exist for the title");
@@ -728,12 +729,18 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
 
             //Convert Map to JSON
             try {
-                titleKeywordsMap = mapper.readValue(json, new TypeReference<HashMap<String, Integer>>() {
-                });
+                titleKeywordsMap = mapper.readValue(json, new TypeReference<HashMap<String, Integer>>() {});
+                Log.i(TAG, "The current keywords for the title are: " + titleKeywordsMap.toString());
+                for (Map.Entry<String, Integer> entry : titleKeywordsMap.entrySet()) {
+                    if (entry.getValue() > 1) {
+                        Log.i(TAG, "The keyword within the initial keyword hashmap: " + entry.getKey());
+                    }
+                }
                 List<String> orderedKeywords = Comment.getWordsToDisplay(titleKeywordsMap);
                 for (String keyword : orderedKeywords) {
                     Log.i(TAG, "Keyword is: " + keyword);
-                    // TODO: Do something
+                    TextView commentKeyword = findViewById(R.id.tvCommentKeywordsHeading_TV);
+                    commentKeyword.setText(commentKeyword.getText() + keyword);
                 }
             } catch (JsonProcessingException e) {
                 Log.d(TAG, "Issue accessing keywords for the title");
@@ -751,9 +758,10 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
             } else {
                 int currentValue = titleKeywordsMap.get(keyword);
                 Log.i(TAG, "The keyword " + keyword + " has a value of " + currentValue + " for the title w/ Object ID: " + titleParseObject.getObjectId());
-                titleKeywordsMap.put(keyword, currentValue++);
+                titleKeywordsMap.put(keyword, currentValue + 1);
             }
         }
+        Log.i(TAG, "The title keywords are " + titleKeywordsMap.toString());
         titleParseObject.put(Title.KEY_KEYWORDS, titleKeywordsMap);
 
         titleParseObject.saveInBackground(new SaveCallback() {
@@ -762,7 +770,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 if (e != null) {
                     Log.d(TAG, "Issue saving title keyword update /Error: " + e.getMessage());
                 } else {
-                    Log.i(TAG, "Success saving title keyword update");
+                    Log.i(TAG, "Success saving title keywords update");
                     // Update the comment keyword section
                     try {
                         handleCommentKeywords();
