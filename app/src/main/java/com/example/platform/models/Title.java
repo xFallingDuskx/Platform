@@ -26,6 +26,12 @@ public class Title extends ParseObject {
     String type;
 
     public static final String KEY_TMDB_ID = "tmdbID";
+    public static final String KEY_TMDBID_LOWER = "tmdbId";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_POSTERPATH = "posterPath";
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_RELEASE_DATE = "releaseDate";
     public static final String KEY_LIKES = "likes";
     public static final String KEY_SHARES = "shares";
 

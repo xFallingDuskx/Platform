@@ -544,7 +544,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         } else { // the user is currently following at least one title
             for (int i = 0; i < userFollowingTitles.length(); i++) {
                 JSONObject jsonObject = new JSONObject(userFollowingTitles.getString(i));
-                Integer objectTmdbId = jsonObject.getInt("tmdbId");
+                Integer objectTmdbId = jsonObject.getInt(Title.KEY_TMDBID_LOWER);
                 Log.d(TAG, "The jsonobject returned is: " + jsonObject.toString() + " with a TMDB id of " + objectTmdbId);
                 if (objectTmdbId.equals(titleTmdbID)) { // if the current title is currently liked by the user
                     jsonPosition = i;
@@ -577,12 +577,12 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     // Create a new JSONObject for that title and add it to the jsonArray
                     JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("tmdbId", titleTmdbID);
-                        jsonObject.put("name", titleName);
-                        jsonObject.put("posterPath", titleCoverPath);
-                        jsonObject.put("type", titleType);
-                        jsonObject.put("description", titleDescription);
-                        jsonObject.put("releaseDate", titleReleaseDate);
+                        jsonObject.put(Title.KEY_TMDBID_LOWER, titleTmdbID);
+                        jsonObject.put(Title.KEY_NAME, titleName);
+                        jsonObject.put(Title.KEY_POSTERPATH, titleCoverPath);
+                        jsonObject.put(Title.KEY_TYPE, titleType);
+                        jsonObject.put(Title.KEY_DESCRIPTION, titleDescription);
+                        jsonObject.put(Title.KEY_RELEASE_DATE, titleReleaseDate);
                     } catch (JSONException e) {
                         Log.d(TAG, "Issue creating new JSONObject for user following titles");
                         e.printStackTrace();
