@@ -9,20 +9,21 @@
 
     <ImageView
         android:id="@+id/ivCover_Search"
+        android:background="@color/grey_light"
         android:layout_width="130dp"
-        android:layout_height="wrap_content"
+        android:layout_height="195dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="-2dp"
         android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:scaleType="fitCenter"/>
     <!--    todo: the 2 lines above help with rounded image corners on glide -->
 
     <TextView
         android:id="@+id/tvName_Search"
-        android:layout_width="wrap_content"
+        android:background="@color/grey_light"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="false"
@@ -37,6 +38,7 @@
 
     <TextView
         android:id="@+id/tvDescription_Search"
+        android:background="@color/grey_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName_Search"
@@ -54,7 +56,8 @@
 
     <TextView
         android:id="@+id/tvReadMore_Search"
-        android:layout_width="wrap_content"
+        android:background="@color/grey_light"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDescription_Search"
         android:layout_alignParentBottom="false"
@@ -62,7 +65,6 @@
         android:layout_marginTop="3dp"
         android:layout_marginBottom="0dp"
         android:layout_toEndOf="@+id/ivCover_Search"
-        android:text="Click for more"
         android:textColor="@color/white"
         android:textStyle="bold" />
 </RelativeLayout>

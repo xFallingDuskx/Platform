@@ -37,25 +37,61 @@
         android:layout_below="@+id/toolbar_search"
         android:background="@color/black_light" />
 
-    <TextView
-        android:id="@+id/tvLoadingMessage_Search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:text="Searching for that title for you"
-        android:textColor="@color/white"
-        android:textSize="20sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvLoadingMessage_Search"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:text="Searching for that title for you"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="20sp" />-->
 
-    <ProgressBar
-        android:id="@+id/pbSearch"
-        style="?android:attr/progressBarStyleLarge"
+<!--    <ProgressBar-->
+<!--        android:id="@+id/pbSearch"-->
+<!--        style="?android:attr/progressBarStyleLarge"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/tvLoadingMessage_Search"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginTop="5dp" />-->
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerFrameLayout_Search"
+        android:layout_below="@+id/toolbar_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvLoadingMessage_Search"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp" />
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+                <include layout="@layout/item_title_search_shimmer_placeholder" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 
 </RelativeLayout>

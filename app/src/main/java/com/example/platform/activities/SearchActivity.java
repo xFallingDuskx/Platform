@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +25,8 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
 import com.example.platform.adapters.SearchResultsAdapter;
 import com.example.platform.models.Title;
+import com.facebook.shimmer.Shimmer;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,13 +44,13 @@ public class SearchActivity extends AppCompatActivity {
     Context context;
     String query;
 
-    ProgressBar progressBar;
-    TextView tvLoadingMessage;
     ImageView ivProfile;
 
     RecyclerView rvSearchResults;
     SearchResultsAdapter adapter;
     List<Title> allTitles;
+
+    ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +59,14 @@ public class SearchActivity extends AppCompatActivity {
         context = getApplicationContext();
         setToolBar();
 
-        progressBar = findViewById(R.id.pbSearch);
-        tvLoadingMessage = findViewById(R.id.tvLoadingMessage_Search);
+        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout_Search);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+
         rvSearchResults = findViewById(R.id.rvSearchResults);
         allTitles = new ArrayList<>();
         adapter = new SearchResultsAdapter(context, allTitles);
@@ -65,9 +74,13 @@ public class SearchActivity extends AppCompatActivity {
         rvSearchResults.setLayoutManager(linearLayoutManager);
         rvSearchResults.setAdapter(adapter);
 
-        showProgressBar();
         query = (String) getIntent().getStringExtra("query");
-        performSearch(query);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                performSearch(query);
+            }
+        }, 5000);
     }
 
     private void setToolBar() {
@@ -151,7 +164,8 @@ public class SearchActivity extends AppCompatActivity {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
                     e.printStackTrace();
                 }
-                hideProgressBar(); // Make progressBar invisible
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -159,15 +173,5 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
-    }
-
-    public void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-        tvLoadingMessage.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressBar() {
-        progressBar.setVisibility(View.INVISIBLE);
-        tvLoadingMessage.setVisibility(View.INVISIBLE);
     }
 }
