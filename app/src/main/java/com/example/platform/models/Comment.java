@@ -79,7 +79,7 @@ public class Comment extends ParseObject {
                         thirdWord = sentencesWords[i + 2];
 
                         // If the third word happens to also be one that should be avoided, continue on to next cluster
-                        if(avoid.contains(wordCluster[2])) {
+                        if(avoid.contains(thirdWord)) {
                             continue;
                         }
                     }

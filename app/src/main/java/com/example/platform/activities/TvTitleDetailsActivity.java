@@ -739,7 +739,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
             Log.i(TAG, "No keywords currently exist for the title");
             titleKeywordsMap = new HashMap<>();
         } else {
-            tvNoComments.setVisibility(View.INVISIBLE); // hide message if comment keywords do exist
             String json = jsonObject.toString();
             Log.i(TAG, "String format of the json Map Object: " + json);
             ObjectMapper mapper = new ObjectMapper();
@@ -758,6 +757,11 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     }
                 }
                 List<String> orderedKeywords = Comment.getWordsToDisplay(titleKeywordsMap); // Get the chosen keywords to display to users
+
+                if (! orderedKeywords.isEmpty()) { // hide message if comment keywords do exist
+                    tvNoComments.setVisibility(View.INVISIBLE);
+                }
+
                 for (int i = 0; i < orderedKeywords.size(); i++) {
                     String keyword = orderedKeywords.get(i);
                     Log.i(TAG, "Keyword is: " + keyword);

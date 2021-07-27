@@ -403,7 +403,6 @@
                     android:layout_below="@+id/tvCommentKeywordsHeading_TV"
                     android:layout_margin="5dp"/>
 
-
             </RelativeLayout>
 
             <RelativeLayout

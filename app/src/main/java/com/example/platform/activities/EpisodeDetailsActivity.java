@@ -1,6 +1,7 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,10 +20,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.platform.R;
 import com.example.platform.adapters.CommentsAdapter;
+import com.example.platform.adapters.KeywordsAdapter;
 import com.example.platform.models.Comment;
+import com.example.platform.models.Keyword;
+import com.example.platform.models.Title;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -32,7 +40,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class EpisodeDetailsActivity extends AppCompatActivity {
 
@@ -66,6 +77,13 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
 
     ShimmerFrameLayout shimmerFrameLayout;
     ScrollView svEntireScreen;
+
+    HashMap<String, Integer> episodeKeywordsMap;
+    ParseObject episodeParseObject;
+    RecyclerView  rvCommentKeywords;
+    List<Keyword> allKeywords;
+    KeywordsAdapter keywordsAdapter;
+    TextView tvNoComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +125,14 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                     displayComments();
                 } catch (ParseException e) {
                     Log.d(TAG, "Issue fetching and displaying comments");
+                    e.printStackTrace();
+                }
+
+                // Handle and display keywords for comment section
+                try {
+                    handleCommentKeywords();
+                } catch (ParseException e) {
+                    Log.d(TAG, "Issue handling the comment keywords /Error: " + e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -233,6 +259,13 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                     commentsAdapter.notifyItemInserted(0);
                     // want to scroll to the top of recyclerview after each new tweet
                     rvComments.smoothScrollToPosition(0);
+                    // update keywords for the title
+                    try {
+                        updateTitleKeywords(commentText);
+                    } catch (ParseException parseException) {
+                        Log.d(TAG, "Issue updating the keywords for the title");
+                        parseException.printStackTrace();
+                    }
                 }
             }
         });
@@ -322,4 +355,90 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         });
     }
 
+    public void handleCommentKeywords() throws ParseException {
+        allKeywords = new ArrayList<>();
+        tvNoComments = findViewById(R.id.tvNoComments_Episode);
+        rvCommentKeywords = findViewById(R.id.rvCommentKeywords_Episode);
+        keywordsAdapter = new KeywordsAdapter(context, allKeywords);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false);
+        rvCommentKeywords.setLayoutManager(gridLayoutManager);
+        rvCommentKeywords.setAdapter(keywordsAdapter);
+
+
+        episodeParseObject = ParseQuery.getQuery("Episode").include(Title.KEY_KEYWORDS).whereEqualTo(Title.KEY_TMDB_ID, episodeTmdbId).getFirst();
+        JSONObject jsonObject = episodeParseObject.getJSONObject(Title.KEY_KEYWORDS);
+        if (jsonObject == null) { // If the user has liked no titles
+            Log.i(TAG, "No keywords currently exist for the episode");
+            episodeKeywordsMap = new HashMap<>();
+        } else {
+            String json = jsonObject.toString();
+            Log.i(TAG, "String format of the json Map Object: " + json);
+            ObjectMapper mapper = new ObjectMapper();
+
+            // Clear List<Keyword> and notify keywordAdapter - Needed just in case to avoid duplication as a user makes a new comment and this method runs
+            allKeywords.clear();
+            keywordsAdapter.notifyDataSetChanged();
+
+            //Convert Map to JSON and update the RecyclerView
+            try {
+                episodeKeywordsMap = mapper.readValue(json, new TypeReference<HashMap<String, Integer>>() {});
+                Log.i(TAG, "The current keywords for the title are: " + episodeKeywordsMap.toString());
+                for (Map.Entry<String, Integer> entry : episodeKeywordsMap.entrySet()) {
+                    if (entry.getValue() > 1) {
+                        Log.i(TAG, "The keyword within the initial keyword hashmap: " + entry.getKey());
+                    }
+                }
+                List<String> orderedKeywords = Comment.getWordsToDisplay(episodeKeywordsMap); // Get the chosen keywords to display to users
+
+                if (! orderedKeywords.isEmpty()) { // hide message if comment keywords do exist
+                    tvNoComments.setVisibility(View.INVISIBLE);
+                }
+
+                for (int i = 0; i < orderedKeywords.size(); i++) {
+                    String keyword = orderedKeywords.get(i);
+                    Log.i(TAG, "Keyword is: " + keyword);
+                    Keyword keywordObject = new Keyword(keyword);
+                    allKeywords.add(keywordObject);
+                }
+                keywordsAdapter.notifyDataSetChanged();
+            } catch (JsonProcessingException e) {
+                Log.d(TAG, "Issue accessing keywords for the episode");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateTitleKeywords(String comment) throws ParseException {
+        HashSet<String> commentKeywords = Comment.getKeywords(comment);
+
+        for (String keyword : commentKeywords) {
+            if (! episodeKeywordsMap.containsKey(keyword)) { // If the comment keyword is not within the title keywords
+                episodeKeywordsMap.put(keyword, 1);
+            } else {
+                int currentValue = episodeKeywordsMap.get(keyword);
+                Log.i(TAG, "The keyword " + keyword + " has a value of " + currentValue + " for the title w/ Object ID: " + episodeParseObject.getObjectId());
+                episodeKeywordsMap.put(keyword, currentValue + 1);
+            }
+        }
+        Log.i(TAG, "The title keywords are " + episodeKeywordsMap.toString());
+        episodeParseObject.put(Title.KEY_KEYWORDS, episodeKeywordsMap);
+
+        episodeParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "Issue saving title keyword update /Error: " + e.getMessage());
+                } else {
+                    Log.i(TAG, "Success saving title keywords update");
+                    // Update the comment keyword section
+                    try {
+                        handleCommentKeywords();
+                    } catch (ParseException parseException) {
+                        Log.d(TAG, "Issue handle comment keywords after successfully title keyword update");
+                        parseException.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 }
