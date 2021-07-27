@@ -56,9 +56,10 @@ public class Comment extends ParseObject {
             int iterations = sentencesWords.length - 1; // always iterate one-less of the total word count for 2-word clusters
             int thirdWordLimit = sentencesWords.length - 2; // at this index, a third word does not exist
             for (int i = 0; i < iterations; i++) {
-                String[] wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 2); //TODO: change
-                String firstWord = wordCluster[0].toLowerCase();
-                String secondWord = wordCluster[1].toLowerCase();
+                String[] wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 2);
+                String firstWord = sentencesWords[i];
+                String secondWord = sentencesWords[i + 1];
+                String thirdWord = ""; // make third word empty by default
 
                 // Check first word - skip this cluster if it fails the test
                 if (avoid.contains(firstWord)) {
@@ -75,7 +76,7 @@ public class Comment extends ParseObject {
                     // Only add a 3rd to the cluster (making it a 3-word cluster) if it exist
                     // If this word does not exist, do not add this word cluster to the set of keywords
                     if (! (i == (thirdWordLimit))) {
-                        wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 3); //TODO: change
+                        thirdWord = sentencesWords[i + 2];
 
                         // If the third word happens to also be one that should be avoided, continue on to next cluster
                         if(avoid.contains(wordCluster[2])) {
@@ -85,13 +86,9 @@ public class Comment extends ParseObject {
                 }
 
                 // Custom String.join() method
-                // TODO: change
-                String wordClusterString = "";
-                for (int j = 0; j < wordCluster.length; j++) {
-                    wordClusterString += wordCluster[j];
-                    if (j != wordCluster.length - 1) {
-                        wordClusterString += " ";
-                    }
+                String wordClusterString = firstWord + " " + secondWord;
+                if (! thirdWord.isEmpty()) { // If the third word is not empty (meaning it exists)
+                    wordClusterString += " " + thirdWord;
                 }
                 keywords.add(wordClusterString);
             }
