@@ -91,7 +91,7 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar, menu);
+        getMenuInflater().inflate(R.menu.toolbar_home, menu);
 
         // Allow user to search Titles
         MenuItem searchItem = menu.findItem(R.id.miSearch);

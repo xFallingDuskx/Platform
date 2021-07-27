@@ -7,6 +7,31 @@
     tools:context=".fragments.HomeFragment"
     android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@android:color/white">
+
+        <ImageView
+            android:id="@+id/ivProfileIcon_Base"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_profile" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Feed"
+            android:textColor="@android:color/white"
+            android:textSize="34sp" />
+    </androidx.appcompat.widget.Toolbar>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tlHome"
         style="@style/CustomTabLayout"
