@@ -32,8 +32,7 @@ public class Title extends ParseObject {
     public static final String KEY_TYPE = "type";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_RELEASE_DATE = "releaseDate";
-    public static final String KEY_LIKES = "likes";
-    public static final String KEY_SHARES = "shares";
+    public static final String KEY_KEYWORDS = "keywords";
 
     // Default, empty constructor
     public Title() {}

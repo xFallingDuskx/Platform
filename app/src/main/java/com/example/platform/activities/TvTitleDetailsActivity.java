@@ -44,6 +44,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import okhttp3.Headers;
@@ -112,6 +113,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     ShimmerFrameLayout shimmerFrameLayout;
     ScrollView svEntireScreen;
 
+    HashMap<String, Integer> titleKeywordsMap;
+    ParseObject titleParseObject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,6 +169,14 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     displayComments();
                 } catch (ParseException e) {
                     Log.d(TAG, "Issue fetching and displaying comments");
+                    e.printStackTrace();
+                }
+
+                // Handle keywords for comment section
+                try {
+                    handleCommentKeywords();
+                } catch (ParseException e) {
+                    Log.d(TAG, "Issue handling the comment keywords /Error: " + e.getMessage());
                     e.printStackTrace();
                 }
 
@@ -527,6 +539,13 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     commentsAdapter.notifyItemInserted(0);
                     // want to scroll to the top of recyclerview after each new tweet
                     rvComments.smoothScrollToPosition(0);
+                    // update keywords for the title
+                    try {
+                        updateTitleKeywords(commentText);
+                    } catch (ParseException parseException) {
+                        Log.d(TAG, "Issue updating the keywords for the title");
+                        parseException.printStackTrace();
+                    }
                 }
             }
         });
@@ -692,6 +711,66 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
                 startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + titleName));
+            }
+        });
+    }
+
+    public void handleCommentKeywords() throws ParseException {
+        titleParseObject = ParseQuery.getQuery("Title").whereEqualTo(Title.KEY_TMDB_ID, titleTmdbID).getFirst();
+        JSONObject jsonObject = titleParseObject.getJSONObject(Title.KEY_KEYWORDS);
+        if (jsonObject == null) { // If the user has liked no titles
+            Log.i(TAG, "No keywords currently exist for the title");
+            titleKeywordsMap = new HashMap<>();
+        } else {
+            String json = jsonObject.toString();
+            Log.i(TAG, "String format of the json Map Object: " + json);
+            ObjectMapper mapper = new ObjectMapper();
+
+            //Convert Map to JSON
+            try {
+                titleKeywordsMap = mapper.readValue(json, new TypeReference<HashMap<String, Integer>>() {
+                });
+                List<String> orderedKeywords = Comment.getWordsToDisplay(titleKeywordsMap);
+                for (String keyword : orderedKeywords) {
+                    Log.i(TAG, "Keyword is: " + keyword);
+                    // TODO: Do something
+                }
+            } catch (JsonProcessingException e) {
+                Log.d(TAG, "Issue accessing keywords for the title");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void updateTitleKeywords(String comment) throws ParseException {
+        HashSet<String> commentKeywords = Comment.getKeywords(comment);
+
+        for (String keyword : commentKeywords) {
+            if (! titleKeywordsMap.containsKey(keyword)) { // If the comment keyword is not within the title keywords
+                titleKeywordsMap.put(keyword, 1);
+            } else {
+                int currentValue = titleKeywordsMap.get(keyword);
+                Log.i(TAG, "The keyword " + keyword + " has a value of " + currentValue + " for the title w/ Object ID: " + titleParseObject.getObjectId());
+                titleKeywordsMap.put(keyword, currentValue++);
+            }
+        }
+        titleParseObject.put(Title.KEY_KEYWORDS, titleKeywordsMap);
+
+        titleParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "Issue saving title keyword update /Error: " + e.getMessage());
+                } else {
+                    Log.i(TAG, "Success saving title keyword update");
+                    // Update the comment keyword section
+                    try {
+                        handleCommentKeywords();
+                    } catch (ParseException parseException) {
+                        Log.d(TAG, "Issue handle comment keywords after successfully title keyword update");
+                        parseException.printStackTrace();
+                    }
+                }
             }
         });
     }

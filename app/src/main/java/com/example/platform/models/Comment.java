@@ -5,9 +5,16 @@ import android.util.Log;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 
 @ParseClassName("Comment")
 public class Comment extends ParseObject {
@@ -24,12 +31,12 @@ public class Comment extends ParseObject {
 
     public Comment() {}
 
-    // Get keywords from the title
+    // Get keywords from each comment
     // There is a more efficient way of going about this (such as using an API)
     public static HashSet<String> getKeywords(String comment) {
         HashSet<String> keywords = new HashSet<>();
         // Set of words (articles and common/undesired prepositions, verbs) and pronouns to avoid
-        HashSet<String> avoid = new HashSet<>(Arrays.asList("the", "a", "an", "above", "across", "against", "along", "among", "around", "at", "by", "from", "in", "into", "near", "of", "on", "to", "toward", "upon", "with", "within", "am", "is", "are", "they", "their", "them", "she", "her", "hers", "him", "he", "his", "i", "you", "we"));
+        HashSet<String> avoid = new HashSet<>(Arrays.asList("this", "the", "a", "an", "for", "comment", "above", "across", "against", "along", "among", "around", "at", "by", "from", "in", "into", "near", "of", "on", "to", "toward", "upon", "with", "within", "am", "is", "are", "they", "their", "them", "she", "her", "hers", "him", "he", "his", "i", "you", "we"));
 
         String[] commentSentences = comment.split("[.!?]+\\s*"); // Split comment by end punctuations (.!?) to get sentences
         for (String sentence : commentSentences) {
@@ -47,27 +54,30 @@ public class Comment extends ParseObject {
 
             // Get and add two-word clusters
             int iterations = sentencesWords.length - 1; // always iterate one-less of the total word count for 2-word clusters
-            int thirdWordLimit = sentencesWords.length - 2; // after this index, a third word does not exist
+            int thirdWordLimit = sentencesWords.length - 2; // at this index, a third word does not exist
             for (int i = 0; i < iterations; i++) {
                 String[] wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 2);
-                // Check if first word is an article or preposition by checking if it exist in the set of words to avoid
-                // If the first word is an article or preposition, continue on to the next cluster
                 String firstWord = wordCluster[0].toLowerCase();
+                String secondWord = wordCluster[1].toLowerCase();
+
+                // Check if first word - skip this cluster if it fails the test
                 if (avoid.contains(firstWord)) {
                     continue;
                 }
 
-                // Run the same check on the second word to see if it is an article or preposition
-                // If the second word is an article or preposition, attempt to add the following word to the cluster
-                String secondWord = wordCluster[1].toLowerCase();
+                // Avoid having word clusters with the same word
+                if (firstWord.equals(secondWord)) {
+                    continue;
+                }
+
+                // Check if second word - attempt to make a 3-word cluster if it fails the test
                 if (avoid.contains(secondWord)) {
                     // Only add a 3rd to the cluster (making it a 3-word cluster) if it exist
-                    // Will not exist if we are at the final cluster of the sentence
                     // If this word does not exist, do not add this word cluster to the set of keywords
                     if (! (i == (thirdWordLimit))) {
                         wordCluster = Arrays.copyOfRange(sentencesWords, i, i + 3);
 
-                        // If the third word happens to also be one that should be avoided, continue on
+                        // If the third word happens to also be one that should be avoided, continue on to next cluster
                         if(avoid.contains(wordCluster[2])) {
                             continue;
                         }
@@ -75,18 +85,38 @@ public class Comment extends ParseObject {
                 }
 
                 // Custom String.join() method
-                String twoWordClusterString = "";
+                String wordClusterString = "";
                 for (int j = 0; j < wordCluster.length; j++) {
-                    twoWordClusterString += wordCluster[j];
+                    wordClusterString += wordCluster[j];
                     if (j != wordCluster.length - 1) {
-                        twoWordClusterString += " ";
+                        wordClusterString += " ";
                     }
                 }
-
-                keywords.add(twoWordClusterString);
+                keywords.add(wordClusterString);
             }
         }
         return keywords;
+    }
+
+    // Decide which words to display to other users depending on all keywords available
+    // Source: https://mkyong.com/java8/java-8-how-to-sort-a-map/
+    public static List<String> getWordsToDisplay(HashMap<String, Integer> allKeywords) {
+        // Ensure keywords have been mention by more than once
+        HashMap<String, Integer> checkedKeywords = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : allKeywords.entrySet()) {
+            if (entry.getValue() > 1) {
+                checkedKeywords.put(entry.getKey(), entry.getValue());
+            }
+        }
+
+        List<String> chosenKeywords = new ArrayList<>();
+
+        checkedKeywords.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(x -> chosenKeywords.add(x.getKey()));
+
+        return chosenKeywords;
     }
 
     // Timestamp
