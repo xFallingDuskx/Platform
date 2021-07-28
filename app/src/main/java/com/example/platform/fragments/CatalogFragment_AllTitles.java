@@ -41,6 +41,7 @@ public class CatalogFragment_AllTitles extends Fragment {
     public static final String TAG = "CatalogFragment_AllTitles";
     private ImageView ivProfile;
     private SharedCatalogViewModel sharedCatalogViewModel;
+    String value;
 
     public CatalogFragment_AllTitles() {
         // Required empty public constructor
@@ -97,7 +98,7 @@ public class CatalogFragment_AllTitles extends Fragment {
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
-        intent.putExtra("type", "tv");
+        intent.putExtra("type", value);
         startActivity(intent);
     }
 
@@ -106,7 +107,7 @@ public class CatalogFragment_AllTitles extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
-        String value = sharedCatalogViewModel.getValue();
+        value = sharedCatalogViewModel.getValue();
         Log.i(TAG, "The value received is " + value);
 
         // Setting up the toolbar

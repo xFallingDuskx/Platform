@@ -109,7 +109,7 @@
             android:id="@+id/tvCatalogOptionText_Movie_Platform"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="By Genre"
+            android:text="By Platform"
             android:textStyle="bold"
             android:textSize="40sp"
             android:textColor="@color/white"

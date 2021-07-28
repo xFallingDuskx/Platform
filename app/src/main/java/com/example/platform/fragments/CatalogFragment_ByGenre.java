@@ -10,10 +10,9 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
@@ -35,19 +33,14 @@ import org.jetbrains.annotations.NotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class CatalogFragment_TvShow extends Fragment {
+public class CatalogFragment_ByGenre extends Fragment {
 
-    public static final String TAG = "CatalogFragment_TvShow";
+    public static final String TAG = "CatalogFragment_ByGenre";
     private ImageView ivProfile;
-    private RelativeLayout rlAllTitles;
-    private RelativeLayout rlPopularTitles;
-    private RelativeLayout rlByGenre;
-    private RelativeLayout rlByPlatform;
     private SharedCatalogViewModel sharedCatalogViewModel;
-    FragmentManager fragmentManager;
+    String value;
 
-
-    public CatalogFragment_TvShow() {
+    public CatalogFragment_ByGenre() {
         // Required empty public constructor
     }
 
@@ -57,11 +50,10 @@ public class CatalogFragment_TvShow extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Alert view that menu items exist
-        setHasOptionsMenu(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_catalog__tv_show, container, false);
+        return inflater.inflate(R.layout.fragment_catalog__by_genre, container, false);
     }
 
     @Override
@@ -103,7 +95,7 @@ public class CatalogFragment_TvShow extends Fragment {
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
-        intent.putExtra("type", "tv");
+        intent.putExtra("type", value);
         startActivity(intent);
     }
 
@@ -112,6 +104,8 @@ public class CatalogFragment_TvShow extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
+        value = sharedCatalogViewModel.getValue();
+        Log.i(TAG, "The value received is " + value);
 
         // Setting up the toolbar
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_TV);
@@ -128,60 +122,5 @@ public class CatalogFragment_TvShow extends Fragment {
             }
         });
 
-        // Take user to appropriate catalog option depending on their selection
-        rlAllTitles = getActivity().findViewById(R.id.rlCatalogOption_TV_All);
-        rlPopularTitles = getActivity().findViewById(R.id.rlCatalogOption_TV_Popular);
-        rlByGenre = getActivity().findViewById(R.id.rlCatalogOption_TV_Genre);
-        rlByPlatform = getActivity().findViewById(R.id.rlCatalogOption_TV_Platform);
-
-        fragmentManager = getActivity().getSupportFragmentManager();
-
-        rlAllTitles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_AllTitles.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-                sharedCatalogViewModel.setValue("tv");
-            }
-        });
-
-        rlPopularTitles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_PopularTitles.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-                sharedCatalogViewModel.setValue("tv");
-            }
-        });
-
-        rlByGenre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_ByGenre.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-                sharedCatalogViewModel.setValue("tv");
-            }
-        });
-
-        rlByPlatform.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_ByPlatform.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-                sharedCatalogViewModel.setValue("tv");
-            }
-        });
     }
 }

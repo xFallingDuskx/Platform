@@ -12,6 +12,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import android.widget.RelativeLayout;
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
 import com.example.platform.activities.SearchActivity;
+import com.example.platform.models.SharedCatalogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +43,7 @@ public class CatalogFragment_Movie extends Fragment {
     private RelativeLayout rlPopularTitles;
     private RelativeLayout rlByGenre;
     private RelativeLayout rlByPlatform;
+    private SharedCatalogViewModel sharedCatalogViewModel;
     FragmentManager fragmentManager;
 
     public CatalogFragment_Movie() {
@@ -106,6 +109,8 @@ public class CatalogFragment_Movie extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Handle information shared between fragments
+        sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
 
         // Setting up the toolbar
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_Movie);
@@ -128,6 +133,8 @@ public class CatalogFragment_Movie extends Fragment {
         rlByGenre = getActivity().findViewById(R.id.rlCatalogOption_Movie_Genre);
         rlByPlatform = getActivity().findViewById(R.id.rlCatalogOption_Movie_Platform);
 
+        fragmentManager = getActivity().getSupportFragmentManager();
+
         rlAllTitles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,27 +143,43 @@ public class CatalogFragment_Movie extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
+                sharedCatalogViewModel.setValue("movie");
             }
         });
 
         rlPopularTitles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.flContainer, CatalogFragment_PopularTitles.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+                sharedCatalogViewModel.setValue("movie");
             }
         });
 
         rlByGenre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.flContainer, CatalogFragment_ByGenre.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+                sharedCatalogViewModel.setValue("movie");
             }
         });
 
-        rlPopularTitles.setOnClickListener(new View.OnClickListener() {
+        rlByPlatform.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.flContainer, CatalogFragment_ByPlatform.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+                sharedCatalogViewModel.setValue("movie");
             }
         });
     }
