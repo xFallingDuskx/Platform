@@ -116,8 +116,6 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         return super.onDoubleTap(e);
                     }
 
-
-
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
                         Log.i(TAG, "onSingleTap");
@@ -150,6 +148,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         return super.onSingleTapUp(e);
                     }
                 });
+
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     Log.d(TAG, "Raw event: " + event.getAction() + ", (" + event.getRawX() + ", " + event.getRawY() + ")");

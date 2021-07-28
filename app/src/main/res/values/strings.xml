@@ -2,7 +2,7 @@
     <string name="app_name">Platform</string>
     <string name="copyright">&#169; 2021 Platform</string>
 
-    <string name="unmatched_passwords">Password are not the same</string>
+    <string name="unmatched_passwords">Passwords are not the same</string>
     <string name="invalid_email">Please use a valid email address</string>
     <string name="successful_signup">Successfully signed up!</string>
     <string name="incorrect_login">Incorrect username and/or password</string>

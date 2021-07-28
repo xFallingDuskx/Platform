@@ -124,6 +124,5 @@ public class CatalogFragment_AllTitles extends Fragment {
                 startActivity(intent);
             }
         });
-
     }
 }

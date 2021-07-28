@@ -60,9 +60,6 @@ public class Episode extends ParseObject {
         for(int i = 0; i < episodeJsonArray.length(); i++) {
             Episode episode = new Episode(episodeJsonArray.getJSONObject(i));
             episodes.add(episode);
-            if (i == 5) { // TODO: handle episode breaks and add endless scrolling
-                return episodes;
-            }
         }
         return episodes;
     }

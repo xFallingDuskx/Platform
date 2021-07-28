@@ -31,6 +31,10 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etPasswordConfirmation;
     private Button btnSignup;
+    String fullName;
+    String username;
+    String password;
+    Boolean valid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +53,9 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.i(TAG, "onClick signup button");
                 String email = etEmail.getText().toString();
-                String fullName = etFullName.getText().toString();
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
+                fullName = etFullName.getText().toString();
+                username = etUsername.getText().toString();
+                password = etPassword.getText().toString();
                 String passwordConfirmation = etPasswordConfirmation.getText().toString();
 
                 // Confirm password
@@ -62,22 +66,15 @@ public class SignupActivity extends AppCompatActivity {
                 }
 
                 // Verify the email address
-                if(! validEmail(email)) {
-                    Log.i(TAG, "Email address entered in by user is not valid");
-                    Toast.makeText(SignupActivity.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                signupUser(email, fullName, username, password);
+                verifyEmail(email);
             }
         });
     }
 
-    private Boolean validEmail(String email) {
+    private void verifyEmail(String email) {
         EMAIL_VERIFY_URL = "https://emailverification.whoisxmlapi.com/api/v1?apiKey=at_q49YobOASp4bKDhec8CdDDqfApDef&emailAddress=" + email;
         Log.i(TAG, "Email Verify URL: " + EMAIL_VERIFY_URL);
         AsyncHttpClient client = new AsyncHttpClient();
-        final Boolean[] valid = {null};
 
         client.get(EMAIL_VERIFY_URL, new JsonHttpResponseHandler() {
             @Override
@@ -92,9 +89,10 @@ public class SignupActivity extends AppCompatActivity {
 
                     // If the email is not valid for any of the above 4 reasons
                     if (formatCheck.equals("false") || smtpCheck.equals("false") || dnsCheck.equals("false") || disposableCheck.equals("true")) {
-                        valid[0] = false;
+                        Log.i(TAG, "Email address entered in by user is not valid");
+                        Toast.makeText(SignupActivity.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
                     } else { // If the email is valid
-                        valid[0] = true;
+                        signupUser(email, fullName, username, password);
                     }
 
                 } catch (JSONException e) {
@@ -108,8 +106,6 @@ public class SignupActivity extends AppCompatActivity {
                 Log.d(TAG, "onFailure to verify email address / Response: " + response + " / Error: " + throwable);
             }
         });
-
-        return valid[0];
     }
 
     private void signupUser(String email, String fullName, String username, String password) {

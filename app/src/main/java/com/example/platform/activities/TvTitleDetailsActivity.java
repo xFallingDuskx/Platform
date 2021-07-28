@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.platform.EndlessRecyclerViewScrollListener;
 import com.example.platform.R;
 import com.example.platform.adapters.CommentsAdapter;
 import com.example.platform.adapters.EpisodesAdapter;
@@ -129,6 +130,9 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     List<Keyword> allKeywords;
     KeywordsAdapter keywordsAdapter;
     TextView tvNoComments;
+
+    EndlessRecyclerViewScrollListener scrollListener;
+    int seasonNumber = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,45 +400,89 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         rvEpisodesDisplay.setLayoutManager(linearLayoutManager);
         rvEpisodesDisplay.setAdapter(adapter);
+
+        // Endless Scrolling
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                loadNextDataFromApi();
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvEpisodesDisplay.addOnScrollListener(scrollListener);
+    }
+
+    private void loadNextDataFromApi() {
+        seasonNumber++;
+        SEASON_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "/season/" + seasonNumber + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+        Log.i(TAG, "Season Details URL: " + SEASON_DETAILS_URL);
+        AsyncHttpClient seasonClient = new AsyncHttpClient();
+
+        seasonClient.get(SEASON_DETAILS_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess to get season details");
+                JSONObject seasonJsonObject = json.jsonObject;
+                try {
+                    JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
+                    Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
+                    List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes);
+                    updateParseServerEpisodes(newEpisodes);
+                    allEpisodes.addAll(newEpisodes);
+                    adapter.notifyDataSetChanged();
+                    Log.i(TAG, "Episodes: " + allEpisodes.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception for season details" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.i(TAG, "Issue saving Episode to parse server");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to get season / Response: " + response + " / Error: " + throwable);
+            }
+        });
     }
 
     // Obtain episodes data by accessing each season of the title
     private void displayEpisodesInDisplay() {
         Log.i(TAG, "Title: " + titleName + "/Number of seasons: " + numberOfSeasons);
-        for(int seasonNumber = 1; seasonNumber <= numberOfSeasons; seasonNumber++) { // for each season in the title
-            SEASON_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "/season/" + seasonNumber + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
-            Log.i(TAG, "Season Details URL: " + SEASON_DETAILS_URL);
-            AsyncHttpClient seasonClient = new AsyncHttpClient();
-            seasonNumberAccessible = seasonNumber; // seasonNumber cannot be accessed by inner for-loop so this is necessary
+        SEASON_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "/season/" + seasonNumber + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+        Log.i(TAG, "Season Details URL: " + SEASON_DETAILS_URL);
+        AsyncHttpClient seasonClient = new AsyncHttpClient();
 
-            seasonClient.get(SEASON_DETAILS_URL, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Log.d(TAG, "onSuccess to get season details");
-                    JSONObject seasonJsonObject = json.jsonObject;
-                    try {
-                        JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
-                        Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
-                        List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes); // TODO: only first 5 episodes are returned for now
-                        updateParseServerEpisodes(newEpisodes);
-                        allEpisodes.addAll(newEpisodes);
-                        adapter.notifyDataSetChanged();
-                        Log.i(TAG, "Episodes: " + allEpisodes.size());
-                    } catch (JSONException e) {
-                        Log.e(TAG, "Hit json exception for season details" + " Exception: " + e);
-                        e.printStackTrace();
-                    } catch (ParseException e) {
-                        Log.i(TAG, "Issue saving Episode to parse server");
-                        e.printStackTrace();
-                    }
+        seasonClient.get(SEASON_DETAILS_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess to get season details");
+                JSONObject seasonJsonObject = json.jsonObject;
+                try {
+                    JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
+                    Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
+                    List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes);
+                    updateParseServerEpisodes(newEpisodes);
+                    allEpisodes.addAll(newEpisodes);
+                    adapter.notifyDataSetChanged();
+                    Log.i(TAG, "Episodes: " + allEpisodes.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception for season details" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.i(TAG, "Issue saving Episode to parse server");
+                    e.printStackTrace();
                 }
+            }
 
-                @Override
-                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Log.d(TAG, "onFailure to get season / Response: " + response + " / Error: " + throwable);
-                }
-            });
-        }
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to get season / Response: " + response + " / Error: " + throwable);
+            }
+        });
     }
 
     // First check if Title already exist in the Parse Server
