@@ -1,16 +1,18 @@
 package com.example.platform.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.platform.R;
-import com.example.platform.models.Comment;
+import com.example.platform.activities.CatalogActivity_TitleDisplay;
 import com.example.platform.models.Genre;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +25,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder>{
 
     private Context context;
     private List<Genre> genres;
+    FragmentManager fragmentManager;
 
     public GenreAdapter(Context context, List<Genre> genres) {
         this.context = context;
@@ -56,6 +59,21 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.ViewHolder>{
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tvGenreName);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Genre genre = genres.get(position);
+                        Intent intent = new Intent(context, CatalogActivity_TitleDisplay.class);
+                        intent.putExtra("id", genre.getId());
+                        intent.putExtra("type", genre.getType());
+                        intent.putExtra("objective", "genre");
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
 
         public void bind(Genre genre) {

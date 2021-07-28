@@ -312,7 +312,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 Log.i(TAG, "Success saving the title: " + title.getName());
             }
         });
-
     }
 
     // Format the network JSON data into a String to be displayed in the app

@@ -63,7 +63,7 @@ public class CatalogFragment_PopularTitles extends Fragment {
     private SharedCatalogViewModel sharedCatalogViewModel;
     EndlessRecyclerViewScrollListener scrollListener;
 
-    String value;
+    String mediaType;
 
     RecyclerView rvRecentTitles;
     TitlesSimpleAdapter adapter;
@@ -106,8 +106,8 @@ public class CatalogFragment_PopularTitles extends Fragment {
 
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
-        value = sharedCatalogViewModel.getValue();
-        Log.i(TAG, "The value received is " + value);
+        mediaType = sharedCatalogViewModel.getMediaType();
+        Log.i(TAG, "The media type received is " + mediaType);
 
         // Set up RecyclerView for titles
         rvRecentTitles = view.findViewById(R.id.rvPopularTitles);
@@ -140,7 +140,7 @@ public class CatalogFragment_PopularTitles extends Fragment {
 
     public void displayTitles() {
         // Whether we are looking to display all TV show titles or Movie titles
-        if (value.equals("tv")) {
+        if (mediaType.equals("tv")) {
             POPULAR_TITLES_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + tvPage;
         } else {
             POPULAR_TITLES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + moviePage;
@@ -210,7 +210,7 @@ public class CatalogFragment_PopularTitles extends Fragment {
     // Append the next page of data into the adapter
     public void loadNextDataFromApi() {
         // Whether we are looking to display all TV show titles or Movie titles
-        if (value.equals("tv")) {
+        if (mediaType.equals("tv")) {
             tvPage++;
             POPULAR_TITLES_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + tvPage;
         } else {
@@ -233,8 +233,6 @@ public class CatalogFragment_PopularTitles extends Fragment {
                     updateParseServer(newTitles);
                     allTitles.addAll(newTitles);
                     adapter.notifyDataSetChanged();
-                    shimmerFrameLayout.stopShimmer();
-                    shimmerFrameLayout.setVisibility(View.GONE);
                     Log.i(TAG, "Titles: " + allTitles.size());
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);

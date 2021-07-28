@@ -144,7 +144,7 @@ public class CatalogFragment_TvShow extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("tv");
+                sharedCatalogViewModel.setMediaType("tv");
             }
         });
 
@@ -156,7 +156,7 @@ public class CatalogFragment_TvShow extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("tv");
+                sharedCatalogViewModel.setMediaType("tv");
             }
         });
 
@@ -168,7 +168,7 @@ public class CatalogFragment_TvShow extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("tv");
+                sharedCatalogViewModel.setMediaType("tv");
             }
         });
 
@@ -180,7 +180,7 @@ public class CatalogFragment_TvShow extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("tv");
+                sharedCatalogViewModel.setMediaType("tv");
             }
         });
     }

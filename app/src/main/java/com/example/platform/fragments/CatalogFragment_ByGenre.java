@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +50,8 @@ public class CatalogFragment_ByGenre extends Fragment {
     public static final String TAG = "CatalogFragment_ByGenre";
     private SharedCatalogViewModel sharedCatalogViewModel;
     private RecyclerView rvListedGenres;
-    String value;
+    FragmentManager fragmentManager;
+    String mediaType;
     RecyclerView rvGenres;
     List<Genre> allGenres;
     GenreAdapter adapter;
@@ -75,18 +77,18 @@ public class CatalogFragment_ByGenre extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
-        value = sharedCatalogViewModel.getValue();
-        Log.i(TAG, "The value received is " + value);
+        mediaType = sharedCatalogViewModel.getMediaType();
+        Log.i(TAG, "The value received is " + mediaType);
 
-        // Create TreeMap of TV show and Movies
+        // Create List<Genre> depending on the type of title
         allGenres = new ArrayList<>();
-        if (value.equals("tv")) {
+        if (mediaType.equals("tv")) {
             initializeTvGenres();
         } else {
             initializeMovieGenres();
         }
 
-        // Set up view
+        // Set up RecyclerView
         rvListedGenres = view.findViewById(R.id.rvListedGenres);
         adapter = new GenreAdapter(getContext(), allGenres);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -95,43 +97,43 @@ public class CatalogFragment_ByGenre extends Fragment {
     }
 
     public void initializeTvGenres() {
-        allGenres.add(new Genre("Action & Adventure", 10759, value));
-        allGenres.add(new Genre("Animation", 16, value));
-        allGenres.add(new Genre("Comedy", 35, value));
-        allGenres.add(new Genre("Crime", 80, value));
-        allGenres.add(new Genre("Documentary", 99, value));
-        allGenres.add(new Genre("Drama", 18, value));
-        allGenres.add(new Genre("Family", 10751, value));
-        allGenres.add(new Genre("Kids", 10762, value));
-        allGenres.add(new Genre("Mystery", 9648, value));
-        allGenres.add(new Genre("News", 10763, value));
-        allGenres.add(new Genre("Reality", 10, value));
-        allGenres.add(new Genre("Sci-Fi & Fantasy", 10765, value));
-        allGenres.add(new Genre("Soap", 10766, value));
-        allGenres.add(new Genre("Talk", 10767, value));
-        allGenres.add(new Genre("War & Politics", 10768, value));
-        allGenres.add(new Genre("Western", 37, value));
+        allGenres.add(new Genre("Action & Adventure", 10759, mediaType));
+        allGenres.add(new Genre("Animation", 16, mediaType));
+        allGenres.add(new Genre("Comedy", 35, mediaType));
+        allGenres.add(new Genre("Crime", 80, mediaType));
+        allGenres.add(new Genre("Documentary", 99, mediaType));
+        allGenres.add(new Genre("Drama", 18, mediaType));
+        allGenres.add(new Genre("Family", 10751, mediaType));
+        allGenres.add(new Genre("Kids", 10762, mediaType));
+        allGenres.add(new Genre("Mystery", 9648, mediaType));
+        allGenres.add(new Genre("News", 10763, mediaType));
+        allGenres.add(new Genre("Reality", 10, mediaType));
+        allGenres.add(new Genre("Sci-Fi & Fantasy", 10765, mediaType));
+        allGenres.add(new Genre("Soap", 10766, mediaType));
+        allGenres.add(new Genre("Talk", 10767, mediaType));
+        allGenres.add(new Genre("War & Politics", 10768, mediaType));
+        allGenres.add(new Genre("Western", 37, mediaType));
     }
 
     public void initializeMovieGenres() {
-        allGenres.add(new Genre("Action", 28, value));
-        allGenres.add(new Genre("Adventure", 12, value));
-        allGenres.add(new Genre("Animation", 16, value));
-        allGenres.add(new Genre("Comedy", 35, value));
-        allGenres.add(new Genre("Crime", 80, value));
-        allGenres.add(new Genre("Documentary", 99, value));
-        allGenres.add(new Genre("Drama", 18, value));
-        allGenres.add(new Genre("Family", 10751, value));
-        allGenres.add(new Genre("Fantasy", 14, value));
-        allGenres.add(new Genre("History", 36, value));
-        allGenres.add(new Genre("Horror", 27, value));
-        allGenres.add(new Genre("Music", 10402, value));
-        allGenres.add(new Genre("Mystery", 9648, value));
-        allGenres.add(new Genre("Romance", 10749, value));
-        allGenres.add(new Genre("Science Fiction", 878, value));
-        allGenres.add(new Genre("TV Movie", 10770, value));
-        allGenres.add(new Genre("Thriller", 53, value));
-        allGenres.add(new Genre("War", 10752, value));
-        allGenres.add(new Genre("Western", 37, value));
+        allGenres.add(new Genre("Action", 28, mediaType));
+        allGenres.add(new Genre("Adventure", 12, mediaType));
+        allGenres.add(new Genre("Animation", 16, mediaType));
+        allGenres.add(new Genre("Comedy", 35, mediaType));
+        allGenres.add(new Genre("Crime", 80, mediaType));
+        allGenres.add(new Genre("Documentary", 99, mediaType));
+        allGenres.add(new Genre("Drama", 18, mediaType));
+        allGenres.add(new Genre("Family", 10751, mediaType));
+        allGenres.add(new Genre("Fantasy", 14, mediaType));
+        allGenres.add(new Genre("History", 36, mediaType));
+        allGenres.add(new Genre("Horror", 27, mediaType));
+        allGenres.add(new Genre("Music", 10402, mediaType));
+        allGenres.add(new Genre("Mystery", 9648, mediaType));
+        allGenres.add(new Genre("Romance", 10749, mediaType));
+        allGenres.add(new Genre("Science Fiction", 878, mediaType));
+        allGenres.add(new Genre("TV Movie", 10770, mediaType));
+        allGenres.add(new Genre("Thriller", 53, mediaType));
+        allGenres.add(new Genre("War", 10752, mediaType));
+        allGenres.add(new Genre("Western", 37, mediaType));
     }
 }

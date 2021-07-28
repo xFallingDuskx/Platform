@@ -38,7 +38,7 @@ public class CatalogFragment_ByPlatform extends Fragment {
     public static final String TAG = "CatalogFragment_ByPlatform";
     private ImageView ivProfile;
     private SharedCatalogViewModel sharedCatalogViewModel;
-    String value;
+    String mediaType;
 
     public CatalogFragment_ByPlatform() {
         // Required empty public constructor
@@ -95,7 +95,7 @@ public class CatalogFragment_ByPlatform extends Fragment {
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
-        intent.putExtra("type", value);
+        intent.putExtra("type", mediaType);
         startActivity(intent);
     }
 
@@ -104,8 +104,8 @@ public class CatalogFragment_ByPlatform extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
-        value = sharedCatalogViewModel.getValue();
-        Log.i(TAG, "The value received is " + value);
+        mediaType = sharedCatalogViewModel.getMediaType();
+        Log.i(TAG, "The value received is " + mediaType);
 
         // Setting up the toolbar
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_TV);

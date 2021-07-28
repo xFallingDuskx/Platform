@@ -143,7 +143,7 @@ public class CatalogFragment_Movie extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("movie");
+                sharedCatalogViewModel.setMediaType("movie");
             }
         });
 
@@ -155,7 +155,7 @@ public class CatalogFragment_Movie extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("movie");
+                sharedCatalogViewModel.setMediaType("movie");
             }
         });
 
@@ -167,7 +167,7 @@ public class CatalogFragment_Movie extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("movie");
+                sharedCatalogViewModel.setMediaType("movie");
             }
         });
 
@@ -179,7 +179,7 @@ public class CatalogFragment_Movie extends Fragment {
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
-                sharedCatalogViewModel.setValue("movie");
+                sharedCatalogViewModel.setMediaType("movie");
             }
         });
     }
