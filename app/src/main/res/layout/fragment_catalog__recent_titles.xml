@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CatalogFragment_AllTitles">
+    tools:context=".fragments.CatalogFragment_RecentTitles">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Arrived at the All Titles fragment" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecentTitles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

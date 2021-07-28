@@ -39,7 +39,7 @@ public class CatalogFragment_TvShow extends Fragment {
 
     public static final String TAG = "CatalogFragment_TvShow";
     private ImageView ivProfile;
-    private RelativeLayout rlAllTitles;
+    private RelativeLayout rlRecentTitles;
     private RelativeLayout rlPopularTitles;
     private RelativeLayout rlByGenre;
     private RelativeLayout rlByPlatform;
@@ -129,18 +129,18 @@ public class CatalogFragment_TvShow extends Fragment {
         });
 
         // Take user to appropriate catalog option depending on their selection
-        rlAllTitles = getActivity().findViewById(R.id.rlCatalogOption_TV_All);
+        rlRecentTitles = getActivity().findViewById(R.id.rlCatalogOption_TV_Recent);
         rlPopularTitles = getActivity().findViewById(R.id.rlCatalogOption_TV_Popular);
         rlByGenre = getActivity().findViewById(R.id.rlCatalogOption_TV_Genre);
         rlByPlatform = getActivity().findViewById(R.id.rlCatalogOption_TV_Platform);
 
         fragmentManager = getActivity().getSupportFragmentManager();
 
-        rlAllTitles.setOnClickListener(new View.OnClickListener() {
+        rlRecentTitles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_AllTitles.class, null)
+                transaction.replace(R.id.flContainer, CatalogFragment_RecentTitles.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
