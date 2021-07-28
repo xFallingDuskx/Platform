@@ -33,4 +33,88 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <RelativeLayout
+        android:id="@+id/rlCatalogOption_TV_All"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="200dp"
+        android:background="@color/black_light">
+
+        <TextView
+            android:id="@+id/tvCatalogOptionText_TV_All"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Shows"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCatalogOption_TV_Popular"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@color/black_light">
+
+        <TextView
+            android:id="@+id/tvCatalogOptionText_TV_Popular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Popular"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCatalogOption_TV_Genre"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-80dp"
+        android:background="@color/black_light">
+
+        <TextView
+            android:id="@+id/tvCatalogOptionText_TV_Genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By Genre"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCatalogOption_TV_Platform"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="-220dp"
+        android:background="@color/black_light">
+
+        <TextView
+            android:id="@+id/tvCatalogOptionText_TV_Platform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By Genre"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
 </FrameLayout>

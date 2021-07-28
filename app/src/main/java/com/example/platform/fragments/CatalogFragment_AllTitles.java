@@ -12,7 +12,9 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +28,7 @@ import android.widget.RelativeLayout;
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
 import com.example.platform.activities.SearchActivity;
+import com.example.platform.models.SharedCatalogViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,17 +36,13 @@ import org.jetbrains.annotations.NotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class CatalogFragment_Movie extends Fragment {
+public class CatalogFragment_AllTitles extends Fragment {
 
-    public static final String TAG = "CatalogFragment_Movie";
+    public static final String TAG = "CatalogFragment_AllTitles";
     private ImageView ivProfile;
-    private RelativeLayout rlAllTitles;
-    private RelativeLayout rlPopularTitles;
-    private RelativeLayout rlByGenre;
-    private RelativeLayout rlByPlatform;
-    FragmentManager fragmentManager;
+    private SharedCatalogViewModel sharedCatalogViewModel;
 
-    public CatalogFragment_Movie() {
+    public CatalogFragment_AllTitles() {
         // Required empty public constructor
     }
 
@@ -53,11 +52,10 @@ public class CatalogFragment_Movie extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Alert view that menu items exist
-        setHasOptionsMenu(true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_catalog__movie, container, false);
+        return inflater.inflate(R.layout.fragment_catalog__all_titles, container, false);
     }
 
     @Override
@@ -72,7 +70,7 @@ public class CatalogFragment_Movie extends Fragment {
         // Change appearance of EditText for the Search View
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.white));
-        searchEditText.setHint("Search Movies");
+        searchEditText.setHint("Search TV Shows");
         searchEditText.setHintTextColor(getResources().getColor(R.color.grey_light));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -99,16 +97,20 @@ public class CatalogFragment_Movie extends Fragment {
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
-        intent.putExtra("type", "movie");
+        intent.putExtra("type", "tv");
         startActivity(intent);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Handle information shared between fragments
+        sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
+        String value = sharedCatalogViewModel.getValue();
+        Log.i(TAG, "The value received is " + value);
 
         // Setting up the toolbar
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_Movie);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_TV);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -122,42 +124,5 @@ public class CatalogFragment_Movie extends Fragment {
             }
         });
 
-        // Take user to appropriate catalog option depending on their selection
-        rlAllTitles = getActivity().findViewById(R.id.rlCatalogOption_Movie_All);
-        rlPopularTitles = getActivity().findViewById(R.id.rlCatalogOption_Movie_Popular);
-        rlByGenre = getActivity().findViewById(R.id.rlCatalogOption_Movie_Genre);
-        rlByPlatform = getActivity().findViewById(R.id.rlCatalogOption_Movie_Platform);
-
-        rlAllTitles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_AllTitles.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-
-        rlPopularTitles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
-        });
-
-        rlByGenre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
-        });
-
-        rlPopularTitles.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
-        });
     }
 }
