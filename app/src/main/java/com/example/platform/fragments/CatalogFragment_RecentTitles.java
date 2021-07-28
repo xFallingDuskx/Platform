@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +34,7 @@ import com.example.platform.activities.SearchActivity;
 import com.example.platform.adapters.TitlesSimpleAdapter;
 import com.example.platform.models.SharedCatalogViewModel;
 import com.example.platform.models.Title;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -59,7 +61,7 @@ public class CatalogFragment_RecentTitles extends Fragment {
     public static final String TAG = "CatalogFragment_RecentTitles";
     public String ALL_TITLES_ULR;
     private SharedCatalogViewModel sharedCatalogViewModel;
-    private ImageView ivProfile;
+    EndlessRecyclerViewScrollListener scrollListener;
 
     String value;
 
@@ -71,6 +73,8 @@ public class CatalogFragment_RecentTitles extends Fragment {
     String dateFormatted;
     int tvPage = 1;
     int moviePage = 1;
+
+    ShimmerFrameLayout shimmerFrameLayout;
 
     public CatalogFragment_RecentTitles() {
         // Required empty public constructor
@@ -87,42 +91,6 @@ public class CatalogFragment_RecentTitles extends Fragment {
         return inflater.inflate(R.layout.fragment_catalog__recent_titles, container, false);
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.toolbar_home, menu);
-
-        // Allow user to search Titles
-        MenuItem searchItem = menu.findItem(R.id.miSearch);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Change appearance of EditText for the Search View
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.white));
-        searchEditText.setHint("Search TV Shows");
-        searchEditText.setHintTextColor(getResources().getColor(R.color.grey_light));
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Search for Titles according to the query
-                searchTitles(query);
-                // Reset the Search View and return to normal toolbar
-                searchView.clearFocus();
-                searchView.setQuery("", false);
-                searchView.setIconified(true);
-                searchItem.collapseActionView();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
@@ -133,25 +101,19 @@ public class CatalogFragment_RecentTitles extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout_Catalog_Recent);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
         value = sharedCatalogViewModel.getValue();
         Log.i(TAG, "The value received is " + value);
-
-        // Setting up the toolbar
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_TV);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-//        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        // Take user to their profile
-        ivProfile = getActivity().findViewById(R.id.ivProfileIcon_Catalog);
-        ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
 
         // Set up RecyclerView for titles
         rvRecentTitles = view.findViewById(R.id.rvRecentTitles);
@@ -165,11 +127,27 @@ public class CatalogFragment_RecentTitles extends Fragment {
         // Current data is needed to avoid getting titles that have not yet released
         Date currentTime = Calendar.getInstance().getTime();
         dateFormatted = new SimpleDateFormat("yyyy-MM-dd").format(currentTime);
-        displayTitles();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayTitles();
+            }
+        }, 5000);
+
+        // Endless Scrolling
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                loadNextDataFromApi();
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvRecentTitles.addOnScrollListener(scrollListener);
     }
 
     public void displayTitles() {
-
         // Whether we are looking to display all TV show titles or Movie titles
         if (value.equals("tv")) {
             ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=" + dateFormatted + "&page=" + tvPage + " &include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
@@ -192,8 +170,8 @@ public class CatalogFragment_RecentTitles extends Fragment {
                     updateParseServer(newTitles);
                     allTitles.addAll(newTitles);
                     adapter.notifyDataSetChanged();
-//                    shimmerFrameLayout.stopShimmer();
-//                    shimmerFrameLayout.setVisibility(View.GONE);
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
                     Log.i(TAG, "Titles: " + allTitles.size());
                 } catch (JSONException e) {
                     Log.e(TAG, "Hit json exception" + " Exception: " + e);
@@ -237,5 +215,49 @@ public class CatalogFragment_RecentTitles extends Fragment {
         });
     }
 
+    // Endless Scrolling
+    // Append the next page of data into the adapter
+    public void loadNextDataFromApi() {
+        // Whether we are looking to display all TV show titles or Movie titles
+        if (value.equals("tv")) {
+            tvPage++;
+            ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=" + dateFormatted + "&page=" + tvPage + " &include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
+        } else {
+            moviePage++;
+            ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=" + moviePage + "&release_date.lte=" + dateFormatted + "&with_original_language=en&with_watch_monetization_types=flatrate";
+        }
+        Log.i(TAG, "The All Titles URL: " + ALL_TITLES_ULR);
 
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(ALL_TITLES_ULR, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess to display titles");
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    Log.i(TAG, "Results: " + results.toString());
+                    List<Title> newTitles = Title.fromJsonArray(results);
+                    updateParseServer(newTitles);
+                    allTitles.addAll(newTitles);
+                    adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Log.i(TAG, "Titles: " + allTitles.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.e(TAG, "Issue updating Parse Server");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
+            }
+        });
+    }
 }
