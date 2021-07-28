@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.CatalogFragment">
+    tools:context=".fragments.CatalogFragment"
+    android:background="@color/black_lighter">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_Catalog"
@@ -31,5 +32,45 @@
             android:textSize="34sp" />
 
     </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/rlCatalogOption_TV"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="100dp"
+        android:background="@color/black_light">
+
+        <TextView
+            android:id="@+id/tvCatalogOptionText_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TV Shows"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCatalogOption_Movie"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="100dp"
+        android:background="@color/black_light">
+
+        <TextView
+            android:id="@+id/tvCatalogOptionText_Movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Movies"
+            android:textStyle="bold"
+            android:textSize="40sp"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
 </FrameLayout>

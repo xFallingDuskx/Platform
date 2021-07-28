@@ -33,17 +33,16 @@ import org.jetbrains.annotations.NotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class CatalogFragment extends Fragment {
+public class CatalogFragment_TvShow extends Fragment {
 
-    public static final String TAG = "CatalogFragment";
+    public static final String TAG = "CatalogFragment_TvShow";
     private ImageView ivProfile;
-    private RelativeLayout rlTvOption;
-    private RelativeLayout rlMovieOption;
     FragmentManager fragmentManager;
 
-    public CatalogFragment() {
+    public CatalogFragment_TvShow() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,7 @@ public class CatalogFragment extends Fragment {
         // Alert view that menu items exist
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_catalog, container, false);
+        return inflater.inflate(R.layout.fragment_catalog__tv_show, container, false);
     }
 
     @Override
@@ -116,34 +115,6 @@ public class CatalogFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ProfileActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        fragmentManager = getActivity().getSupportFragmentManager();
-
-        // Take user to TV catalog
-        rlTvOption = getActivity().findViewById(R.id.rlCatalogOption_TV);
-        rlTvOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_TvShow.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-
-        // Take user to Movie catalog
-        rlMovieOption = getActivity().findViewById(R.id.rlCatalogOption_Movie);
-        rlMovieOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_Movie.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
             }
         });
     }

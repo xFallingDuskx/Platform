@@ -11,7 +11,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
@@ -33,15 +31,13 @@ import org.jetbrains.annotations.NotNull;
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class CatalogFragment extends Fragment {
+public class CatalogFragment_Movie extends Fragment {
 
-    public static final String TAG = "CatalogFragment";
+    public static final String TAG = "CatalogFragment_Movie";
     private ImageView ivProfile;
-    private RelativeLayout rlTvOption;
-    private RelativeLayout rlMovieOption;
     FragmentManager fragmentManager;
 
-    public CatalogFragment() {
+    public CatalogFragment_Movie() {
         // Required empty public constructor
     }
 
@@ -55,7 +51,7 @@ public class CatalogFragment extends Fragment {
         // Alert view that menu items exist
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_catalog, container, false);
+        return inflater.inflate(R.layout.fragment_catalog__movie, container, false);
     }
 
     @Override
@@ -116,34 +112,6 @@ public class CatalogFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ProfileActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        fragmentManager = getActivity().getSupportFragmentManager();
-
-        // Take user to TV catalog
-        rlTvOption = getActivity().findViewById(R.id.rlCatalogOption_TV);
-        rlTvOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_TvShow.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-
-        // Take user to Movie catalog
-        rlMovieOption = getActivity().findViewById(R.id.rlCatalogOption_Movie);
-        rlMovieOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_Movie.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
             }
         });
     }
