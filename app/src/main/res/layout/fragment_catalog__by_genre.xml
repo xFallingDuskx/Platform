@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CatalogFragment_ByGenre">
+    tools:context=".fragments.CatalogFragment_ByGenre"
+    android:background="@color/black_lighter">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvListedGenres"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Catalog By Genre" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>
