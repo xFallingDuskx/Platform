@@ -91,13 +91,6 @@ public class CatalogFragment_RecentTitles extends Fragment {
         return inflater.inflate(R.layout.fragment_catalog__recent_titles, container, false);
     }
 
-    private void searchTitles(String query) {
-        Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra("query", query);
-        intent.putExtra("type", value);
-        startActivity(intent);
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

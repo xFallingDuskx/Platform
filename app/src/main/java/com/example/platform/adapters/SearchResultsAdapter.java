@@ -90,7 +90,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                         intent.putExtra("description", title.getDescription());
                         intent.putExtra("releaseDate", title.getReleaseDate());
                         context.startActivity(intent);
-                        Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
+                        Log.i(TAG, "Opening DetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " within the list: " + titles.toString());
                     }
                 }
             });

@@ -11,7 +11,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,12 +25,32 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
+import com.example.platform.EndlessRecyclerViewScrollListener;
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
 import com.example.platform.activities.SearchActivity;
+import com.example.platform.adapters.TitlesSimpleAdapter;
 import com.example.platform.models.SharedCatalogViewModel;
+import com.example.platform.models.Title;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import okhttp3.Headers;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,9 +59,21 @@ import org.jetbrains.annotations.NotNull;
 public class CatalogFragment_PopularTitles extends Fragment {
 
     public static final String TAG = "CatalogFragment_PopularTitles";
-    private ImageView ivProfile;
+    public String POPULAR_TITLES_URL;
     private SharedCatalogViewModel sharedCatalogViewModel;
+    EndlessRecyclerViewScrollListener scrollListener;
+
     String value;
+
+    RecyclerView rvRecentTitles;
+    TitlesSimpleAdapter adapter;
+    List<Title> allTitles;
+
+    EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+    int tvPage = 1;
+    int moviePage = 1;
+
+    ShimmerFrameLayout shimmerFrameLayout;
 
     public CatalogFragment_PopularTitles() {
         // Required empty public constructor
@@ -58,70 +93,162 @@ public class CatalogFragment_PopularTitles extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.toolbar_home, menu);
-
-        // Allow user to search Titles
-        MenuItem searchItem = menu.findItem(R.id.miSearch);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // Change appearance of EditText for the Search View
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.white));
-        searchEditText.setHint("Search TV Shows");
-        searchEditText.setHintTextColor(getResources().getColor(R.color.grey_light));
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // Search for Titles according to the query
-                searchTitles(query);
-                // Reset the Search View and return to normal toolbar
-                searchView.clearFocus();
-                searchView.setQuery("", false);
-                searchView.setIconified(true);
-                searchItem.collapseActionView();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    private void searchTitles(String query) {
-        Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra("query", query);
-        intent.putExtra("type", value);
-        startActivity(intent);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        shimmerFrameLayout = view.findViewById(R.id.shimmerFrameLayout_Catalog_Popular);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
+
         // Handle information shared between fragments
         sharedCatalogViewModel = new ViewModelProvider(requireActivity()).get(SharedCatalogViewModel.class);
         value = sharedCatalogViewModel.getValue();
         Log.i(TAG, "The value received is " + value);
 
-        // Setting up the toolbar
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_TV);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        // Set up RecyclerView for titles
+        rvRecentTitles = view.findViewById(R.id.rvPopularTitles);
+        allTitles = new ArrayList<>();
+        adapter = new TitlesSimpleAdapter(getContext(), allTitles);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+        rvRecentTitles.setLayoutManager(gridLayoutManager);
+        rvRecentTitles.setAdapter(adapter);
 
-        // Take user to their profile
-        ivProfile = getActivity().findViewById(R.id.ivProfileIcon_Catalog);
-        ivProfile.setOnClickListener(new View.OnClickListener() {
+        // Add titles to display
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ProfileActivity.class);
-                startActivity(intent);
+            public void run() {
+                displayTitles();
+            }
+        }, 5000);
+
+        // Endless Scrolling
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                loadNextDataFromApi();
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvRecentTitles.addOnScrollListener(scrollListener);
+    }
+
+    public void displayTitles() {
+        // Whether we are looking to display all TV show titles or Movie titles
+        if (value.equals("tv")) {
+            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + tvPage;
+        } else {
+            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + moviePage;
+        }
+        Log.i(TAG, "The All Titles URL: " + POPULAR_TITLES_URL);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(POPULAR_TITLES_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess to display titles");
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    Log.i(TAG, "Results: " + results.toString());
+                    List<Title> newTitles = Title.fromJsonArray(results);
+                    updateParseServer(newTitles);
+                    allTitles.addAll(newTitles);
+                    adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Log.i(TAG, "Titles: " + allTitles.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.e(TAG, "Issue updating Parse Server");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
+    }
 
+    // First check if Title already exist in the Parse Server
+    // Requires making a query for Titles within the server that contain the same unique TMDB ID #
+    private void updateParseServer(List<Title> newTitles) throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Title");
+
+        for (Title title : newTitles) {
+            query.whereEqualTo(Title.KEY_TMDB_ID, title.getId());
+            if (query.count() == 0) {
+                saveTitle(title);
+            }
+        }
+    }
+
+    // Save Title in the Parse Server if it does not exist
+    private void saveTitle(Title title) {
+        title.setId(title.getId());
+
+        title.saveInBackground(e -> {
+            if (e != null){
+                Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
+            } else {
+                Log.i(TAG, "Success saving the title: " + title.getName());
+            }
+        });
+    }
+
+    // Endless Scrolling
+    // Append the next page of data into the adapter
+    public void loadNextDataFromApi() {
+        // Whether we are looking to display all TV show titles or Movie titles
+        if (value.equals("tv")) {
+            tvPage++;
+            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + tvPage;
+        } else {
+            moviePage++;
+            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + moviePage;
+        }
+        Log.i(TAG, "The All Titles URL: " + POPULAR_TITLES_URL);
+
+        AsyncHttpClient client = new AsyncHttpClient();
+
+        client.get(POPULAR_TITLES_URL, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.d(TAG, "onSuccess to display titles");
+                JSONObject jsonObject = json.jsonObject;
+                try {
+                    JSONArray results = jsonObject.getJSONArray("results");
+                    Log.i(TAG, "Results: " + results.toString());
+                    List<Title> newTitles = Title.fromJsonArray(results);
+                    updateParseServer(newTitles);
+                    allTitles.addAll(newTitles);
+                    adapter.notifyDataSetChanged();
+                    shimmerFrameLayout.stopShimmer();
+                    shimmerFrameLayout.setVisibility(View.GONE);
+                    Log.i(TAG, "Titles: " + allTitles.size());
+                } catch (JSONException e) {
+                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    Log.e(TAG, "Issue updating Parse Server");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
+            }
+        });
     }
 }

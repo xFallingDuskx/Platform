@@ -3,12 +3,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CatalogFragment_PopularTitles">
+    tools:context=".fragments.CatalogFragment_PopularTitles"
+    android:background="@color/black_light">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPopularTitles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerFrameLayout_Catalog_Popular"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Catalog popular titles" />
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/layoutPlaceHolderOne_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder" />
+                <include
+                    android:id="@+id/layoutPlaceHolderTwo_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_toRightOf="@+id/layoutPlaceHolderOne_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderThree_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderOne_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderFour_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderTwo_Popular"
+                    android:layout_toRightOf="@+id/layoutPlaceHolderThree_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderFive_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderThree_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderSix_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderFour_Popular"
+                    android:layout_toRightOf="@+id/layoutPlaceHolderFive_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderSeven_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderFive_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderEight_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderSix_Popular"
+                    android:layout_toRightOf="@+id/layoutPlaceHolderSeven_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderNine_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderSeven_Popular"/>
+                <include
+                    android:id="@+id/layoutPlaceHolderTen_Popular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    layout="@layout/item_title_simple_shimmer_placeholder"
+                    android:layout_below="@+id/layoutPlaceHolderEight_Popular"
+                    android:layout_toRightOf="@+id/layoutPlaceHolderNine_Popular"/>
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </FrameLayout>
