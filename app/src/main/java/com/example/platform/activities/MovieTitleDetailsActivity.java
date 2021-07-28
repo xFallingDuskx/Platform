@@ -1,12 +1,16 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -43,6 +47,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -590,17 +596,17 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         });
     }
 
+    // User clicks on share icon
+    // Source: https://www.geeksforgeeks.org/how-to-share-image-of-your-app-with-another-app-in-android/
     public void handleShareAction() {
         ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String shareText = titleName + System.lineSeparator() + System.lineSeparator() + titleDescription;
 
-                Intent shareIntent = new Intent();
-                shareIntent.setType("text/plain");
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-                startActivity(Intent.createChooser(shareIntent, "Sharing title information for " + titleName));
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) ivCover.getDrawable();
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                shareImageandText(bitmap, shareText);
             }
         });
     }
@@ -690,5 +696,34 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    // To share image with text
+    private void shareImageandText(Bitmap bitmap, String shareText) {
+        Uri uri = getmageToShare(bitmap);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+        shareIntent.setType("image/png");
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(Intent.createChooser(shareIntent, "Sharing information for this title"));
+    }
+
+    // Retrieving the url to share
+    private Uri getmageToShare(Bitmap bitmap) {
+        File imagefolder = new File(context.getCacheDir(), "images");
+        Uri uri = null;
+        try {
+            imagefolder.mkdirs();
+            File file = new File(imagefolder, "shared_image.png");
+            FileOutputStream outputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            uri = FileProvider.getUriForFile(context, "com.anni.shareimage.fileprovider", file);
+        } catch (Exception e) {
+            Log.d(TAG, "Issue retrieving the url to share");
+        }
+        return uri;
     }
 }
