@@ -97,6 +97,7 @@ public class CatalogFragment extends Fragment {
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
+        intent.putExtra("type", "multi");
         startActivity(intent);
     }
 

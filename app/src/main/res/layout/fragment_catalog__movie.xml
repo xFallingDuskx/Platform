@@ -3,12 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CatalogFragment_Movie">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.CatalogFragment_Movie"
+    android:background="@color/black_lighter">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar_Catalog_Movie"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Catalog Movie fragment" />
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@android:color/white">
+
+        <ImageView
+            android:id="@+id/ivProfileIcon_Catalog"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_profile" />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Movies"
+            android:textColor="@android:color/white"
+            android:textSize="34sp" />
+
+    </androidx.appcompat.widget.Toolbar>
 
 </FrameLayout>

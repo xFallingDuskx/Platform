@@ -43,6 +43,7 @@ public class SearchActivity extends AppCompatActivity {
     public String TITLES_SEARCH_URL;
     Context context;
     String query;
+    String type;
 
     ImageView ivProfile;
 
@@ -74,6 +75,7 @@ public class SearchActivity extends AppCompatActivity {
         rvSearchResults.setLayoutManager(linearLayoutManager);
         rvSearchResults.setAdapter(adapter);
 
+        type = (String) getIntent().getStringExtra("type");
         query = (String) getIntent().getStringExtra("query");
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -144,7 +146,10 @@ public class SearchActivity extends AppCompatActivity {
 
     // Search TMDB for the titles that matches the query
     public void performSearch(String query) {
-        TITLES_SEARCH_URL = "https://api.themoviedb.org/3/search/multi?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&query=" + query + "&page=1&include_adult=false";
+        // Different search depending on type
+        // Types: "multi" - TV shows and movies / "tv" - TV shows / "movie" - movies
+        TITLES_SEARCH_URL = "https://api.themoviedb.org/3/search/" + type + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&query=" + query + "&page=1&include_adult=false";
+        Log.i(TAG, "Search URL: " + TITLES_SEARCH_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get(TITLES_SEARCH_URL, new JsonHttpResponseHandler() {

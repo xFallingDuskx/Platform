@@ -69,7 +69,7 @@ public class CatalogFragment_TvShow extends Fragment {
         // Change appearance of EditText for the Search View
         EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         searchEditText.setTextColor(getResources().getColor(R.color.white));
-        searchEditText.setHint("Search TV Shows and Movies");
+        searchEditText.setHint("Search TV Shows");
         searchEditText.setHintTextColor(getResources().getColor(R.color.grey_light));
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -96,6 +96,7 @@ public class CatalogFragment_TvShow extends Fragment {
     private void searchTitles(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra("query", query);
+        intent.putExtra("type", "tv");
         startActivity(intent);
     }
 
@@ -104,7 +105,7 @@ public class CatalogFragment_TvShow extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Setting up the toolbar
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog);
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_Catalog_TV);
         ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
 
