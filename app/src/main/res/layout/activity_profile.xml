@@ -129,25 +129,26 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlProfileOption_Likes"
+            android:id="@+id/rlProfileOption_Recommendations"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="1dp"
             android:layout_below="@+id/rlProfileOption_Comments"
             android:background="@color/black_light" >
+
             <TextView
-                android:id="@+id/tvProfileOption_Likes_Text"
+                android:id="@+id/tvProfileOption_Recommendations_Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:layout_marginStart="10dp"
-                android:text="Likes"
+                android:text="Recommendations"
                 android:textColor="@color/white_dimmer"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
             <ImageView
-                android:id="@+id/ivProfileOption_Likes_Arrow"
+                android:id="@+id/ivProfileOption_Recommendations_Arrow"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentEnd="true"

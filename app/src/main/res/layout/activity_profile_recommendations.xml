@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileLikesActivity"
+    tools:context=".activities.ProfileRecommendationsActivity"
     android:background="@color/black_lighter">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_ProfileLikes"
+        android:id="@+id/toolbar_ProfileRecommendations"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -18,20 +18,20 @@
         app:titleTextColor="@android:color/white">
 
         <ImageView
-            android:id="@+id/ivBack_ProfileLikes"
+            android:id="@+id/ivBack_ProfileRecommendations"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/ic_back_arrow" />
 
         <TextView
-            android:id="@+id/tvHeading_ProfileLikes"
+            android:id="@+id/tvHeading_ProfileRecommendations"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Your Likes"
+            android:text="Your Recommendations"
             android:textColor="@android:color/white"
-            android:textSize="26sp" />
+            android:textSize="24sp" />
     </androidx.appcompat.widget.Toolbar>
 
 </RelativeLayout>

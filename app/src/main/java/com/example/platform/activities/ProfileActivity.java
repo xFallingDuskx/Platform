@@ -1,7 +1,6 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     RelativeLayout rlAbout;
     RelativeLayout rlFollowing;
     RelativeLayout rlComments;
-    RelativeLayout rlLikes;
+    RelativeLayout rlRecommendations;
     Button btnLogout;
     ImageView ivClose;
 
@@ -76,11 +75,11 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        rlLikes = findViewById(R.id.rlProfileOption_Likes);
-        rlLikes.setOnClickListener(new View.OnClickListener() {
+        rlRecommendations = findViewById(R.id.rlProfileOption_Recommendations);
+        rlRecommendations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, ProfileLikesActivity.class);
+                Intent intent = new Intent(ProfileActivity.this, ProfileRecommendationsActivity.class);
                 startActivity(intent);
             }
         });

@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Platform">
         <activity android:name=".activities.CatalogActivity_TitleDisplay"></activity>
         <activity android:name=".activities.ProfileAboutActivity" />
-        <activity android:name=".activities.ProfileLikesActivity" />
+        <activity android:name=".activities.ProfileRecommendationsActivity" />
         <activity android:name=".activities.ProfileCommentsActivity" />
         <activity android:name=".activities.ProfileFollowingActivity" />
         <activity android:name=".activities.ProfileGeneralActivity" />

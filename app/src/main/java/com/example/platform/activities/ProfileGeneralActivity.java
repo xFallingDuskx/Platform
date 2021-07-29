@@ -20,7 +20,6 @@ public class ProfileGeneralActivity extends AppCompatActivity {
     TextView tvFullname;
     TextView tvUsername;
     TextView tvEmail;
-    TextView tvPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
