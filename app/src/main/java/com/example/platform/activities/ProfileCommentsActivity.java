@@ -19,6 +19,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +78,8 @@ public class ProfileCommentsActivity extends AppCompatActivity {
     public void displayComments() {
         // Specify that we want Comments from the server
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        String currentUser = ParseUser.getCurrentUser().getUsername();
+        query.whereEqualTo(Comment.KEY_USER, currentUser);
         // Sort comments first by likes then by their creation date
         query.addDescendingOrder("createdAt"); // Newest comments to the top
         query.findInBackground(new FindCallback<Comment>() {
