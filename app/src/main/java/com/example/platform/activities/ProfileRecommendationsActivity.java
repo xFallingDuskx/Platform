@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -232,10 +233,12 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
     // Append the next page of data into the adapter
     public void loadNextDataFromApi() {
         // Ensure there is another liked title to query for more recommendations
-        if (currentLikedTitlePosition + 1 < likedTitlesIds.size()) {
-            currentLikedTitlePosition++;
+        if ((currentLikedTitlePosition + 1) == likedTitlesIds.size()) {
+            Toast.makeText(context, "You must like more titles for more recommendations", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        currentLikedTitlePosition++;
         String titleId = likedTitlesIds.get(currentLikedTitlePosition);
         String mediaType = userLikedTitles.get(titleId);
 
