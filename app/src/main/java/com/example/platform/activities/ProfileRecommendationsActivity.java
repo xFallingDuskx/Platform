@@ -18,7 +18,6 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.EndlessRecyclerViewScrollListener;
 import com.example.platform.R;
 import com.example.platform.adapters.TitlesSimpleAdapter;
-import com.example.platform.models.SharedCatalogViewModel;
 import com.example.platform.models.Title;
 import com.example.platform.models.User;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -40,10 +39,12 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Headers;
+import cn.pedant.SweetAlert.SweetAlertDialog ;
 
 public class ProfileRecommendationsActivity extends AppCompatActivity {
 
     public static final String TAG = "ProfileRecommendationsActivity";
+    ParseUser currentUser;
     Context context;
     ImageView ivBack;
     TextView tvNotAvailable;
@@ -65,6 +66,10 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_recommendations);
         context = getApplicationContext();
+        currentUser = ParseUser.getCurrentUser();
+
+        // Alert users that the more they like, the more recommendations will appear
+        new SweetAlertDialog(this).setTitleText("More Likes, More Recs").setContentText("Hey " + currentUser.getUsername() + ", the more TV shows and movies you like, the more recommendations we can give you!").show();
 
         shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout_Recommendations);
         if(!shimmerFrameLayout.isShimmerVisible()) {
@@ -122,7 +127,6 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
     }
 
     public void getLikedTitles() {
-        ParseUser currentUser = ParseUser.getCurrentUser();
         JSONObject jsonObject = currentUser.getJSONObject(User.KEY_LIKED_TITLES);
         if (jsonObject == null) { // If the user has liked no titles
             Log.i(TAG, "No titles currently liked by the user");
