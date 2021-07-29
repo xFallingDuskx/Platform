@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -72,7 +73,12 @@ public class ProfileCommentsActivity extends AppCompatActivity {
         rvComments.setAdapter(commentsAdapter);
 
         // Add comments to RV to be displayed
-        displayComments();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                displayComments();
+            }
+        }, 3000);
     }
 
     public void displayComments() {

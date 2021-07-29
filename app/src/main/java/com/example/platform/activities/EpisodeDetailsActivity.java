@@ -342,7 +342,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                     try {
                         jsonObject.put("tmdbId", episodeTmdbId);
                         jsonObject.put("name", episodeName);
-                        jsonObject.put("posterPath", episodeCover);
+                        jsonObject.put("posterPath", titleCoverPath);
                         jsonObject.put("type", "Episode");
                         jsonObject.put("description", episodeDescription);
                         jsonObject.put("releaseDate", episodeReleaseDate);
