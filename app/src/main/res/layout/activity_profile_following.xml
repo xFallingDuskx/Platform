@@ -34,6 +34,17 @@
             android:textSize="26sp" />
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/tvNotAvailable_ProfileFollowing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="You must follow an item first"
+        android:textColor="@color/white_dimmer"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments_ProfileFollowing"
         android:layout_width="match_parent"

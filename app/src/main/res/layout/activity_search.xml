@@ -37,6 +37,17 @@
         android:layout_below="@+id/toolbar_search"
         android:background="@color/black_light" />
 
+    <TextView
+        android:id="@+id/tvNotAvailable_SearchResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="No titles match your search"
+        android:textColor="@color/white_dimmer"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayout_Search"
         android:layout_below="@+id/toolbar_search"

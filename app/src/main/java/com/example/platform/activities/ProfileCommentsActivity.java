@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.platform.R;
 import com.example.platform.adapters.CommentsAdapter;
@@ -30,6 +31,7 @@ public class ProfileCommentsActivity extends AppCompatActivity {
     public static final String TAG = "ProfileCommentsActivity";
     Context context;
     ImageView ivBack;
+    TextView tvNotAvailable;
 
     RecyclerView rvComments;
     List<Comment> allComments;
@@ -63,6 +65,8 @@ public class ProfileCommentsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+
+        tvNotAvailable = findViewById(R.id.tvNotAvailable_ProfileComments);
 
         // Set up RecyclerView
         rvComments = findViewById(R.id.rvComments_ProfileComments);
@@ -106,6 +110,10 @@ public class ProfileCommentsActivity extends AppCompatActivity {
                 commentsAdapter.notifyDataSetChanged();
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
+
+                if(allComments.isEmpty()) { // If there are no comments to display
+                    tvNotAvailable.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

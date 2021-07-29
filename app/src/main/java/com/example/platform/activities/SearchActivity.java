@@ -46,6 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     String type;
 
     ImageView ivProfile;
+    TextView tvNotAvailable;
 
     RecyclerView rvSearchResults;
     SearchResultsAdapter adapter;
@@ -67,6 +68,8 @@ public class SearchActivity extends AppCompatActivity {
         if(!shimmerFrameLayout.isShimmerStarted()) {
             shimmerFrameLayout.startShimmer();
         }
+
+        tvNotAvailable = findViewById(R.id.tvNotAvailable_SearchResults);
 
         rvSearchResults = findViewById(R.id.rvSearchResults);
         allTitles = new ArrayList<>();
@@ -171,6 +174,10 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
+
+                if (allTitles.isEmpty()) { // If not titles match the query
+                    tvNotAvailable.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override

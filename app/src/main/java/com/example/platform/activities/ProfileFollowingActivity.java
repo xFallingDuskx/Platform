@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.platform.R;
 import com.example.platform.adapters.ProfileCommentsAdapter;
@@ -37,6 +38,7 @@ public class ProfileFollowingActivity extends AppCompatActivity {
     public static final String TAG = "ProfileFollowingActivity";
     Context context;
     ImageView ivBack;
+    TextView tvNotAvailable;
 
     RecyclerView rvSearchResults;
     ProfileFollowingsAdapter adapter;
@@ -71,6 +73,8 @@ public class ProfileFollowingActivity extends AppCompatActivity {
             }
         });
 
+        tvNotAvailable = findViewById(R.id.tvNotAvailable_ProfileFollowing);
+
         // Set up RecyclerView
         rvSearchResults = findViewById(R.id.rvComments_ProfileFollowing);
         allTitles = new ArrayList<>();
@@ -97,8 +101,9 @@ public class ProfileFollowingActivity extends AppCompatActivity {
         ParseUser currentUser = ParseUser.getCurrentUser();
         JSONArray userFollowingTitles = currentUser.getJSONArray("following");
 
-        if (userFollowingTitles == null) { // if the user is not currently following any titles
+        if (userFollowingTitles == null) { // If the user is not currently following any titles
             Log.i(TAG, "The user is not currently following any titles");
+            tvNotAvailable.setVisibility(View.VISIBLE);
             return;
         }
         for (int i = 0; i < userFollowingTitles.length(); i++) {

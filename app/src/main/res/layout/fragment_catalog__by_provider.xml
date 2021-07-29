@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.CatalogFragment_ByProvider"
-    android:background="@color/black_light">
+    android:background="@color/black_lighter">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListedProviders"

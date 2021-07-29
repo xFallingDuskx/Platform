@@ -40,6 +40,17 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_ProfileComments"/>
 
+    <TextView
+        android:id="@+id/tvNotAvailable_ProfileComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="You must make a comment first"
+        android:textColor="@color/white_dimmer"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayout_ProfileComments"
         android:layout_below="@+id/toolbar_ProfileComments"
