@@ -63,7 +63,7 @@ public class CatalogFragment_ByProvider extends Fragment {
         mediaType = sharedCatalogViewModel.getMediaType();
         Log.i(TAG, "The value received is " + mediaType);
 
-        // Create List<Genre> depending on the type of title
+        // Create List<Provider> depending on the type of title
         allProvider = new ArrayList<>();
         if (mediaType.equals("tv")) {
             initializeTvPlatforms();
@@ -100,7 +100,6 @@ public class CatalogFragment_ByProvider extends Fragment {
         allProvider.add(new Provider("Amazon Prime Videos", "119|9|10", mediaType));
         allProvider.add(new Provider("Apple", "2|350", mediaType));
         allProvider.add(new Provider("Crackle", "12", mediaType));
-        allProvider.add(new Provider("Crunchyroll", "283", mediaType));
         allProvider.add(new Provider("Disney Plus", "337|390|520", mediaType));
         allProvider.add(new Provider("HBO", "280|118|384|425|31|27", mediaType));
         allProvider.add(new Provider("Hulu", "15", mediaType));

@@ -159,8 +159,14 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
                     Log.e(TAG, "Issue updating Parse Server");
                     e.printStackTrace();
                 }
+                // Check if there are matches
+                if (allTitles.isEmpty()) {
+                    tvNoTitlesMessage.setVisibility(View.VISIBLE);
+                    Log.i(TAG, "No Discover titles to display with the objective " +  objective + "/ Media type is " + type + " / Genre ID is " + id);
+                } else {
+                    Log.i(TAG, "Displaying Discover titles with the objective " +  objective + "/ Media type is " + type + " / Genre ID is " + id);
 
-                Log.i(TAG, "Displaying Discover titles with the objective " +  objective + "/ Media type is " + type + " / Genre ID is " + id);
+                }
             }
 
             @Override
@@ -168,10 +174,6 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
                 Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
-        // Check if there are matches
-        if (allTitles.isEmpty()) {
-            tvNoTitlesMessage.setVisibility(View.VISIBLE);
-        }
     }
 
     // First check if Title already exist in the Parse Server
