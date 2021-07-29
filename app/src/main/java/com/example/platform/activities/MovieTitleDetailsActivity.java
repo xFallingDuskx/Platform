@@ -70,7 +70,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     String titleDescription;
     String titleReleaseDate;
     Boolean titleLiked;
-    HashMap<String, Object> userLikedTitles;
+    HashMap<String, String> userLikedTitles;
     String runtime;
     String genres;
     String actors;
@@ -565,7 +565,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
             //Convert Map to JSON
             try {
-                userLikedTitles = mapper.readValue(json, new TypeReference<HashMap<String, Object>>() {
+                userLikedTitles = mapper.readValue(json, new TypeReference<HashMap<String, String>>() {
                 });
             } catch (JsonProcessingException e) {
                 Log.d(TAG, "Issue accessing tiles liked by user");
@@ -590,7 +590,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 } else {  // Title is currently not liked by the User and they desire to like it
                     ivLikeStatus.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
                     tvLikeStatus.setText("Liked");
-                    userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
+                    userLikedTitles.put(String.valueOf(titleTmdbID), titleType); // Add title based on its TMDB ID #
                     currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
                     titleLiked = true; // Title is now liked by the user
                     Toast.makeText(context, getString(R.string.liked_title) + titleName, Toast.LENGTH_SHORT).show();
@@ -612,7 +612,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                             } else {
                                 ivLikeStatus.setImageResource(R.drawable.ic_heart_filled);
                                 tvLikeStatus.setText("Liked");
-                                userLikedTitles.put(String.valueOf(titleTmdbID), 0);
+                                userLikedTitles.put(String.valueOf(titleTmdbID), titleType);
                                 titleLiked = true;
                             }
                             Toast.makeText(context, getString(R.string.like_action_failed), Toast.LENGTH_SHORT).show();

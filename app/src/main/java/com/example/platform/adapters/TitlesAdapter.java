@@ -49,7 +49,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
     private List<Title> titles;
     ParseUser currentUser = ParseUser.getCurrentUser();
     Boolean titleLiked = false;
-    HashMap<String, Object> userLikedTitles;
+    HashMap<String, String> userLikedTitles;
 
 
     public TitlesAdapter(Context context, List<Title> titles) {
@@ -226,7 +226,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
             //Convert Map to JSON
             try {
-                userLikedTitles = mapper.readValue(json, new TypeReference<HashMap<String, Object>>(){});
+                userLikedTitles = mapper.readValue(json, new TypeReference<HashMap<String, String>>(){});
             } catch (JsonProcessingException e) {
                 Log.d(TAG, "Issue accessing tiles liked by user");
                 e.printStackTrace();
@@ -262,7 +262,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + title.getName());
         } else {  // Title is currently not liked by the User and they desire to like it
             ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
-            userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
+            userLikedTitles.put(String.valueOf(titleTmdbID), title.getType()); // Add title based on its TMDB ID #
             currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
             titleLiked = true; // Title is now liked by the user
             Toast.makeText(context, context.getString(R.string.liked_title) + title.getName(), Toast.LENGTH_SHORT).show();
@@ -282,7 +282,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         titleLiked = false;
                     } else {
                         ivLike.setImageResource(R.drawable.ic_heart_filled);
-                        userLikedTitles.put(String.valueOf(titleTmdbID), 0);
+                        userLikedTitles.put(String.valueOf(titleTmdbID), title.getType());
                         titleLiked = true;
                     }
                     Toast.makeText(context, context.getString(R.string.like_action_failed), Toast.LENGTH_SHORT).show();

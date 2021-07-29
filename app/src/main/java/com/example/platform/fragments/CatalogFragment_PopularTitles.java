@@ -69,7 +69,6 @@ public class CatalogFragment_PopularTitles extends Fragment {
     TitlesSimpleAdapter adapter;
     List<Title> allTitles;
 
-    EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     int tvPage = 1;
     int moviePage = 1;
 
