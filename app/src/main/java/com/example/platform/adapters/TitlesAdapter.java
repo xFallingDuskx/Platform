@@ -258,14 +258,14 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             userLikedTitles.remove(String.valueOf(titleTmdbID)); // Remove title based on its TMDB ID #
             currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
             titleLiked = false; // Title is no longer liked by the user
-            Toast.makeText(context, context.getString(R.string.liked_title) + title.getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.unliked_title) + title.getName(), Toast.LENGTH_SHORT).show();
             Log.i(TAG, "User " + currentUser.getUsername() + " has disliked the title: " + title.getName());
         } else {  // Title is currently not liked by the User and they desire to like it
             ivLike.setImageResource(R.drawable.ic_heart_filled); // Change to filled-in heart
             userLikedTitles.put(String.valueOf(titleTmdbID), 0); // Add title based on its TMDB ID #
             currentUser.put(User.KEY_LIKED_TITLES, userLikedTitles); // Update the Parse Server with this change
             titleLiked = true; // Title is now liked by the user
-            Toast.makeText(context, context.getString(R.string.unliked_title) + title.getName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.liked_title) + title.getName(), Toast.LENGTH_SHORT).show();
             Log.i(TAG, "User " + currentUser.getUsername() + " has liked the title: " + title.getName());
         }
 
