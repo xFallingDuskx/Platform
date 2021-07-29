@@ -12,6 +12,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/tvListedProviders_No_Match"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Sorry! No titles match this search."
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="invisible" />
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayout_Catalog_General"
         android:layout_width="match_parent"

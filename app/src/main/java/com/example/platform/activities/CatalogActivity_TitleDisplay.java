@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -41,6 +42,7 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
     RecyclerView rvGeneralTitles;
     TitlesSimpleAdapter adapter;
     List<Title> allTitles;
+    TextView tvNoTitlesMessage;
 
     EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     int genrePage = 1;
@@ -51,7 +53,7 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
 
     String objective;
     String type;
-    int id;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +88,13 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
         Log.i(TAG, "Getting necessary information...");
         Intent intent = getIntent();
         objective = (String) intent.getStringExtra("objective");
-        id = (Integer) intent.getIntExtra("id", 0);
+        id = (String) intent.getStringExtra("id");
         type = (String) intent.getStringExtra("type");
 
     }
 
     public void establishView() {
+        tvNoTitlesMessage = findViewById(R.id.tvListedProviders_No_Match);
         rvGeneralTitles = findViewById(R.id.rvGeneralTitles);
         allTitles = new ArrayList<>();
         adapter = new TitlesSimpleAdapter(context, allTitles);
@@ -123,12 +126,11 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
             }
         } else {
             // Whether we are looking to display all TV show titles or Movie titles based on Platform
-            // TODO
-//            if (type.equals("tv")) {
-//                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&page=" + genrePage + "&with_genres=" + id + "&include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
-//            } else {
-//                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + genrePage + "&with_genres=" + id + "&with_original_language=en&with_watch_monetization_types=flatrate";
-//            }
+            if (type.equals("tv")) {
+                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
+            } else {
+                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
+            }
         }
 
         Log.i(TAG, "The Discover Titles URL: " + DISCOVER_URL);
@@ -166,6 +168,10 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
                 Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
+        // Check if there are matches
+        if (allTitles.isEmpty()) {
+            tvNoTitlesMessage.setVisibility(View.VISIBLE);
+        }
     }
 
     // First check if Title already exist in the Parse Server
@@ -207,12 +213,11 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
         } else {
             platformPage++;
             // Whether we are looking to display more titles of TV show or Movie type based on Platform
-            // TODO
-//            if (type.equals("tv")) {
-//                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&page=" + genrePage + "&with_genres=" + id + "&include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
-//            } else {
-//                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + genrePage + "&with_genres=" + id + "&with_original_language=en&with_watch_monetization_types=flatrate";
-//            }
+            if (type.equals("tv")) {
+                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
+            } else {
+                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
+            }
         }
 
         Log.i(TAG, "The Discover Titles URL: " + DISCOVER_URL);

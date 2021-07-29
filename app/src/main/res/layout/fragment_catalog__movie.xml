@@ -97,7 +97,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rlCatalogOption_Movie_Platform"
+        android:id="@+id/rlCatalogOption_Movie_Provider"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="40dp"
         android:layout_height="120dp"
@@ -106,10 +106,10 @@
         android:background="@color/black_light">
 
         <TextView
-            android:id="@+id/tvCatalogOptionText_Movie_Platform"
+            android:id="@+id/tvCatalogOptionText_Movie_Provider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="By Platform"
+            android:text="By Provider"
             android:textStyle="bold"
             android:textSize="40sp"
             android:textColor="@color/white"

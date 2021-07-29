@@ -1,13 +1,13 @@
 package com.example.platform.models;
 
-public class Genre {
+public class Provider {
 
-    public static final String TAG = "Genre";
+    public static final String TAG = "Provider";
     public String name;
     public String id;
     public String type;
 
-    public Genre(String name, String id, String type) {
+    public Provider(String name, String id, String type) {
         this.name = name;
         this.id = id;
         this.type = type;

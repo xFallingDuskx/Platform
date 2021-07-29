@@ -42,7 +42,7 @@ public class CatalogFragment_Movie extends Fragment {
     private RelativeLayout rlRecentTitles;
     private RelativeLayout rlPopularTitles;
     private RelativeLayout rlByGenre;
-    private RelativeLayout rlByPlatform;
+    private RelativeLayout rlByProvider;
     private SharedCatalogViewModel sharedCatalogViewModel;
     FragmentManager fragmentManager;
 
@@ -131,7 +131,7 @@ public class CatalogFragment_Movie extends Fragment {
         rlRecentTitles = getActivity().findViewById(R.id.rlCatalogOption_Movie_Recent);
         rlPopularTitles = getActivity().findViewById(R.id.rlCatalogOption_Movie_Popular);
         rlByGenre = getActivity().findViewById(R.id.rlCatalogOption_Movie_Genre);
-        rlByPlatform = getActivity().findViewById(R.id.rlCatalogOption_Movie_Platform);
+        rlByProvider = getActivity().findViewById(R.id.rlCatalogOption_Movie_Provider);
 
         fragmentManager = getActivity().getSupportFragmentManager();
 
@@ -171,11 +171,11 @@ public class CatalogFragment_Movie extends Fragment {
             }
         });
 
-        rlByPlatform.setOnClickListener(new View.OnClickListener() {
+        rlByProvider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.flContainer, CatalogFragment_ByPlatform.class, null)
+                transaction.replace(R.id.flContainer, CatalogFragment_ByProvider.class, null)
                         .setReorderingAllowed(true)
                         .addToBackStack(null)
                         .commit();
