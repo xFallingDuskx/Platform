@@ -81,6 +81,7 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
                         intent.putExtra("description", episode.getDescription());
                         intent.putExtra("releaseDate", episode.getReleaseDate());
                         intent.putExtra("id", episode.getId());
+                        intent.putExtra("titleCoverPath", episode.getTitleCoverPath());
                         context.startActivity(intent);
                         Log.i(TAG, "Opening EpisodeDetailsActivity w/ episode: " + episode + " name: " + episode.getName() + " and TMDB ID: " + episode.getId() + " at position: " + position + " within the list: " + episodes.toString());
                     }

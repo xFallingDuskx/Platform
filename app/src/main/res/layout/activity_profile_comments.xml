@@ -34,4 +34,44 @@
             android:textSize="26sp" />
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments_ProfileComments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_ProfileComments"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerFrameLayout_ProfileComments"
+        android:layout_below="@+id/toolbar_ProfileComments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+    <ScrollView
+        android:layout_below="@+id/toolbar_ProfileComments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+            <include layout="@layout/item_comment_profile_shimmer_placeholder" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
 </RelativeLayout>

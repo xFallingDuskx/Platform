@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_lighter"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/ivTitleCover_ProfileComment"
+        android:background="@color/grey_medium"
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tvUsername_ProfileComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivTitleCover_ProfileComment"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Username" />
+
+    <TextView
+        android:id="@+id/tvTimestamp_ProfileComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="false"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/tvUsername_ProfileComment"
+        android:textColor="@color/grey_light"
+        android:textSize="16sp"
+        tools:text="Timestamp" />
+
+    <TextView
+        android:id="@+id/tvCommentText_ProfileComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername_ProfileComment"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/ivTitleCover_ProfileComment"
+        android:textColor="@color/whiteOpacit"
+        android:textSize="16sp"
+        tools:text="Comment from user - Lorem ipsum dolor sit amet, veritus adolescens temporibus ad cum, ad qui tractatos reprehendunt. Usu ut ullum iracundia, agam interesset ea nam." />
+</RelativeLayout>

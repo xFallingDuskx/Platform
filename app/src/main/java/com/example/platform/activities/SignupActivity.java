@@ -34,7 +34,6 @@ public class SignupActivity extends AppCompatActivity {
     String fullName;
     String username;
     String password;
-    Boolean valid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

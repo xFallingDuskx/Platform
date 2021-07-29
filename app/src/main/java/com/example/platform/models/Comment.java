@@ -28,6 +28,7 @@ public class Comment extends ParseObject {
     public static final String KEY_IN_REPLY_TO = "repliedCommentId";
     public static final String KEY_LIKES = "likes";
     public static final String KEY_REPLIES = "replies";
+    public static final String KEY_COVER_PATH = "coverPath";
 
     public Comment() {}
 
@@ -205,5 +206,13 @@ public class Comment extends ParseObject {
 
     public void setReplies(Integer replies) {
         put(KEY_REPLIES, replies);
+    }
+
+    public String getCoverPath() {
+        return getString(KEY_COVER_PATH);
+    }
+
+    public void setCoverPath(String coverPath) {
+        put(KEY_COVER_PATH, coverPath);
     }
 }

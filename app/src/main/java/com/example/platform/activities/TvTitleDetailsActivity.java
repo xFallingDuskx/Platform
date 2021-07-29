@@ -428,7 +428,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 try {
                     JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
                     Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
-                    List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes);
+                    List<Episode> newEpisodes = Episode.fromJsonArray(titleCoverPath, seasonEpisodes);
                     updateParseServerEpisodes(newEpisodes);
                     allEpisodes.addAll(newEpisodes);
                     adapter.notifyDataSetChanged();
@@ -464,7 +464,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                 try {
                     JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
                     Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
-                    List<Episode> newEpisodes = Episode.fromJsonArray(seasonEpisodes);
+                    List<Episode> newEpisodes = Episode.fromJsonArray(titleCoverPath, seasonEpisodes);
                     updateParseServerEpisodes(newEpisodes);
                     allEpisodes.addAll(newEpisodes);
                     adapter.notifyDataSetChanged();
@@ -574,17 +574,18 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
-                saveComment(commentText, currentUser, titleTmdbID);
+                saveComment(commentText, currentUser, titleTmdbID, titleCoverPath);
             }
         });
     }
 
     // Save and post the comment
-    public void saveComment(String commentText, String currentUser, Integer tmdbId) {
+    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath) {
         Comment comment = new Comment();
         comment.setText(commentText);
         comment.setUser(currentUser);
         comment.setTmdbId(tmdbId);
+        comment.setCoverPath(titleCoverPath);
         comment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

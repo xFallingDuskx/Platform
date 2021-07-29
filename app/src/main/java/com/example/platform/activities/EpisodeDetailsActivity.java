@@ -62,6 +62,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     String episodeReleaseDate;
     String episodeDescription;
     Integer episodeTmdbId;
+    String titleCoverPath;
 
     ImageView ivCover;
     TextView tvName;
@@ -179,6 +180,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
         episodeReleaseDate = (String) intent.getStringExtra("releaseDate");
         episodeDescription = (String) intent.getStringExtra("description");
         episodeTmdbId = (Integer) intent.getIntExtra("id", 0);
+        titleCoverPath = (String) intent.getStringExtra("titleCoverPath");
         Log.i(TAG, "Opening the Episode " + episodeName + " and TMDB ID: " + episodeTmdbId + " in Episode Details");
 
         shimmerFrameLayout.stopShimmer();
@@ -244,17 +246,18 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
-                saveComment(commentText, currentUser, episodeTmdbId);
+                saveComment(commentText, currentUser, episodeTmdbId, titleCoverPath);
             }
         });
     }
 
     // Save and post the comment
-    public void saveComment(String commentText, String currentUser, Integer tmdbId) {
+    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath) {
         Comment comment = new Comment();
         comment.setText(commentText);
         comment.setUser(currentUser);
         comment.setTmdbId(tmdbId);
+        comment.setCoverPath(titleCoverPath);
         comment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

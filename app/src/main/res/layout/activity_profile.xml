@@ -80,16 +80,17 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="1dp"
             android:background="@color/black_light" >
+
             <TextView
                 android:id="@+id/tvProfileOption_Following_Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:layout_marginStart="10dp"
-                android:text="Following"
+                android:text="Followings"
                 android:textColor="@color/white_dimmer"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
             <ImageView
                 android:id="@+id/ivProfileOption_Following_Arrow"
                 android:layout_width="20dp"

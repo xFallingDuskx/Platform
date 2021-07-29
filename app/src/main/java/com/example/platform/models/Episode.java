@@ -25,6 +25,7 @@ public class Episode extends ParseObject {
     Integer episodeNumber;
     String description;
     String releaseDate;
+    String titleCoverPath;
     ParseObject parseObject;
 
     public static final String KEY_TMDB_ID = "tmdbID";
@@ -55,10 +56,11 @@ public class Episode extends ParseObject {
     }
 
     // Convert JSONArray into List<Titles>
-    public static List<Episode> fromJsonArray(JSONArray episodeJsonArray) throws JSONException {
+    public static List<Episode> fromJsonArray(String titleCoverPath, JSONArray episodeJsonArray) throws JSONException {
         List<Episode> episodes = new ArrayList<>();
         for(int i = 0; i < episodeJsonArray.length(); i++) {
             Episode episode = new Episode(episodeJsonArray.getJSONObject(i));
+            episode.setTitleCoverPath(titleCoverPath);
             episodes.add(episode);
         }
         return episodes;
@@ -153,5 +155,13 @@ public class Episode extends ParseObject {
 
     public ParseObject getParseObject() {
         return parseObject;
+    }
+
+    public String getTitleCoverPath() {
+        return titleCoverPath;
+    }
+
+    public void setTitleCoverPath(String titleCoverPath) {
+        this.titleCoverPath = titleCoverPath;
     }
 }
