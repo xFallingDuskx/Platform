@@ -234,7 +234,7 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
     public void loadNextDataFromApi() {
         // Ensure there is another liked title to query for more recommendations
         if ((currentLikedTitlePosition + 1) == likedTitlesIds.size()) {
-            Toast.makeText(context, "You must like more titles for more recommendations", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Approaching the end! You must like more titles for more recommendations", Toast.LENGTH_LONG).show();
             return;
         }
 
