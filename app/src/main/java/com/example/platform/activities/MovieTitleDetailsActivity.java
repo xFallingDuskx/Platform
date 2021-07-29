@@ -602,7 +602,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         ivShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String shareText = titleName + System.lineSeparator() + System.lineSeparator() + titleDescription;
+                String shareText = getString(R.string.title_share_message) + System.lineSeparator() + System.lineSeparator() + titleName + System.lineSeparator() + System.lineSeparator() + titleDescription;
 
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) ivCover.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();

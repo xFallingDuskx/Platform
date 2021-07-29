@@ -166,7 +166,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         Title title = titles.get(position);
-                        String shareText = title.getName() + System.lineSeparator() + System.lineSeparator() + title.getDescription();
+                        String shareText = context.getString(R.string.title_share_message) + System.lineSeparator() + System.lineSeparator() + title.getName() + System.lineSeparator() + System.lineSeparator() + title.getDescription();
 
                         BitmapDrawable bitmapDrawable = (BitmapDrawable) ivCover.getDrawable();
                         Bitmap bitmap = bitmapDrawable.getBitmap();
