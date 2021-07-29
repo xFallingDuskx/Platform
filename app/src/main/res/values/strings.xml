@@ -14,10 +14,12 @@
     <string name="now_unfollowing_title">You are no longer following the title&#160;</string>
     <string name="now_following_episode">You are now following the episode&#160;</string>
     <string name="now_unfollowing_episode">You are no longer following the episode&#160;</string>
+    <string name="follow_action_failed">Failed to save your new following status</string>
     <string name="following">Following</string>
     <string name="not_following">Not Following</string>
     <string name="liked_title">You liked the title&#160;</string>
     <string name="unliked_title">You unliked the title&#160;</string>
+    <string name="like_action_failed">Failed to save your like action</string>
     <string name="comment_is_empty">Comment cannot be empty</string>
     <string name="cannot_save_comment">Unable to save comment</string>
     <string name="title_share_message">Hey, check out this titles I came across on Platform - Share Your Media Experience:</string>

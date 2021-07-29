@@ -104,6 +104,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     ParseUser currentUser = ParseUser.getCurrentUser();
     JSONArray userFollowingTitles;
     int jsonPosition;
+    JSONObject currentJsonObject;
     boolean currentlyFollowing;
 
     ShimmerFrameLayout shimmerFrameLayout;
@@ -465,6 +466,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 if (objectTmdbId.equals(titleTmdbID)) { // if the current title is currently liked by the user
                     jsonPosition = i;
                     currentlyFollowing = true;
+                    currentJsonObject = jsonObject;
                     break;
                 }
             }
@@ -484,10 +486,18 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
             public void onClick(View v){
                 // If the user is following the title and wishes to unfollow it
                 if (currentlyFollowing) {
+                    ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
+                    tvFollowingStatus.setText(R.string.not_following);
+                    Toast.makeText(context, getString(R.string.now_unfollowing_title) + titleName, Toast.LENGTH_SHORT).show();
+
                     userFollowingTitles.remove(jsonPosition);
                     Log.i(TAG, "User desires to unfollow the title");
                     currentlyFollowing = false;
                 } else {
+                    ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
+                    tvFollowingStatus.setText(R.string.following);
+                    Toast.makeText(context, getString(R.string.now_following_title) + titleName, Toast.LENGTH_SHORT).show();
+
                     Log.i(TAG, "User desires to follow the title");
                     // If the user is not following the title and wish to follow it
                     // Create a new JSONObject for that title and add it to the jsonArray
@@ -514,16 +524,21 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e != null) {
                             Log.d(TAG, "Issue saving following action by user");
-                        } else {
-                            if (currentlyFollowing) { // If the user is now following the item
-                                ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
-                                tvFollowingStatus.setText(R.string.following);
-                                Toast.makeText(context, getString(R.string.now_following_title) + titleName, Toast.LENGTH_SHORT).show();
-                            } else { // If the user is no longer following the title
+
+                            // In case saving the user new following status fails
+                            if (currentlyFollowing) { // User wanted to follow the title, but it failed -- Must revert back to 'Not Following' status
                                 ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
                                 tvFollowingStatus.setText(R.string.not_following);
-                                Toast.makeText(context, getString(R.string.now_unfollowing_title) + titleName, Toast.LENGTH_SHORT).show();
+                                userFollowingTitles.remove(userFollowingTitles.length() - 1);
+                                currentlyFollowing = false;
+                            } else {
+                                ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
+                                tvFollowingStatus.setText(R.string.following);
+                                userFollowingTitles.put(currentJsonObject.toString());
+                                currentlyFollowing = true;
                             }
+                            Toast.makeText(context, getString(R.string.follow_action_failed), Toast.LENGTH_SHORT).show();
+                        } else {
                             Log.i(TAG, "Success saving following action by user");
                         }
                     }
@@ -586,6 +601,20 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e != null) {
                             Log.d(TAG, "User: Issue saving like action by user " + e.getMessage());
+
+                            // In case saving the user like fails
+                            if (titleLiked) { // User wanted to like the title, but it failed -- Must revert back to unliked status
+                                ivLikeStatus.setImageResource(R.drawable.ic_heart_empty);
+                                tvLikeStatus.setText("Not liked");
+                                userLikedTitles.remove(String.valueOf(titleTmdbID));
+                                titleLiked = false;
+                            } else {
+                                ivLikeStatus.setImageResource(R.drawable.ic_heart_filled);
+                                tvLikeStatus.setText("Liked");
+                                userLikedTitles.put(String.valueOf(titleTmdbID), 0);
+                                titleLiked = true;
+                            }
+                            Toast.makeText(context, getString(R.string.like_action_failed), Toast.LENGTH_SHORT).show();
                         } else {
                             Log.i(TAG, "User: Success saving like action by user");
                         }

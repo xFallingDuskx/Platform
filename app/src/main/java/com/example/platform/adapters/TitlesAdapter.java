@@ -274,6 +274,18 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
             public void done(ParseException e) {
                 if (e != null) {
                     Log.d(TAG, "User: Issue saving like action by user " + e.getMessage());
+
+                    // In case saving the user like fails
+                    if (titleLiked) { // User wanted to like the title, but it failed -- Must revert back to unliked status
+                        ivLike.setImageResource(R.drawable.ic_heart_empty);
+                        userLikedTitles.remove(String.valueOf(titleTmdbID));
+                        titleLiked = false;
+                    } else {
+                        ivLike.setImageResource(R.drawable.ic_heart_filled);
+                        userLikedTitles.put(String.valueOf(titleTmdbID), 0);
+                        titleLiked = true;
+                    }
+                    Toast.makeText(context, context.getString(R.string.like_action_failed), Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i(TAG, "User: Success saving like action by user");
                 }

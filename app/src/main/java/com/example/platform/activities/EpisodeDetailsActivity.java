@@ -80,6 +80,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
     ParseUser currentUser = ParseUser.getCurrentUser();
     JSONArray userFollowingTitles;
     int jsonPosition;
+    JSONObject currentJsonObject;
     boolean currentlyFollowing;
 
     ShimmerFrameLayout shimmerFrameLayout;
@@ -299,6 +300,7 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                 if (objectTmdbId.equals(episodeTmdbId)) { // if the current title is currently liked by the user
                     jsonPosition = i;
                     currentlyFollowing = true;
+                    currentJsonObject = jsonObject;
                     break;
                 }
             }
@@ -318,10 +320,18 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
             public void onClick(View v){
                 // If the user is following the title and wishes to unfollow it
                 if (currentlyFollowing) {
+                    ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
+                    tvFollowingStatus.setText(R.string.not_following);
+                    Toast.makeText(context, getString(R.string.now_unfollowing_episode) + episodeName, Toast.LENGTH_SHORT).show();
+
                     userFollowingTitles.remove(jsonPosition);
                     Log.i(TAG, "User desires to unfollow the title");
                     currentlyFollowing = false;
                 } else {
+                    ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
+                    tvFollowingStatus.setText(R.string.following);
+                    Toast.makeText(context, getString(R.string.now_following_episode) + episodeName, Toast.LENGTH_SHORT).show();
+
                     Log.i(TAG, "User desires to follow the title");
                     // If the user is not following the title and wish to follow it
                     // Create a new JSONObject for that title and add it to the jsonArray
@@ -348,16 +358,21 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                     public void done(ParseException e) {
                         if (e != null) {
                             Log.d(TAG, "Issue saving following action by user");
-                        } else {
-                            if (currentlyFollowing) { // If the user is now following the item
-                                ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
-                                tvFollowingStatus.setText(R.string.following);
-                                Toast.makeText(context, getString(R.string.now_following_episode) + episodeName, Toast.LENGTH_SHORT).show();
-                            } else { // If the user is no longer following the title
+
+                            // In case saving the user new following status fails
+                            if (currentlyFollowing) { // User wanted to follow the episode, but it failed -- Must revert back to 'Not Following' status
                                 ivFollowingStatus.setImageResource(R.drawable.ic_following_false);
                                 tvFollowingStatus.setText(R.string.not_following);
-                                Toast.makeText(context, getString(R.string.now_unfollowing_episode) + episodeName, Toast.LENGTH_SHORT).show();
+                                userFollowingTitles.remove(userFollowingTitles.length() - 1);
+                                currentlyFollowing = false;
+                            } else {
+                                ivFollowingStatus.setImageResource(R.drawable.ic_following_true);
+                                tvFollowingStatus.setText(R.string.following);
+                                userFollowingTitles.put(currentJsonObject.toString());
+                                currentlyFollowing = true;
                             }
+                            Toast.makeText(context, getString(R.string.follow_action_failed), Toast.LENGTH_SHORT).show();
+                        } else {
                             Log.i(TAG, "Success saving following action by user");
                         }
                     }
