@@ -217,7 +217,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     scrollBehavior();
                 }
             }
-        }, 10000);
+        }, 8500);
     }
 
     private void getTitleInformation() {

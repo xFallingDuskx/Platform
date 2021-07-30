@@ -1,5 +1,6 @@
 package com.example.platform.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,7 +16,13 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.R;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
+import com.pubnub.api.callbacks.PNCallback;
+import com.pubnub.api.models.consumer.PNStatus;
+import com.pubnub.api.models.consumer.objects_api.uuid.PNSetUUIDMetadataResult;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +38,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etPasswordConfirmation;
     private Button btnSignup;
+    String email;
     String fullName;
     String username;
     String password;
@@ -51,7 +59,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick signup button");
-                String email = etEmail.getText().toString();
+                email = etEmail.getText().toString();
                 fullName = etFullName.getText().toString();
                 username = etUsername.getText().toString();
                 password = etPassword.getText().toString();
@@ -122,10 +130,38 @@ public class SignupActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with signup", e);
                     return;
                 }
+
+                saveUserToPubnub(username, email);
                 goMainActivity();
                 Toast.makeText(SignupActivity.this, getString(R.string.successful_signup), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void saveUserToPubnub(String username, String email) {
+        // First establish a connection to PubNub
+        PNConfiguration pnConfiguration = new PNConfiguration();
+        pnConfiguration.setSubscribeKey("sub-c-f3e50456-f16a-11eb-9d61-d6c76bc6f614");
+        pnConfiguration.setPublishKey("pub-c-d5e6773e-3948-488a-a5cd-4976b5c9de45");
+        pnConfiguration.setUuid(ParseUser.getCurrentUser().getObjectId()); // Set the PubNub unique user ID as the User's Object ID in the Parse server
+        PubNub pubnub = new PubNub(pnConfiguration);
+
+        // Create user in PubNub with their given information
+        pubnub.setUUIDMetadata()
+                .uuid(ParseUser.getCurrentUser().getObjectId())
+                .name(username)
+                .email(email)
+                .async(new PNCallback<PNSetUUIDMetadataResult>() {
+                    @Override
+                    public void onResponse(@Nullable final PNSetUUIDMetadataResult result, @NotNull final PNStatus status) {
+                        if (status.isError()) {
+                            Log.d(TAG, "Issue create new Pubnub user object /Error: " + status.toString());
+                        }
+                        else {
+                            Log.i(TAG, "Success creating new Pubnub user object");
+                        }
+                    }
+                });
     }
 
     private void goMainActivity() {

@@ -66,7 +66,7 @@ dependencies {
     // TabLayout
     implementation 'com.google.android.material:material:1.1.0'
 
-    // For Jackson .jar files
+    // For Jackson library
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.4'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
@@ -82,4 +82,8 @@ dependencies {
 
     // Sweet Alert (pop up) effect
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
+
+    // PubNub Chat API
+    implementation group: 'com.pubnub', name: 'pubnub-gson', version: '5.1.1'
+
 }

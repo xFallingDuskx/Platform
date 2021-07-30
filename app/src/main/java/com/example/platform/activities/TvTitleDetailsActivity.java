@@ -242,7 +242,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     scrollBehavior();
                 }
             }
-        }, 10000);
+        }, 8500);
     }
 
     private void getTitleInformation() {
