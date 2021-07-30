@@ -6,16 +6,21 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
@@ -36,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 public class ChatsFragment extends Fragment {
 
     public static final String TAG = "ChatsFragment";
+    TextView tvNotAvailable;
     private ImageView ivProfile;
     PubNub pubnub;
 
@@ -60,6 +66,18 @@ public class ChatsFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.toolbar_chat_main, menu);
+
+        // Allow user to start new chats
+        MenuItem composeItem = menu.findItem(R.id.miCompose);
+        composeItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.i(TAG, "onMenuItemClick to compose new chat");
+                newComposePopUp();
+                return false;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -82,6 +100,8 @@ public class ChatsFragment extends Fragment {
             }
         });
 
+        tvNotAvailable = view.findViewById(R.id.tvNotAvailable_Chats);
+
         // Connect to PubNub and establish a session with the user
         establishPubnubConnection();
         pubnub.getUUIDMetadata().async(new PNCallback<PNGetUUIDMetadataResult>() {
@@ -96,6 +116,7 @@ public class ChatsFragment extends Fragment {
                 }
                 else {
                     Log.i(TAG, "Success getting PN user data");
+                    fetchUserConversations();
                 }
             }
         });
@@ -127,5 +148,14 @@ public class ChatsFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    public void fetchUserConversations() {
+        // TODO - If-then-Else statement
+        // tvNotAvailable.setVisibility();
+    }
+
+    public void newComposePopUp() {
+        //TODO
     }
 }

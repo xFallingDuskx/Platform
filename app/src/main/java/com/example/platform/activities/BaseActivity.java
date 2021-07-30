@@ -23,14 +23,12 @@ public class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     BottomNavigationView bottomNavigationView;
     final FragmentManager fragmentManager = getSupportFragmentManager();
-    TextView tvToolbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
 
-        tvToolbarTitle = findViewById(R.id.toolbar_title);
 
         bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -55,7 +53,7 @@ public class BaseActivity extends AppCompatActivity {
                         fragment = new ChatsFragment();
                         break;
                     case R.id.action_inbox:
-                        Log.i(TAG, "Heading to Inbix Fragment");
+                        Log.i(TAG, "Heading to Inbox Fragment");
                         fragment = new InboxFragment();
                         break;
                     default:

@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/miSearch"
+        android:id="@+id/miCompose"
         android:icon="@drawable/ic_compose_temp"
-        android:title="Search"
-        app:showAsAction="always|collapseActionView"
-        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+        android:title="Compose"
+        app:showAsAction="always"/>
 
 </menu>
