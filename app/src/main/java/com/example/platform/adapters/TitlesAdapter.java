@@ -177,23 +177,25 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     .centerCrop() // scale image to fill the entire ImageView
                     .into(ivCover);
 
+            // Load and initialize animations
+            Animation slideRightToLeft = AnimationUtils.loadAnimation(context,
+                    R.anim.right_to_left);
+            Animation slideLeftToRight = AnimationUtils.loadAnimation(context,
+                    R.anim.left_to_right);
+
             // Change slide in effect on title cover depending on its position
             // Source: https://stackoverflow.com/questions/31562833/how-to-slide-an-imageview-from-left-to-right-smoothly-in-android
             // Source: https://stackoverflow.com/questions/5151591/android-left-to-right-slide-animation
             if (getAdapterPosition() % 2 == 0) { // title slides in from right to left if at an even position
-                // Load the animation like this
-                Animation animSlide = AnimationUtils.loadAnimation(context,
-                        R.anim.right_to_left);
-
-                // Start the animation like this
-                ivCover.startAnimation(animSlide);
+                // Start animations
+                ivCover.startAnimation(slideRightToLeft);
+                tvName.startAnimation(slideLeftToRight);
+                tvDescription.startAnimation(slideLeftToRight);
             } else { // title slides in from left to right if at an odd position
-                // Load the animation like this
-                Animation animSlide = AnimationUtils.loadAnimation(context,
-                        R.anim.left_to_right);
-
-                // Start the animation like this
-                ivCover.startAnimation(animSlide);
+                // Start animations
+                ivCover.startAnimation(slideLeftToRight);
+                tvName.startAnimation(slideRightToLeft);
+                tvDescription.startAnimation(slideRightToLeft);
             }
 
         }
