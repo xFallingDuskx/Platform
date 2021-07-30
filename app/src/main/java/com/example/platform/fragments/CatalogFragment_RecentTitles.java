@@ -59,7 +59,8 @@ import okhttp3.Headers;
 public class CatalogFragment_RecentTitles extends Fragment {
 
     public static final String TAG = "CatalogFragment_RecentTitles";
-    public String ALL_TITLES_ULR;
+    public String TV_TITLES_URL_BASE = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=%s&page=%d&include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
+    public String MOVIE_TITLES_URL_BASE = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=%d&release_date.lte=%s&with_original_language=en&with_watch_monetization_types=flatrate";
     private SharedCatalogViewModel sharedCatalogViewModel;
     EndlessRecyclerViewScrollListener scrollListener;
 
@@ -71,8 +72,7 @@ public class CatalogFragment_RecentTitles extends Fragment {
 
     EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
     String dateFormatted;
-    int tvPage = 1;
-    int moviePage = 1;
+    int page = 0;
 
     ShimmerFrameLayout shimmerFrameLayout;
 
@@ -123,7 +123,7 @@ public class CatalogFragment_RecentTitles extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                displayTitles();
+                loadTitles();
             }
         }, 5000);
 
@@ -133,25 +133,27 @@ public class CatalogFragment_RecentTitles extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
-                loadNextDataFromApi();
+                loadTitles();
             }
         };
         // Adds the scroll listener to RecyclerView
         rvRecentTitles.addOnScrollListener(scrollListener);
     }
 
-    public void displayTitles() {
+    public void loadTitles() {
+        page++;
         // Whether we are looking to display all TV show titles or Movie titles
+        String RECENT_TITLES_URL;
         if (mediaType.equals("tv")) {
-            ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=" + dateFormatted + "&page=" + tvPage + " &include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
+            RECENT_TITLES_URL = String.format(TV_TITLES_URL_BASE, dateFormatted, page);
         } else {
-            ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=" + moviePage + "&release_date.lte=" + dateFormatted + "&with_original_language=en&with_watch_monetization_types=flatrate";
+            RECENT_TITLES_URL = String.format(MOVIE_TITLES_URL_BASE, page, dateFormatted);
         }
-        Log.i(TAG, "The All Titles URL: " + ALL_TITLES_ULR);
+        Log.i(TAG, "The Recent Titles URL: " + RECENT_TITLES_URL);
 
         AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get(ALL_TITLES_ULR, new JsonHttpResponseHandler() {
+        client.get(RECENT_TITLES_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "onSuccess to display titles");
@@ -204,50 +206,6 @@ public class CatalogFragment_RecentTitles extends Fragment {
                 Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
                 Log.i(TAG, "Success saving the title: " + title.getName());
-            }
-        });
-    }
-
-    // Endless Scrolling
-    // Append the next page of data into the adapter
-    public void loadNextDataFromApi() {
-        // Whether we are looking to display all TV show titles or Movie titles
-        if (mediaType.equals("tv")) {
-            tvPage++;
-            ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=first_air_date.desc&first_air_date.lte=" + dateFormatted + "&page=" + tvPage + " &include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
-        } else {
-            moviePage++;
-            ALL_TITLES_ULR = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=primary_release_date.desc&include_adult=false&include_video=false&page=" + moviePage + "&release_date.lte=" + dateFormatted + "&with_original_language=en&with_watch_monetization_types=flatrate";
-        }
-        Log.i(TAG, "The All Titles URL: " + ALL_TITLES_ULR);
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(ALL_TITLES_ULR, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess to display titles");
-                JSONObject jsonObject = json.jsonObject;
-                try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results: " + results.toString());
-                    List<Title> newTitles = Title.fromJsonArray(results);
-                    updateParseServer(newTitles);
-                    allTitles.addAll(newTitles);
-                    adapter.notifyDataSetChanged();
-                    Log.i(TAG, "Titles: " + allTitles.size());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    Log.e(TAG, "Issue updating Parse Server");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
     }

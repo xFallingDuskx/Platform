@@ -60,7 +60,7 @@ import okhttp3.Headers;
 public class MovieTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "MovieTitleDetailsActivity";
-    public String Movie_DETAILS_URL;
+    public String MOVIE_DETAILS_URL_BASE = "https://api.themoviedb.org/3/movie/%d?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar,credits";
     Context context;
 
     Integer titleTmdbID;
@@ -235,11 +235,11 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in Movie Details");
 
         // Then get additional information from TMDB API
-        Movie_DETAILS_URL = "https://api.themoviedb.org/3/movie/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar,credits";
-        Log.i(TAG, "Movie Details URL: " + Movie_DETAILS_URL);
+        String MOVIE_DETAILS_URL = String.format(MOVIE_DETAILS_URL_BASE, titleTmdbID);
+        Log.i(TAG, "Movie Details URL: " + MOVIE_DETAILS_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 
-        client.get(Movie_DETAILS_URL, new JsonHttpResponseHandler() {
+        client.get(MOVIE_DETAILS_URL, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 Log.d(TAG, "onSuccess to getting additional title information");

@@ -24,7 +24,7 @@ import okhttp3.Headers;
 public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
-    public String EMAIL_VERIFY_URL;
+    public String EMAIL_VERIFY_URL_BASE = "https://emailverification.whoisxmlapi.com/api/v1?apiKey=at_q49YobOASp4bKDhec8CdDDqfApDef&emailAddress=%s";
     private EditText etEmail;
     private EditText etFullName;
     private EditText etUsername;
@@ -71,7 +71,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void verifyEmail(String email) {
-        EMAIL_VERIFY_URL = "https://emailverification.whoisxmlapi.com/api/v1?apiKey=at_q49YobOASp4bKDhec8CdDDqfApDef&emailAddress=" + email;
+        String EMAIL_VERIFY_URL = String.format(EMAIL_VERIFY_URL_BASE, email);
         Log.i(TAG, "Email Verify URL: " + EMAIL_VERIFY_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 

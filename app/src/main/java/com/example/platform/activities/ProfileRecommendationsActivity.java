@@ -45,15 +45,15 @@ import cn.pedant.SweetAlert.SweetAlertDialog ;
 public class ProfileRecommendationsActivity extends AppCompatActivity {
 
     public static final String TAG = "ProfileRecommendationsActivity";
+    public String RECOMMENDATION_URL_BASE = "https://api.themoviedb.org/3/%s/%s/recommendations?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=1";
+    int currentLikedTitlePosition = -1;
     ParseUser currentUser;
     Context context;
     ImageView ivBack;
     TextView tvNotAvailable;
     HashMap<String, String> userLikedTitles;
     List<String> likedTitlesIds;
-    int currentLikedTitlePosition = 0;
 
-    public String RECOMMENDATION_URL;
     EndlessRecyclerViewScrollListener scrollListener;
 
     RecyclerView rvRecentTitles;
@@ -110,7 +110,7 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                displayTitles();
+                loadTitles();
             }
         }, 5000);
 
@@ -155,20 +155,12 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         }
     }
 
-    public void displayTitles() {
+    public void loadTitles() {
+        currentLikedTitlePosition++;
         String titleId = likedTitlesIds.get(currentLikedTitlePosition);
         String mediaType = userLikedTitles.get(titleId);
-        Log.i(TAG, "Title with ID of " + titleId + " has a media type of " + mediaType);
-
-        // Whether we are looking to display TV show or movie recommendation
-        if (mediaType.equals("TV")) {
-            RECOMMENDATION_URL = "https://api.themoviedb.org/3/tv/" + titleId + "/recommendations?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=1";
-            Log.i(TAG, "The TV Recommendations URL: " + RECOMMENDATION_URL);
-
-        } else {
-            RECOMMENDATION_URL = "https://api.themoviedb.org/3/movie/" + titleId + "/recommendations?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=1";
-            Log.i(TAG, "The Movie Recommendations URL: " + RECOMMENDATION_URL);
-        }
+        String RECOMMENDATION_URL = String.format(RECOMMENDATION_URL_BASE, mediaType.toLowerCase(), titleId);
+        Log.i(TAG, "Recommended Titles URL: " + RECOMMENDATION_URL);
 
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -236,52 +228,8 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         if ((currentLikedTitlePosition + 1) == likedTitlesIds.size()) {
             Toast.makeText(context, "Approaching the end! You must like more titles for more recommendations", Toast.LENGTH_LONG).show();
             return;
-        }
-
-        currentLikedTitlePosition++;
-        String titleId = likedTitlesIds.get(currentLikedTitlePosition);
-        String mediaType = userLikedTitles.get(titleId);
-
-        // Whether we are looking to display TV show or movie recommendation
-        if (mediaType.equals("TV")) {
-            RECOMMENDATION_URL = "https://api.themoviedb.org/3/tv/" + titleId + "/recommendations?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=1";
-            Log.i(TAG, "The TV Recommendations URL: " + RECOMMENDATION_URL);
-
         } else {
-            RECOMMENDATION_URL = "https://api.themoviedb.org/3/movie/" + titleId + "/recommendations?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=1";
-            Log.i(TAG, "The Movie Recommendations URL: " + RECOMMENDATION_URL);
+            loadTitles();
         }
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(RECOMMENDATION_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess to display titles");
-                JSONObject jsonObject = json.jsonObject;
-                try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results: " + results.toString());
-                    List<Title> newTitles = Title.fromJsonArray(results);
-                    updateParseServer(newTitles);
-                    allTitles.addAll(newTitles);
-                    adapter.notifyDataSetChanged();
-                    shimmerFrameLayout.stopShimmer();
-                    shimmerFrameLayout.setVisibility(View.GONE);
-                    Log.i(TAG, "Titles: " + allTitles.size());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    Log.e(TAG, "Issue updating Parse Server");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
-            }
-        });
     }
 }

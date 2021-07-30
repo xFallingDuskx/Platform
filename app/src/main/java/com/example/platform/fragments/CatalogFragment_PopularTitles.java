@@ -59,7 +59,8 @@ import okhttp3.Headers;
 public class CatalogFragment_PopularTitles extends Fragment {
 
     public static final String TAG = "CatalogFragment_PopularTitles";
-    public String POPULAR_TITLES_URL;
+    public String POPULAR_TITLES_URL_BASE = "https://api.themoviedb.org/3/%s/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=%d";
+    int page = 0;
     private SharedCatalogViewModel sharedCatalogViewModel;
     EndlessRecyclerViewScrollListener scrollListener;
 
@@ -68,9 +69,6 @@ public class CatalogFragment_PopularTitles extends Fragment {
     RecyclerView rvRecentTitles;
     TitlesSimpleAdapter adapter;
     List<Title> allTitles;
-
-    int tvPage = 1;
-    int moviePage = 1;
 
     ShimmerFrameLayout shimmerFrameLayout;
 
@@ -120,7 +118,7 @@ public class CatalogFragment_PopularTitles extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                displayTitles();
+                loadTitles();
             }
         }, 5000);
 
@@ -130,20 +128,17 @@ public class CatalogFragment_PopularTitles extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
-                loadNextDataFromApi();
+                loadTitles();
             }
         };
         // Adds the scroll listener to RecyclerView
         rvRecentTitles.addOnScrollListener(scrollListener);
     }
 
-    public void displayTitles() {
+    public void loadTitles() {
+        page++;
         // Whether we are looking to display all TV show titles or Movie titles
-        if (mediaType.equals("tv")) {
-            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + tvPage;
-        } else {
-            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + moviePage;
-        }
+        String POPULAR_TITLES_URL = String.format(POPULAR_TITLES_URL_BASE, mediaType, page);
         Log.i(TAG, "The All Titles URL: " + POPULAR_TITLES_URL);
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -201,50 +196,6 @@ public class CatalogFragment_PopularTitles extends Fragment {
                 Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
                 Log.i(TAG, "Success saving the title: " + title.getName());
-            }
-        });
-    }
-
-    // Endless Scrolling
-    // Append the next page of data into the adapter
-    public void loadNextDataFromApi() {
-        // Whether we are looking to display all TV show titles or Movie titles
-        if (mediaType.equals("tv")) {
-            tvPage++;
-            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/tv/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + tvPage;
-        } else {
-            moviePage++;
-            POPULAR_TITLES_URL = "https://api.themoviedb.org/3/movie/popular?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + moviePage;
-        }
-        Log.i(TAG, "The All Titles URL: " + POPULAR_TITLES_URL);
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(POPULAR_TITLES_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess to display titles");
-                JSONObject jsonObject = json.jsonObject;
-                try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results: " + results.toString());
-                    List<Title> newTitles = Title.fromJsonArray(results);
-                    updateParseServer(newTitles);
-                    allTitles.addAll(newTitles);
-                    adapter.notifyDataSetChanged();
-                    Log.i(TAG, "Titles: " + allTitles.size());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    Log.e(TAG, "Issue updating Parse Server");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
     }

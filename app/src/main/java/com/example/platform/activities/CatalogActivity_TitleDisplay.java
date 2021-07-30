@@ -36,17 +36,15 @@ import okhttp3.Headers;
 public class CatalogActivity_TitleDisplay extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
+    public String PLATFORM_DISCOVER_URL_BASE = "https://api.themoviedb.org/3/discover/%s?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=%s&watch_region=US&language=en-US&sort_by=popularity.desc&page=%d";
+    public String GENRE_DISCOVER_URL_BASE = "https://api.themoviedb.org/3/discover/%s?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&page=%d&with_genres=%s&with_original_language=en&with_watch_monetization_types=flatrate";
+    int page = 0;
     Context context;
-    public String DISCOVER_URL;
 
     RecyclerView rvGeneralTitles;
     TitlesSimpleAdapter adapter;
     List<Title> allTitles;
     TextView tvNoTitlesMessage;
-
-    EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
-    int genrePage = 1;
-    int platformPage = 1;
 
     ShimmerFrameLayout shimmerFrameLayout;
     EndlessRecyclerViewScrollListener scrollListener;
@@ -79,7 +77,7 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                displayTitles();
+                loadTitles();
             }
         }, 5000);
     }
@@ -108,32 +106,26 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
-                loadNextDataFromApi();
+                loadTitles();
             }
         };
         // Adds the scroll listener to RecyclerView
         rvGeneralTitles.addOnScrollListener(scrollListener);
     }
 
-    public void displayTitles() {
+    public void loadTitles() {
+        page++;
+        String DISCOVER_URL;
         // Whether we are looking for titles based on Genre or Platform
         if (objective.equals("genre")) {
             // Whether we are looking to display all TV show titles or Movie titles based on Genre
-            if (type.equals("tv")) {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&page=" + genrePage + "&with_genres=" + id + "&include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
-            } else {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + genrePage + "&with_genres=" + id + "&with_original_language=en&with_watch_monetization_types=flatrate";
-            }
+            DISCOVER_URL = String.format(GENRE_DISCOVER_URL_BASE, type, page, id);
         } else {
             // Whether we are looking to display all TV show titles or Movie titles based on Platform
-            if (type.equals("tv")) {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
-            } else {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
-            }
+            DISCOVER_URL = String.format(PLATFORM_DISCOVER_URL_BASE, type, id, page);
         }
 
-        Log.i(TAG, "The Discover Titles URL: " + DISCOVER_URL);
+        Log.i(TAG, "The Discover Titles URL by " + objective + ": " + DISCOVER_URL);
 
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -198,59 +190,6 @@ public class CatalogActivity_TitleDisplay extends AppCompatActivity {
                 Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
                 Log.i(TAG, "Success saving the title: " + title.getName());
-            }
-        });
-    }
-
-    private void loadNextDataFromApi() {
-        // Whether we are looking to load more titles based on Genre or Platform
-        if (objective.equals("genre")) {
-            genrePage++;
-            // Whether we are looking to display more titles of TV show or Movie type based on Genre
-            if (type.equals("tv")) {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&page=" + genrePage + "&with_genres=" + id + "&include_null_first_air_dates=false&with_original_language=en&with_watch_monetization_types=flatrate";
-            } else {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=" + genrePage + "&with_genres=" + id + "&with_original_language=en&with_watch_monetization_types=flatrate";
-            }
-        } else {
-            platformPage++;
-            // Whether we are looking to display more titles of TV show or Movie type based on Platform
-            if (type.equals("tv")) {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/tv?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
-            } else {
-                DISCOVER_URL = "https://api.themoviedb.org/3/discover/movie?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=" + id + "&watch_region=US&language=en-US&sort_by=popularity.desc&page=" + platformPage;
-            }
-        }
-
-        Log.i(TAG, "The Discover Titles URL: " + DISCOVER_URL);
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(DISCOVER_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess to display titles");
-                JSONObject jsonObject = json.jsonObject;
-                try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results: " + results.toString());
-                    List<Title> newTitles = Title.fromJsonArray(results);
-                    updateParseServer(newTitles);
-                    allTitles.addAll(newTitles);
-                    adapter.notifyDataSetChanged();
-                    Log.i(TAG, "Titles: " + allTitles.size());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    Log.e(TAG, "Issue updating Parse Server");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
     }

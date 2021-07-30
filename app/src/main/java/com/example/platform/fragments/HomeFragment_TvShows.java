@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Headers;
 
@@ -42,8 +43,9 @@ import okhttp3.Headers;
 public class HomeFragment_TvShows extends Fragment {
 
     public static final String TAG = "HomeFragment_TvShows";
-    int desiredPage = 1;
-    public String TRENDING_TV_SHOWS_URL = "https://api.themoviedb.org/3/trending/tv/day?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + desiredPage;
+    public String TRENDING_TV_SHOWS_URL_BASE = "https://api.themoviedb.org/3/trending/tv/day?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=%d";
+    int desiredPage = 0;
+    int startingPosition;
 
     RecyclerView rvTitles;
     List<Title> allTitles;
@@ -102,7 +104,7 @@ public class HomeFragment_TvShows extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                displayTitles();
+                loadTitles();
             }
         }, 10000);
 
@@ -112,14 +114,21 @@ public class HomeFragment_TvShows extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
-                loadNextDataFromApi();
+                loadTitles();
             }
         };
         // Adds the scroll listener to RecyclerView
         rvTitles.addOnScrollListener(scrollListener);
     }
 
-    private void displayTitles() {
+    private void loadTitles() {
+        desiredPage++;
+        startingPosition = (desiredPage - 1) * 20;
+
+        // Load more titles
+        String TRENDING_TV_SHOWS_URL = String.format(TRENDING_TV_SHOWS_URL_BASE, desiredPage);
+        Log.i(TAG, "Trending TV shows URL at starting position " + startingPosition + ": " + TRENDING_TV_SHOWS_URL);
+
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get(TRENDING_TV_SHOWS_URL, new JsonHttpResponseHandler() {
@@ -133,7 +142,7 @@ public class HomeFragment_TvShows extends Fragment {
                     List<Title> newTitles = Title.fromJsonArray(results);
                     updateParseServer(newTitles);
                     allTitles.addAll(newTitles);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemRangeInserted(startingPosition, 20);
                     shimmerFrameLayout.stopShimmer();
                     shimmerFrameLayout.setVisibility(View.GONE);
                     Log.i(TAG, "Titles: " + allTitles.size());
@@ -175,46 +184,6 @@ public class HomeFragment_TvShows extends Fragment {
                 Log.e(TAG, "Issue saving title / Title: " + title.getName() + " / Message: " + e.getMessage());
             } else {
                 Log.i(TAG, "Success saving the title: " + title.getName());
-            }
-        });
-    }
-
-    // Endless Scrolling
-    // Append the next page of data into the adapter
-    public void loadNextDataFromApi() {
-        // Desire the next page
-        desiredPage++;
-        int startingPosition = (desiredPage - 1) * 20;
-        // Send an API request to retrieve appropriate paginated data
-        TRENDING_TV_SHOWS_URL = "https://api.themoviedb.org/3/trending/tv/day?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&page=" + desiredPage;
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(TRENDING_TV_SHOWS_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.i(TAG, "The trending URL for page " + desiredPage + " is: " + TRENDING_TV_SHOWS_URL);
-
-                Log.d(TAG, "onSuccess to update home feed");
-                JSONObject jsonObject = json.jsonObject;
-                try {
-                    JSONArray results = jsonObject.getJSONArray("results");
-                    Log.i(TAG, "Results: " + results.toString());
-                    List<Title> newTitles = Title.fromJsonArray(results);
-                    updateParseServer(newTitles);
-                    allTitles.addAll(newTitles);
-                    adapter.notifyItemRangeInserted(startingPosition, 20);
-                    Log.i(TAG, "Titles: " + allTitles.size());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception" + " Exception: " + e);
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    Log.e(TAG, "Issue updating Parse Server");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to display titles / Response: " + response + " / Error: " + throwable);
             }
         });
     }

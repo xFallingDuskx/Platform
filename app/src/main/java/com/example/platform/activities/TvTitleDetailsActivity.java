@@ -64,9 +64,9 @@ import okhttp3.Headers;
 public class TvTitleDetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "TvTitleDetailsActivity";
-    public String TV_SHOW_DETAILS_URL;
-    public String SEASON_DETAILS_URL;
-    public Integer seasonNumberAccessible;
+    public String TV_SHOW_DETAILS_URL_BASE = "https://api.themoviedb.org/3/tv/%d?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar,credits";
+    public String SEASON_DETAILS_URL_BASE = "https://api.themoviedb.org/3/tv/%d/season/%d?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+    int seasonNumber = 0;
     Context context;
 
     Integer titleTmdbID;
@@ -135,7 +135,6 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     TextView tvNoComments;
 
     EndlessRecyclerViewScrollListener scrollListener;
-    int seasonNumber = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +261,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " and TMDB ID: " + titleTmdbID + " in TV Details");
 
         // Then get additional information from TMDB API
-        TV_SHOW_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&append_to_response=similar,credits";
+        String TV_SHOW_DETAILS_URL = String.format(TV_SHOW_DETAILS_URL_BASE, titleTmdbID);
         Log.i(TAG, "Title Details URL: " + TV_SHOW_DETAILS_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -285,7 +284,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     setTitleInformation();
 
                     // Display Episodes in RecyclerView
-                    displayEpisodesInDisplay();
+                    loadEpisodesInDisplay();
 
                     // Display similar Titles in RecyclerView
                     displaySimilarTitlesInDisplay();
@@ -431,52 +430,18 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
-                loadNextDataFromApi();
+                loadEpisodesInDisplay();
             }
         };
         // Adds the scroll listener to RecyclerView
         rvEpisodesDisplay.addOnScrollListener(scrollListener);
     }
 
-    private void loadNextDataFromApi() {
-        seasonNumber++;
-        SEASON_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "/season/" + seasonNumber + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
-        Log.i(TAG, "Season Details URL: " + SEASON_DETAILS_URL);
-        AsyncHttpClient seasonClient = new AsyncHttpClient();
-
-        seasonClient.get(SEASON_DETAILS_URL, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Headers headers, JSON json) {
-                Log.d(TAG, "onSuccess to get season details");
-                JSONObject seasonJsonObject = json.jsonObject;
-                try {
-                    JSONArray seasonEpisodes = seasonJsonObject.getJSONArray("episodes");
-                    Log.i(TAG, "Episodes: " + seasonEpisodes.toString());
-                    List<Episode> newEpisodes = Episode.fromJsonArray(titleCoverPath, seasonEpisodes);
-                    updateParseServerEpisodes(newEpisodes);
-                    allEpisodes.addAll(newEpisodes);
-                    adapter.notifyDataSetChanged();
-                    Log.i(TAG, "Episodes: " + allEpisodes.size());
-                } catch (JSONException e) {
-                    Log.e(TAG, "Hit json exception for season details" + " Exception: " + e);
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    Log.i(TAG, "Issue saving Episode to parse server");
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                Log.d(TAG, "onFailure to get season / Response: " + response + " / Error: " + throwable);
-            }
-        });
-    }
-
     // Obtain episodes data by accessing each season of the title
-    private void displayEpisodesInDisplay() {
+    private void loadEpisodesInDisplay() {
         Log.i(TAG, "Title: " + titleName + "/Number of seasons: " + numberOfSeasons);
-        SEASON_DETAILS_URL = "https://api.themoviedb.org/3/tv/" + titleTmdbID + "/season/" + seasonNumber + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US";
+        seasonNumber++;
+        String SEASON_DETAILS_URL = String.format(SEASON_DETAILS_URL_BASE, titleTmdbID, seasonNumber);
         Log.i(TAG, "Season Details URL: " + SEASON_DETAILS_URL);
         AsyncHttpClient seasonClient = new AsyncHttpClient();
 

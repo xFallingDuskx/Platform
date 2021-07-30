@@ -40,7 +40,7 @@ import okhttp3.Headers;
 public class SearchActivity extends AppCompatActivity {
 
     public static final String TAG = "SeachActivity";
-    public String TITLES_SEARCH_URL;
+    public String TITLES_SEARCH_URL_BASE = "https://api.themoviedb.org/3/search/%s?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&query=%s&page=1&include_adult=false";
     Context context;
     String query;
     String type;
@@ -151,7 +151,7 @@ public class SearchActivity extends AppCompatActivity {
     public void performSearch(String query) {
         // Different search depending on type
         // Types: "multi" - TV shows and movies / "tv" - TV shows / "movie" - movies
-        TITLES_SEARCH_URL = "https://api.themoviedb.org/3/search/" + type + "?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&query=" + query + "&page=1&include_adult=false";
+        String TITLES_SEARCH_URL = String.format(TITLES_SEARCH_URL_BASE, type, query);
         Log.i(TAG, "Search URL: " + TITLES_SEARCH_URL);
         AsyncHttpClient client = new AsyncHttpClient();
 
