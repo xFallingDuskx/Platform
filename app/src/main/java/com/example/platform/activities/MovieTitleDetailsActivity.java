@@ -74,6 +74,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     String runtime;
     String genres;
     String actors;
+    Boolean scrollToComments;
 
     ImageView ivCover;
     TextView tvName;
@@ -176,6 +177,10 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 // Handle comment posting by user
                 handleComment();
 
+                // Handle the user clicking on the comment icon
+                handleCommentScrollAction();
+
+
                 // Handle the current liked status of the title for the user
                 handleLikeStatus();
 
@@ -202,6 +207,17 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 }
             }
         }, 5000);
+
+        // If user clicked on comment icon on home feed
+        // Prevent scroll behavior from happening too early
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (scrollToComments) {
+                    scrollBehavior();
+                }
+            }
+        }, 10000);
     }
 
     private void getTitleInformation() {
@@ -215,6 +231,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
         titleDescription = (String) intent.getStringExtra("description");
         titleReleaseDate = (String) intent.getStringExtra("releaseDate");
         titleLiked = (Boolean) intent.getBooleanExtra("titleLiked", false);
+        scrollToComments = (Boolean) intent.getBooleanExtra("scrollToComments", false);
         Log.i(TAG, "Opening the Title " + titleName + " with type: " + titleType + " in Movie Details");
 
         // Then get additional information from TMDB API
@@ -325,12 +342,19 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
 
         StringBuilder formattedActors = new StringBuilder();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < actors.length(); i++) {
+            // Only display top 3 actors (if there are 3)
+            if (i == 3) {
+                break;
+            }
+
             JSONObject actorObject = actors.getJSONObject(i);
             String actor = actorObject.getString("name");
             formattedActors.append(actor);
-            if (i != 2) {
-                formattedActors.append(", ");
+            if (i < actors.length() - 1) {
+                if (i <= 1) {
+                    formattedActors.append(", ");
+                }
             }
         }
         return formattedActors.toString();
@@ -411,6 +435,26 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
                 saveComment(commentText, currentUser, titleTmdbID, titleCoverPath);
+            }
+        });
+    }
+
+    // Handles taking the user to the comment section if they press the comment icon
+    public void handleCommentScrollAction() {
+        ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrollBehavior();
+            }
+        });
+    }
+
+    // Separating methods is need if user clicks on Comment icon on home feed
+    public void scrollBehavior() {
+        svEntireScreen.post(new Runnable() {
+            @Override
+            public void run() {
+                svEntireScreen.smoothScrollTo(0, rvComments.getTop());
             }
         });
     }

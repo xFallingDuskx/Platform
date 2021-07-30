@@ -104,6 +104,15 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                 }
             });
 
+            ivComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Go to detailed view with the intent to scroll to the comment section automatically after loading
+                    int position = getAdapterPosition();
+                    headToDetails(true, position);
+                }
+            });
+
             // User double-taps screen to like the title
             // Source: https://stackoverflow.com/questions/4804798/doubletap-in-android
             itemView.setOnTouchListener(new View.OnTouchListener() {
@@ -119,32 +128,9 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                     @Override
                     public boolean onSingleTapConfirmed(MotionEvent e) {
                         Log.i(TAG, "onSingleTap");
+                        // Go to detailed view w/o intent to scroll to comments
                         int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            Title title = titles.get(position);
-                            Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId());
-                            Intent intent;
-
-                            // Determine where to send Intent based of the type associated with a Title
-                            if (title.getType().equals("TV Show")) { // TV Show type
-                                Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
-                                intent = new Intent(context, TvTitleDetailsActivity.class);
-                            } else { // Movie type
-                                Log.i(TAG, "Type is: " + title.getType() + " for Movies");
-                                intent = new Intent(context, MovieTitleDetailsActivity.class);
-                            }
-                            // Put extra - Share titleLiked status
-                            intent.putExtra("id", title.getId());
-                            intent.putExtra("name", title.getName());
-                            intent.putExtra("posterPath", title.getPosterPath());
-                            intent.putExtra("type", title.getType());
-                            intent.putExtra("description", title.getDescription());
-                            intent.putExtra("releaseDate", title.getReleaseDate());
-                            intent.putExtra("titleLiked", titleLiked);
-                            intent.putExtra("userLikedTitles", userLikedTitles);
-                            context.startActivity(intent);
-                            Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " with like status: " + titleLiked);
-                        }
+                        headToDetails(false, position);
                         return super.onSingleTapUp(e);
                     }
                 });
@@ -210,6 +196,35 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                 ivCover.startAnimation(animSlide);
             }
 
+        }
+    }
+
+    private void headToDetails(Boolean scrollToComments, int position) {
+        if (position != RecyclerView.NO_POSITION) {
+            Title title = titles.get(position);
+            Log.i(TAG, "The title is " + title.getName() + " /Type: " + title.getType() + " /TMDB ID: " + title.getId());
+            Intent intent;
+
+            // Determine where to send Intent based of the type associated with a Title
+            if (title.getType().equals("TV Show")) { // TV Show type
+                Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
+                intent = new Intent(context, TvTitleDetailsActivity.class);
+            } else { // Movie type
+                Log.i(TAG, "Type is: " + title.getType() + " for Movies");
+                intent = new Intent(context, MovieTitleDetailsActivity.class);
+            }
+            // Put extra - Share titleLiked status
+            intent.putExtra("id", title.getId());
+            intent.putExtra("name", title.getName());
+            intent.putExtra("posterPath", title.getPosterPath());
+            intent.putExtra("type", title.getType());
+            intent.putExtra("description", title.getDescription());
+            intent.putExtra("releaseDate", title.getReleaseDate());
+            intent.putExtra("titleLiked", titleLiked);
+            intent.putExtra("userLikedTitles", userLikedTitles);
+            intent.putExtra("scrollToComments", scrollToComments);
+            context.startActivity(intent);
+            Log.i(TAG, "Opening TvTitleDetailsActivity w/ title: " + title + " name: " + title.getName() + " and TMDB ID: " + title.getId() + " at position: " + position + " with like status: " + titleLiked);
         }
     }
 
