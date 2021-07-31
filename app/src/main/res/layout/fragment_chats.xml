@@ -67,10 +67,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="false"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Who would you like to send a message to?"
                 android:textColor="@color/white"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textStyle="bold"/>
 
             <EditText
                 android:id="@+id/etComposePopUp"
@@ -78,8 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvComposePopUp"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="20dp"
                 android:hint="Username"
+                android:textColor="@color/white"
                 android:textColorHint="@color/grey_light" />
 
             <Button
@@ -88,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etComposePopUp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="5dp"
                 android:text="Find and Greet"
                 android:textColor="@color/white" />
 

@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
+import com.example.platform.models.Conversation;
 import com.example.platform.models.User;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -36,6 +37,8 @@ import com.pubnub.api.PubNub;
 import com.pubnub.api.callbacks.PNCallback;
 import com.pubnub.api.models.consumer.PNPublishResult;
 import com.pubnub.api.models.consumer.PNStatus;
+import com.pubnub.api.models.consumer.objects_api.channel.PNChannelMetadata;
+import com.pubnub.api.models.consumer.objects_api.channel.PNGetChannelMetadataResult;
 import com.pubnub.api.models.consumer.objects_api.channel.PNSetChannelMetadataResult;
 import com.pubnub.api.models.consumer.objects_api.uuid.PNGetUUIDMetadataResult;
 import com.pubnub.api.models.consumer.objects_api.uuid.PNSetUUIDMetadataResult;
@@ -58,6 +61,7 @@ public class ChatsFragment extends Fragment {
     EditText etCompose;
     Button btnComposeConfirm;
     PubNub pubnub;
+    List<Conversation> allConversations;
 
     public ChatsFragment() {
         // Required empty public constructor
@@ -168,12 +172,35 @@ public class ChatsFragment extends Fragment {
     }
 
     public void fetchUserConversations() {
-        List<String> channels = pubnub.getSubscribedChannels();
-        if (channels.isEmpty()) {
+        List<String> conversations = pubnub.getSubscribedChannels();
+        if (conversations.isEmpty()) {
             Log.i(TAG, "There are no conversations to display for the current user");
             tvNotAvailable.setVisibility(View.VISIBLE);
         } else {
             Log.i(TAG, "onTrack to display conversations for the current user");
+            for (int i = 0; i < conversations.size(); i++) {
+                String channel = conversations.get(i);
+                pubnub.getChannelMetadata()
+                        .channel(channel)
+                        .async(new PNCallback<PNGetChannelMetadataResult>() {
+                            @Override
+                            public void onResponse(@Nullable final PNGetChannelMetadataResult result, @NotNull final PNStatus status) {
+                                if (status.isError()) {
+                                    Log.d(TAG, "Issue fetching user channel data");
+                                } else {
+                                    Conversation conversation = new Conversation();
+                                    PNChannelMetadata data = result.getData();
+                                    conversation.setId(data.getId());
+                                    conversation.setName(data.getName());
+                                    conversation.setDescription(data.getDescription());
+                                    Log.i(TAG, "New conversation / ID: " + data.getId() + " / Name: " + data.getName() + " / Description: " + data.getDescription());
+                                    allConversations.add(conversation);
+                                }
+                            }
+                        });
+            }
+            // TODO: get unread messages count for each conversation (channel)
+            // Source: https://www.pubnub.com/docs/chat/features/unread-counts
         }
     }
 
@@ -271,5 +298,8 @@ public class ChatsFragment extends Fragment {
                         }
                     }
                 });
+
+        // Five close the pop up
+        rlComposePopUp.setVisibility(View.GONE);
     }
 }
