@@ -5,6 +5,7 @@
     <string name="unmatched_passwords">Passwords are not the same</string>
     <string name="invalid_email">Please use a valid email address</string>
     <string name="successful_signup">Successfully signed up!</string>
+    <string name="unsuccessful_signup">Issue signing up. Please try again.</string>
     <string name="incorrect_login">Incorrect username and/or password</string>
     <string name="successful_login">Successfully logged in!</string>
     <string name="successful_logout">You\'ve been logged out</string>

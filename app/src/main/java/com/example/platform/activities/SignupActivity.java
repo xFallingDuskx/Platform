@@ -130,10 +130,7 @@ public class SignupActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with signup", e);
                     return;
                 }
-
                 saveUserToPubnub(username, email);
-                goMainActivity();
-                Toast.makeText(SignupActivity.this, getString(R.string.successful_signup), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -156,9 +153,12 @@ public class SignupActivity extends AppCompatActivity {
                     public void onResponse(@Nullable final PNSetUUIDMetadataResult result, @NotNull final PNStatus status) {
                         if (status.isError()) {
                             Log.d(TAG, "Issue create new Pubnub user object /Error: " + status.toString());
+                            Toast.makeText(SignupActivity.this, getString(R.string.unsuccessful_signup), Toast.LENGTH_LONG).show();
                         }
                         else {
                             Log.i(TAG, "Success creating new Pubnub user object");
+                            goMainActivity();
+                            Toast.makeText(SignupActivity.this, getString(R.string.successful_signup), Toast.LENGTH_LONG).show();
                         }
                     }
                 });

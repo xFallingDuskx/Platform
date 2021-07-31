@@ -7,45 +7,94 @@
     tools:context=".fragments.ChatsFragment"
     android:background="@color/black_lighter">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_Chats"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivProfileIcon_Chats"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/ic_profile" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_Chats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:titleTextColor="@android:color/white">
+
+            <ImageView
+                android:id="@+id/ivProfileIcon_Chats"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Chats"
+                android:textColor="@android:color/white"
+                android:textSize="34sp" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <TextView
-            android:id="@+id/toolbar_title"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:id="@+id/tvNotAvailable_Chats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="center"
-            android:text="Chats"
-            android:textColor="@android:color/white"
-            android:textSize="34sp" />
+            android:text="No chats to display"
+            android:textColor="@color/whiteOpacit"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    </androidx.appcompat.widget.Toolbar>
+        <RelativeLayout
+            android:id="@+id/rlComposePopUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginBottom="100dp"
+            android:background="@color/black_light"
+            android:visibility="gone">
 
-    <TextView
-        android:id="@+id/tvNotAvailable_Chats"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center"
-        android:text="No chats to display"
-        android:textColor="@color/whiteOpacit"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:visibility="visible" />
+            <TextView
+                android:id="@+id/tvComposePopUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="false"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="Who would you like to send a message to?"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
 
+            <EditText
+                android:id="@+id/etComposePopUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvComposePopUp"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="5dp"
+                android:hint="Username"
+                android:textColorHint="@color/grey_light" />
+
+            <Button
+                android:id="@+id/btnComposePopUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etComposePopUp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="15dp"
+                android:text="Find and Greet"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>
