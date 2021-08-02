@@ -29,12 +29,14 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +72,20 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         currentUser = ParseUser.getCurrentUser();
 
         // Alert users that the more they like, the more recommendations will appear
-        new SweetAlertDialog(this).setTitleText("More Likes, More Recs").setContentText("Hey " + currentUser.getUsername() + ", the more TV shows and movies you like, the more recommendations we can give you!").show();
+        // Only alert users who've never visited this activity before
+        boolean visitedRecommendations = currentUser.getBoolean(User.KEY_VISITED_RECOMMENDATIONS);
+        if (! visitedRecommendations) {
+            new SweetAlertDialog(this).setTitleText("More Likes, More Recs").setContentText("Hey " + currentUser.getUsername() + ", the more TV shows and movies you like, the more recommendations we can give you!").show();
+            currentUser.put(User.KEY_VISITED_RECOMMENDATIONS, true);
+            currentUser.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        Log.d(TAG, "Issue updating the boolean visitedRecommendations to true / Error: " + e.getMessage());
+                    }
+                }
+            });
+        }
 
         shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout_Recommendations);
         if(!shimmerFrameLayout.isShimmerVisible()) {
@@ -110,6 +125,7 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                Collections.shuffle(likedTitlesIds);
                 loadTitles();
             }
         }, 5000);

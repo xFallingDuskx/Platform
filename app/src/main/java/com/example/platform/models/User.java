@@ -32,6 +32,8 @@ public class User extends ParseObject {
     public static final String KEY_FOLLOWING = "following";
     public static final String KEY_CHATS = "chats";
     public static final String KEY_COMMUNITIES = "communities";
+    public static final String KEY_VISITED_RECOMMENDATIONS = "visitedRecommendations";
+
 
     // Convert JSONArray into List<Titles>
     public static List<Title> fromJsonArray(JSONArray titleJsonArray) throws JSONException {

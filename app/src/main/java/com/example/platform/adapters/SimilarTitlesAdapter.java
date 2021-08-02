@@ -41,7 +41,7 @@ public class SimilarTitlesAdapter extends RecyclerView.Adapter<SimilarTitlesAdap
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         // Change view being used depending on whether the title is a TV Show or Movie
         View view;
-        if (titles.get(0).getType().equals("TV Show")) {
+        if (titles.get(0).getType().equals("tv")) {
             view = LayoutInflater.from(context).inflate(R.layout.item_title_similar_tv, parent, false);
 
         } else {
@@ -70,7 +70,7 @@ public class SimilarTitlesAdapter extends RecyclerView.Adapter<SimilarTitlesAdap
             super(itemView);
 
             // Change reference depending on whether the title is a TV Show or Movie
-            if (titles.get(0).getType().equals("TV Show")) {
+            if (titles.get(0).getType().equals("tv")) {
                 ivTitleCover = itemView.findViewById(R.id.ivTitleCover_Similar_TV);
                 tvTitleName = itemView.findViewById(R.id.tvTitleName_Similar_TV);
             } else {
@@ -89,7 +89,7 @@ public class SimilarTitlesAdapter extends RecyclerView.Adapter<SimilarTitlesAdap
                         Intent intent;
 
                         // Determine where to send Intent based of the type associated with a Title
-                        if (title.getType().equals("TV Show")) { // TV Show type
+                        if (title.getType().equals("tv")) { // TV Show type
                             Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
                             intent = new Intent(context, TvTitleDetailsActivity.class);
                         } else { // Movie type
@@ -114,7 +114,7 @@ public class SimilarTitlesAdapter extends RecyclerView.Adapter<SimilarTitlesAdap
             tvTitleName.setText(title.getName());
 
             // Change cover image depending on whether the title is a TV Show or Movie
-            if (title.getType().equals("TV Show")) {
+            if (title.getType().equals("tv")) {
                 Glide.with(context)
                         .load(title.getBackdropPath())
                         .placeholder(R.drawable.backdrop_placeholder)

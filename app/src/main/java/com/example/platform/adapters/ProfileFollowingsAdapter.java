@@ -77,8 +77,8 @@ public class ProfileFollowingsAdapter extends RecyclerView.Adapter<ProfileFollow
                         Intent intent;
 
                         // Determine where to send Intent based of the type associated with a Title
-                        if (! title.getType().equals("Episode")) {
-                            if (title.getType().equals("TV Show")) { // TV Show type
+                        if (! title.getType().equals("episode")) {
+                            if (title.getType().equals("tv")) { // TV Show type
                                 Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
                                 intent = new Intent(context, TvTitleDetailsActivity.class);
                             } else { // Movie type
@@ -112,7 +112,7 @@ public class ProfileFollowingsAdapter extends RecyclerView.Adapter<ProfileFollow
             tvTitleDescription.setText(title.getDescription());
 
             // Change view if 'title' is an episode
-            if (title.getType().equals("Episode")) {
+            if (title.getType().equals("episode")) {
                 Log.i(TAG, "Episode Glide is being used");
                 Glide.with(context)
                         .load(title.getPosterPath())

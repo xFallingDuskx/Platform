@@ -56,16 +56,16 @@ public class Title extends ParseObject {
             name = jsonObject.getString("title");
             releaseDate = jsonObject.getString("release_date");
             releaseDate = convertDate(releaseDate);
-            type = "Movie";
+            type = "movie";
         } else if (jsonObject.has("first_air_date")) { // TV Show
             name = jsonObject.getString("name");
             releaseDate = jsonObject.getString("first_air_date");
             releaseDate = convertDate(releaseDate);
-            type = "TV Show";
+            type = "tv";
         } else if (jsonObject.has("air_date")) { // Episode
             releaseDate = jsonObject.getString("air_date");
             releaseDate = convertDate(releaseDate);
-            type = "Episode";
+            type = "episode";
         }
     }
 

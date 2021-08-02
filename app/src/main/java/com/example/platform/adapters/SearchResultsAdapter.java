@@ -75,7 +75,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                         Intent intent;
 
                         // Determine where to send Intent based of the type associated with a Title
-                        if (title.getType().equals("TV Show")) { // TV Show type
+                        if (title.getType().equals("tv")) { // TV Show type
                             Log.i(TAG, "Type is: " + title.getType() + " for TV Show");
                             intent = new Intent(context, TvTitleDetailsActivity.class);
                         } else { // Movie type
