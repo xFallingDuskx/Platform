@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -618,6 +620,12 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                         Log.d(TAG, "Issue updating the keywords for the title");
                         parseException.printStackTrace();
                     }
+
+                    // Close the keyboard
+                    // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
+                    View view = findViewById(android.R.id.content);
+                    InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
         });

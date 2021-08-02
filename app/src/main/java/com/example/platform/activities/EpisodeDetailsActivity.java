@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -281,6 +282,11 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                         Log.d(TAG, "Issue updating the keywords for the title");
                         parseException.printStackTrace();
                     }
+                    // Close the keyboard
+                    // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
+                    View view = findViewById(android.R.id.content);
+                    InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
         });
