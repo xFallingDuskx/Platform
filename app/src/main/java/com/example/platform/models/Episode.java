@@ -19,7 +19,6 @@ public class Episode extends ParseObject {
 
     String stillPath;
     String name;
-    String titleName;
     Integer id;
     Integer seasonNumber;
     Integer episodeNumber;
@@ -98,14 +97,6 @@ public class Episode extends ParseObject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitleName() {
-        return "Name";
-    }
-
-    public void setTitleName(String title) {
-        this.titleName = title ;
     }
 
     public Integer getId() {

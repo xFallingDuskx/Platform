@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,11 @@ public class Comment extends ParseObject {
     public static final String KEY_LIKES = "likes";
     public static final String KEY_REPLIES = "replies";
     public static final String KEY_COVER_PATH = "coverPath";
+    public static final String KEY_EPISODE_COVER_PATH = "episodeCoverPath";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_DESCRIPTION = "description";
+    public static final String KEY_RELEASE_DATE = "releaseDate";
 
     public Comment() {}
 
@@ -214,5 +218,45 @@ public class Comment extends ParseObject {
 
     public void setCoverPath(String coverPath) {
         put(KEY_COVER_PATH, coverPath);
+    }
+
+    public String getEpisodeCoverPath() {
+        return getString(KEY_EPISODE_COVER_PATH);
+    }
+
+    public void setEpisodeCoverPath(String episodeCoverPath) {
+        put(KEY_EPISODE_COVER_PATH, episodeCoverPath);
+    }
+
+    public String getName() {
+        return getString(KEY_NAME);
+    }
+
+    public void setName(String titleName) {
+        put(KEY_NAME, titleName);
+    }
+
+    public String getType() {
+        return getString(KEY_TYPE);
+    }
+
+    public void setType(String titleType) {
+        put(KEY_TYPE, titleType);
+    }
+
+    public String getDescription() {
+        return getString(KEY_DESCRIPTION);
+    }
+
+    public void setDescription(String titleDescription) {
+        put(KEY_DESCRIPTION, titleDescription);
+    }
+
+    public String getReleaseDate() {
+        return getString(KEY_RELEASE_DATE);
+    }
+
+    public void setReleaseDate(String titleReleaseDate) {
+        put(KEY_RELEASE_DATE, titleReleaseDate);
     }
 }

@@ -435,7 +435,7 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
-                saveComment(commentText, currentUser, titleTmdbID, titleCoverPath);
+                saveComment(commentText, currentUser, titleTmdbID, titleCoverPath, titleType, titleName, titleDescription, titleReleaseDate);
             }
         });
     }
@@ -461,12 +461,16 @@ public class MovieTitleDetailsActivity extends AppCompatActivity {
     }
 
     // Save and post the comment
-    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath) {
+    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath, String titleType, String titleName, String titleDescription, String titleReleaseDate) {
         Comment comment = new Comment();
         comment.setText(commentText);
         comment.setUser(currentUser);
         comment.setTmdbId(tmdbId);
         comment.setCoverPath(titleCoverPath);
+        comment.setType(titleType);
+        comment.setName(titleName);
+        comment.setDescription(titleDescription);
+        comment.setReleaseDate(titleReleaseDate);
         comment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

@@ -16,7 +16,24 @@ import com.example.platform.fragments.ChatsFragment;
 import com.example.platform.fragments.CommunitiesFragment;
 import com.example.platform.fragments.HomeFragment;
 import com.example.platform.fragments.InboxFragment;
+import com.example.platform.models.Conversation;
+import com.example.platform.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 

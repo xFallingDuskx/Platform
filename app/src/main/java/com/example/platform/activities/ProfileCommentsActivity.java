@@ -71,7 +71,7 @@ public class ProfileCommentsActivity extends AppCompatActivity {
         // Set up RecyclerView
         rvComments = findViewById(R.id.rvComments_ProfileComments);
         allComments = new ArrayList<>();
-        commentsAdapter = new ProfileCommentsAdapter(context, allComments);
+        commentsAdapter = new ProfileCommentsAdapter(ProfileCommentsActivity.this, allComments);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         rvComments.setLayoutManager(linearLayoutManager);
         rvComments.setAdapter(commentsAdapter);

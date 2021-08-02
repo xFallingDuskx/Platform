@@ -58,7 +58,7 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
 
     EndlessRecyclerViewScrollListener scrollListener;
 
-    RecyclerView rvRecentTitles;
+    RecyclerView rvRecommendedTitles;
     TitlesSimpleAdapter adapter;
     List<Title> allTitles;
 
@@ -82,6 +82,8 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
                 public void done(ParseException e) {
                     if (e != null) {
                         Log.d(TAG, "Issue updating the boolean visitedRecommendations to true / Error: " + e.getMessage());
+                    } else {
+                        Log.i(TAG, "Success updating the boolean visitedRecommendations to true");
                     }
                 }
             });
@@ -111,12 +113,12 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
         tvNotAvailable = findViewById(R.id.tvNotAvailable_Recommendations);
 
         // Set up RecyclerView for titles
-        rvRecentTitles = findViewById(R.id.rvRecommendations);
+        rvRecommendedTitles = findViewById(R.id.rvRecommendations);
         allTitles = new ArrayList<>();
         adapter = new TitlesSimpleAdapter(context, allTitles);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false);
-        rvRecentTitles.setLayoutManager(gridLayoutManager);
-        rvRecentTitles.setAdapter(adapter);
+        rvRecommendedTitles.setLayoutManager(gridLayoutManager);
+        rvRecommendedTitles.setAdapter(adapter);
 
         // Get titles liked by the user
         getLikedTitles();
@@ -140,7 +142,7 @@ public class ProfileRecommendationsActivity extends AppCompatActivity {
             }
         };
         // Adds the scroll listener to RecyclerView
-        rvRecentTitles.addOnScrollListener(scrollListener);
+        rvRecommendedTitles.addOnScrollListener(scrollListener);
     }
 
     public void getLikedTitles() {

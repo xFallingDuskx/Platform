@@ -247,18 +247,23 @@ public class EpisodeDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
-                saveComment(commentText, currentUser, episodeTmdbId, titleCoverPath);
+                saveComment(commentText, currentUser, episodeTmdbId, titleCoverPath, episodeCover, "episode", episodeName, episodeDescription, episodeReleaseDate);
             }
         });
     }
 
     // Save and post the comment
-    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath) {
+    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath, String episodeCover, String type, String episodeName, String episodeDescription, String episodeReleaseDate) {
         Comment comment = new Comment();
         comment.setText(commentText);
         comment.setUser(currentUser);
         comment.setTmdbId(tmdbId);
         comment.setCoverPath(titleCoverPath);
+        comment.setEpisodeCoverPath(episodeCover);
+        comment.setType(type);
+        comment.setName(episodeName);
+        comment.setDescription(episodeDescription);
+        comment.setReleaseDate(episodeReleaseDate);
         comment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

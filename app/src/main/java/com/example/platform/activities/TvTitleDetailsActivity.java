@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -565,7 +563,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 String currentUser = ParseUser.getCurrentUser().getUsername();
-                saveComment(commentText, currentUser, titleTmdbID, titleCoverPath);
+                saveComment(commentText, currentUser, titleTmdbID, titleCoverPath, titleType, titleName, titleDescription, titleReleaseDate);
             }
         });
     }
@@ -591,12 +589,16 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
     }
 
     // Save and post the comment
-    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath) {
+    public void saveComment(String commentText, String currentUser, Integer tmdbId, String titleCoverPath, String titleType, String titleName, String titleDescription, String titleReleaseDate) {
         Comment comment = new Comment();
         comment.setText(commentText);
         comment.setUser(currentUser);
         comment.setTmdbId(tmdbId);
         comment.setCoverPath(titleCoverPath);
+        comment.setType(titleType);
+        comment.setName(titleName);
+        comment.setDescription(titleDescription);
+        comment.setReleaseDate(titleReleaseDate);
         comment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

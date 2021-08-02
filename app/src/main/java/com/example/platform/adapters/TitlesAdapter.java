@@ -133,6 +133,8 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
                         headToDetails(false, position);
                         return super.onSingleTapUp(e);
                     }
+
+
                 });
 
                 @Override

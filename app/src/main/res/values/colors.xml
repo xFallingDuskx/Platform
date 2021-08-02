@@ -14,4 +14,5 @@
     <color name="grey_dark">#3A3A3A</color>
     <color name="grey_medium">#737373</color>
     <color name="grey_light">#AEAEAE</color>
+    <color name="red_cancel">#D50000</color>
 </resources>
