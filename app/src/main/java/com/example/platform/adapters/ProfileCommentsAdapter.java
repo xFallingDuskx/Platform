@@ -73,6 +73,7 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
         TextView tvUsername;
         TextView tvTimestamp;
         TextView tvCommentText;
+        TextView tvItemType;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -81,6 +82,7 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
             tvUsername = itemView.findViewById(R.id.tvUsername_ProfileComment);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp_ProfileComment);
             tvCommentText = itemView.findViewById(R.id.tvCommentText_ProfileComment);
+            tvItemType = itemView.findViewById(R.id.tvItemType_ProfileComment);
 
             // User double-taps screen to like the title
             // Source: https://stackoverflow.com/questions/4804798/doubletap-in-android
@@ -95,23 +97,6 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                         if (position != RecyclerView.NO_POSITION) {
                             Comment comment = comments.get(position);
                             String commentObjectId = comment.getObjectId();
-                            // Source: https://developer.android.com/guide/topics/ui/dialogs
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//                        builder.setTitle("Delete Comment?")
-//                                .setMessage("Keep in mind that, once a comment has been deleted, it can be recovered.")
-//                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int id) {
-//                                        Log.i(TAG, "User is onTrack to delete the comment");
-//                                        // TODO: add necessary logic
-//                                    }
-//                                })
-//                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                                    public void onClick(DialogInterface dialog, int id) {
-//                                        Log.i(TAG, "User has decided not to delete the comment");
-//                                    }
-//                                })
-//                                .create()
-//                                .show();
 
                             new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Delete Comment?")
@@ -216,6 +201,16 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                     .placeholder(R.drawable.poster_placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
                     .into(ivTitleCover);
+
+            // Change item type text depending on its type
+//            tvItemType.setText(comment.getType().toUpperCase());
+            if (comment.getType().equals("tv")) {
+                tvItemType.setText("TV Show");
+            } else if (comment.getType().equals("movie")) {
+                tvItemType.setText("Movie");
+            } else {
+                tvItemType.setText("Episode '" + comment.getName() + "'");
+            }
         }
     }
 

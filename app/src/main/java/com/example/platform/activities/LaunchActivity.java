@@ -11,6 +11,8 @@ import android.widget.Button;
 import com.example.platform.R;
 import com.parse.ParseUser;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LaunchActivity extends AppCompatActivity {
 
     public static final String TAG = "LaunchActivity";
@@ -22,9 +24,17 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
-        // Checking if user is alreaady logged into the app
+        // Checking if user is already logged into the app
         if (ParseUser.getCurrentUser() != null) {
             goMainActivity();
+        }
+
+        // If user has just logged out
+        boolean loggedOut = getIntent().getBooleanExtra("loggedOut", false);
+        if (loggedOut) {
+            SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(LaunchActivity.this);
+            sweetAlertDialog.setTitleText(getString(R.string.successful_logout));
+            sweetAlertDialog.show();
         }
 
         btnSignup = findViewById(R.id.btnSignup_Launch);

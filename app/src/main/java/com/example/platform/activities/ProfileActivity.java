@@ -15,9 +15,12 @@ import com.example.platform.R;
 import com.example.platform.models.User;
 import com.parse.ParseUser;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class ProfileActivity extends AppCompatActivity {
 
     public static final String TAG = "ProfileActivity";
+    SweetAlertDialog sweetAlertDialog;
     TextView tvUsername;
     TextView tvCreatedAt;
     RelativeLayout rlGeneral;
@@ -91,9 +94,12 @@ public class ProfileActivity extends AppCompatActivity {
                 ParseUser.logOut();
                 ParseUser currentUser = ParseUser.getCurrentUser(); // Set user as null
                 Intent intent = new Intent(ProfileActivity.this, LaunchActivity.class);
+                intent.putExtra("loggedOut", true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // Takes user back to activities to Launch screen
                 startActivity(intent);
-                Toast.makeText(ProfileActivity.this, "You've been logged out", Toast.LENGTH_SHORT).show();
+//                sweetAlertDialog = new SweetAlertDialog(ProfileActivity.this);
+//                sweetAlertDialog.setTitleText(getString(R.string.successful_logout));
+//                sweetAlertDialog.show();
             }
         });
 

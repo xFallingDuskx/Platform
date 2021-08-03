@@ -3,7 +3,9 @@ package com.example.platform.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,9 +17,12 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    SweetAlertDialog sweetAlertDialog;
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
@@ -35,9 +40,22 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick login button");
-                String username = etUsername.getText().toString();
-                String password = etPassword.getText().toString();
-                loginUser(username, password);
+                sweetAlertDialog = new SweetAlertDialog(LoginActivity.this);
+                sweetAlertDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#171717"));
+                sweetAlertDialog.setTitleText("Logging in...");
+                sweetAlertDialog.setContentText("Prepare to share your media experience");
+                sweetAlertDialog.setCancelable(false);
+                sweetAlertDialog.show();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        String username = etUsername.getText().toString();
+                        String password = etPassword.getText().toString();
+                        loginUser(username, password);
+                    }
+                }, 4000);
             }
         });
     }
@@ -49,11 +67,22 @@ public class LoginActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Issue with login", e);
-                    Toast.makeText(LoginActivity.this, getString(R.string.incorrect_login), Toast.LENGTH_LONG).show();
+                    sweetAlertDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                    sweetAlertDialog.setTitleText("Error");
+                    sweetAlertDialog.setContentText(getString(R.string.incorrect_login));
                     return;
                 }
-                goMainActivity();
-                Toast.makeText(LoginActivity.this, getString(R.string.successful_login), Toast.LENGTH_LONG).show();
+
+                sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                sweetAlertDialog.setTitleText("Success");
+                sweetAlertDialog.setContentText(getString(R.string.successful_login));
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        goMainActivity();
+                    }
+                }, 1000);
             }
         });
     }

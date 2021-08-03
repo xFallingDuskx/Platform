@@ -4,7 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import okhttp3.Headers;
 
 public class SignupActivity extends AppCompatActivity {
@@ -38,6 +41,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText etPassword;
     private EditText etPasswordConfirmation;
     private Button btnSignup;
+    SweetAlertDialog sweetAlertDialog;
     String email;
     String fullName;
     String username;
@@ -59,21 +63,36 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "onClick signup button");
-                email = etEmail.getText().toString();
-                fullName = etFullName.getText().toString();
-                username = etUsername.getText().toString();
-                password = etPassword.getText().toString();
-                String passwordConfirmation = etPasswordConfirmation.getText().toString();
+                sweetAlertDialog = new SweetAlertDialog(SignupActivity.this);
+                sweetAlertDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#171717"));
+                sweetAlertDialog.setTitleText("Signing Up...");
+                sweetAlertDialog.setContentText("Your Platform account is being created");
+                sweetAlertDialog.setCancelable(false);
+                sweetAlertDialog.show();
 
-                // Confirm password
-                if (! password.equals(passwordConfirmation)) {
-                    Log.i(TAG, "Password entered in by user are not the same");
-                    Toast.makeText(SignupActivity.this, getString(R.string.unmatched_passwords), Toast.LENGTH_LONG).show();
-                    return;
-                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        email = etEmail.getText().toString();
+                        fullName = etFullName.getText().toString();
+                        username = etUsername.getText().toString();
+                        password = etPassword.getText().toString();
+                        String passwordConfirmation = etPasswordConfirmation.getText().toString();
 
-                // Verify the email address
-                verifyEmail(email);
+                        // Confirm password
+                        if (! password.equals(passwordConfirmation)) {
+                            Log.i(TAG, "Password entered in by user are not the same");
+                            sweetAlertDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                            sweetAlertDialog.setTitleText("Error");
+                            sweetAlertDialog.setContentText(getString(R.string.unmatched_passwords));
+                            return;
+                        }
+
+                        // Verify the email address
+                        verifyEmail(email);
+                    }
+                }, 3000);
             }
         });
     }
@@ -97,7 +116,9 @@ public class SignupActivity extends AppCompatActivity {
                     // If the email is not valid for any of the above 4 reasons
                     if (formatCheck.equals("false") || smtpCheck.equals("false") || dnsCheck.equals("false") || disposableCheck.equals("true")) {
                         Log.i(TAG, "Email address entered in by user is not valid");
-                        Toast.makeText(SignupActivity.this, getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                        sweetAlertDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        sweetAlertDialog.setTitleText("Error");
+                        sweetAlertDialog.setContentText(getString(R.string.invalid_email));
                     } else { // If the email is valid
                         signupUser(email, fullName, username, password);
                     }
@@ -157,8 +178,16 @@ public class SignupActivity extends AppCompatActivity {
                         }
                         else {
                             Log.i(TAG, "Success creating new Pubnub user object");
-                            goMainActivity();
-                            Toast.makeText(SignupActivity.this, getString(R.string.successful_signup), Toast.LENGTH_LONG).show();
+                            sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                            sweetAlertDialog.setTitleText("Success");
+                            sweetAlertDialog.setContentText(getString(R.string.successful_signup));
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    goMainActivity();
+                                }
+                            }, 1000);
                         }
                     }
                 });

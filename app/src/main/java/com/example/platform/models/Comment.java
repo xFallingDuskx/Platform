@@ -188,14 +188,6 @@ public class Comment extends ParseObject {
         put(KEY_TMDB_ID, tmdbId);
     }
 
-    public String getInReplyTo() {
-        return getString(KEY_IN_REPLY_TO);
-    }
-
-    public void setInReplyTo(String comment) {
-        put(KEY_IN_REPLY_TO, comment);
-    }
-
     public Integer getLikes() {
         return getInt(KEY_LIKES);
     }
