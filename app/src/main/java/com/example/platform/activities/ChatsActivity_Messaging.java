@@ -151,7 +151,7 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
 
                             // Go to recent message
                             adapter.notifyDataSetChanged();
-                            rvMessages.smoothScrollToPosition(0);
+                            rvMessages.smoothScrollToPosition(allMessages.size() - 1);
                         } else {
                             Log.d(TAG, "Issue fetching previous messages");
                             status.getErrorData().getThrowable().printStackTrace();
@@ -185,17 +185,16 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
 
                     @Override
                     public void run() {
-                        // Go to recent message
-                        adapter.notifyDataSetChanged();
-                        rvMessages.smoothScrollToPosition(0);
-
-
                         // Reset the input and close the keyboard
                         // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
                         etMessageInput.setText("");
                         View view = findViewById(android.R.id.content);
                         InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                        // Go to recent message
+                        adapter.notifyDataSetChanged();
+                        rvMessages.smoothScrollToPosition(allMessages.size() - 1);
                     }
                 });
 
