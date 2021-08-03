@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 sweetAlertDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
                 sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#171717"));
                 sweetAlertDialog.setTitleText("Logging in...");
-                sweetAlertDialog.setContentText("Prepare to share your media experience");
+                sweetAlertDialog.setContentText(getString(R.string.logging_in_text));
                 sweetAlertDialog.setCancelable(false);
                 sweetAlertDialog.show();
 

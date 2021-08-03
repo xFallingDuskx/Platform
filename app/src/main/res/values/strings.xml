@@ -7,7 +7,9 @@
     <string name="successful_signup">Successfully signed up!</string>
     <string name="unsuccessful_signup">Issue signing up. Please try again.</string>
     <string name="incorrect_login">Incorrect username and/or password</string>
+    <string name="logging_in_text">Prepare to share your media experience</string>
     <string name="successful_login">Successfully logged in!</string>
+    <string name="signing_up_text">Your Platform account is being created</string>
     <string name="successful_logout">You\'ve been logged out</string>
 
     <string name="description_unavailable">Sorry! No overview is available for the title.</string>

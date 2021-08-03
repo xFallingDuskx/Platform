@@ -31,8 +31,10 @@ import com.example.platform.R;
 import com.example.platform.activities.ProfileActivity;
 import com.example.platform.adapters.ConversationsAdapter;
 import com.example.platform.models.Conversation;
+import com.example.platform.models.Message;
 import com.example.platform.models.User;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.gson.JsonObject;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -65,6 +67,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -406,8 +410,9 @@ public class ConversationsFragment extends Fragment {
 
         // 4) Send a greeting message to the searched user
         String greetingMessage = "Hey " + searchedUserUsername;
+        JsonObject messagePayload = Message.createMessageObject(currentUserUsername, greetingMessage, new Date());
         pubnub.publish()
-                .message(greetingMessage)
+                .message(messagePayload)
                 .channel(channelName)
                 .async(new PNCallback<PNPublishResult>() {
                     @Override

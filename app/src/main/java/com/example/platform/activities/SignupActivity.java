@@ -67,7 +67,7 @@ public class SignupActivity extends AppCompatActivity {
                 sweetAlertDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
                 sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#171717"));
                 sweetAlertDialog.setTitleText("Signing Up...");
-                sweetAlertDialog.setContentText("Your Platform account is being created");
+                sweetAlertDialog.setContentText(getString(R.string.signing_up_text));
                 sweetAlertDialog.setCancelable(false);
                 sweetAlertDialog.show();
 

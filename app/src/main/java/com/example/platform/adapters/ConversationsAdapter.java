@@ -1,6 +1,7 @@
 package com.example.platform.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.platform.R;
-import com.example.platform.models.Conversation;
+import com.example.platform.activities.ChatsActivity_Messaging;
 import com.example.platform.models.Conversation;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +63,19 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             tvUsername = itemView.findViewById(R.id.tvUsername_Conversation);
             tvTimestamp = itemView.findViewById(R.id.tvTimestamp_Conversation);
             tvLastMessage = itemView.findViewById(R.id.tvLastMessage_Conversation);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Conversation conversation = conversations.get(position);
+                        Intent intent = new Intent(context, ChatsActivity_Messaging.class);
+                        intent.putExtra("channelName", conversation.getName());
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
 
         public void bind(Conversation conversation) {

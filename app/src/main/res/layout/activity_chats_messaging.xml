@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMessages"
+        android:background="@color/grey_dark"
+        android:transcriptMode="alwaysScroll"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/rlSend"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:id="@+id/rlSend"
+        android:background="@color/black_light"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/etMessageInput"
+            android:layout_toLeftOf="@+id/ivSend"
+            android:layout_alignBottom="@+id/ivSend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:layout_marginStart="10dp"
+            android:hint="Send message"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_dimmer"
+            android:inputType="textShortMessage"
+            android:imeOptions="actionSend" />
+
+        <ImageView
+            android:id="@+id/ivSend"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:padding="5dp"
+            android:src="@drawable/ic_post_comment"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
