@@ -79,7 +79,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
         adapter = new MessagesAdapter(context, allMessages, currentUser.getUsername());
         rvMessages.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-//        linearLayoutManager.setReverseLayout(true);
         rvMessages.setLayoutManager(linearLayoutManager);
 
         PNConfiguration pnConfiguration = new PNConfiguration();
@@ -102,9 +101,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                             for (final String channel : channels) {
                                 List<PNFetchMessageItem> pnFetchMessageItems = channelToMessageItemsMap.get(channel);
                                 for (final PNFetchMessageItem fetchMessageItem: pnFetchMessageItems) {
-//                                    System.out.println(fetchMessageItem.getMessage());
-//                                    System.out.println(fetchMessageItem.getMeta());
-//                                    System.out.println(fetchMessageItem.getTimetoken());
 
                                     // Ignore older messages that were not saved as a JsonObject
                                     if (! fetchMessageItem.getMessage().isJsonObject()) {
@@ -131,22 +127,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                                     Log.i(TAG, "New Message / Sender: " + sender + " / Type: " + type + " / Text: " + text + " / Sent Date: " + sentDateString);
 
                                 }
-
-
-                                // todo
-//                                System.out.println(messageItem.getMeta());
-//                                System.out.println(messageItem.getTimetoken());
-//                                HashMap<String, HashMap<String, List<PNFetchMessageItem.Action>>> actions = messageItem.getActions();
-//                                for (String type : actions.keySet()) {
-//                                    System.out.println("Action type: " + type);
-//                                    for (String value : actions.get(type).keySet()) {
-//                                        System.out.println("Action value: " + value);
-//                                        for (PNFetchMessageItem.Action action : actions.get(type).get(value)) {
-//                                            System.out.println("Action timetoken: " + action.getActionTimetoken());
-//                                            System.out.println("Action publisher: " + action.getUuid());
-//                                        }
-//                                    }
-//                                }
                             }
 
                             // Go to recent message
@@ -199,30 +179,18 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                 });
 
                 Log.i(TAG, "New Message / Sender: " + sender + " / Type: " + type + " / Text: " + text + " / Sent Date: " + sentDateString);
-
-
-
-//                displayMessage("[MESSAGE: received]",entryVal + ": " + updateVal);
             }
 
             @Override
             public void status(PubNub pubnub, PNStatus event) {
-                displayMessage("[STATUS: " + event.getCategory() + "]",
-                        "connected to channels: " + event.getAffectedChannels());
 
-                if (event.getCategory().equals(PNStatusCategory.PNConnectedCategory)){
-//                    submitUpdate(theEntry, "Harmless.");
-                }
             }
 
             @Override
             public void presence(PubNub pubnub, PNPresenceEventResult event) {
-                displayMessage("[PRESENCE: " + event.getEvent() + ']',
-                        "uuid: " + event.getUuid() + ", channel: " + event.getChannel());
+
             }
 
-            // even if you don't need these handler, you still have include them
-            // because we are extending an Abstract class
             @Override
             public void signal(PubNub pubnub, PNSignalResult event) { }
 
@@ -262,8 +230,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                 JsonObject messagePayload = Message.createMessageObject(currentUser.getUsername(), message, new Date());
                 publishMessage(messagePayload);
 
-//                submitUpdate(theEntry, entryUpdateText.getText().toString());
-//                entryUpdateText.setText("");
             }
         });
     }
@@ -286,47 +252,7 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                 });
     }
 
-    protected void submitUpdate(String anEntry, String anUpdate) {
-        JsonObject entryUpdate = new JsonObject();
-        entryUpdate.addProperty("entry", anEntry);
-        entryUpdate.addProperty("update", anUpdate);
-
-        pubnub.publish().channel(channelName).message(entryUpdate).async(
-                new PNCallback<PNPublishResult>() {
-                    @Override
-                    public void onResponse(PNPublishResult result, PNStatus status) {
-                        if (status.isError()) {
-                            status.getErrorData().getThrowable().printStackTrace();
-                        }
-                        else {
-                            displayMessage("[PUBLISH: sent]",
-                                    "timetoken: " + result.getTimetoken());
-                        }
-                    }
-                });
-    }
-
-
-    protected void displayMessage(String messageType, String aMessage) {
-        String newLine = "\n";
-
-        final StringBuilder textBuilder = new StringBuilder()
-                .append(messageType)
-                .append(newLine)
-                .append(aMessage)
-                .append(newLine).append(newLine);
-//                .append(messagesText.getText().toString());
-
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                messagesText.setText(textBuilder.toString());
-            }
-        });
-    }
-
     //TODO: override onPause() and onBackPressed() {?} to save last message
-
     @Override
     protected void onPause() {
         super.onPause();

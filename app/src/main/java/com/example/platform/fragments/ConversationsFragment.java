@@ -215,41 +215,6 @@ public class ConversationsFragment extends Fragment {
                 });
     }
 
-//    public void fetchUserConversations() {
-//        allConversations = new ArrayList<>();
-//        List<String> conversations = pubnub.getSubscribedChannels();
-//
-//        if (conversations.isEmpty()) {
-//            Log.i(TAG, "There are no conversations to display for the current user");
-//            tvNotAvailable.setVisibility(View.VISIBLE);
-//        } else {
-//            Log.i(TAG, "onTrack to display conversations for the current user");
-//            for (int i = 0; i < conversations.size(); i++) {
-//                String channel = conversations.get(i);
-//                pubnub.getChannelMetadata()
-//                        .channel(channel)
-//                        .async(new PNCallback<PNGetChannelMetadataResult>() {
-//                            @Override
-//                            public void onResponse(@Nullable final PNGetChannelMetadataResult result, @NotNull final PNStatus status) {
-//                                if (status.isError()) {
-//                                    Log.d(TAG, "Issue fetching user channel data");
-//                                } else {
-//                                    Conversation conversation = new Conversation();
-//                                    PNChannelMetadata data = result.getData();
-//                                    conversation.setId(data.getId());
-//                                    conversation.setName(data.getName());
-//                                    conversation.setDescription(data.getDescription());
-//                                    Log.i(TAG, "New conversation / ID: " + data.getId() + " / Name: " + data.getName() + " / Description: " + data.getDescription());
-//                                    allConversations.add(conversation);
-//                                }
-//                            }
-//                        });
-//
-//                displayConversations();
-//            }
-//        }
-//    }
-
     public void displayConversations() {
         Collections.sort(allConversations,
                 (o1, o2) -> o1.getUpdatedAtDate().compareTo(o2.getUpdatedAtDate()));
@@ -507,50 +472,16 @@ public class ConversationsFragment extends Fragment {
                 }
             }
 
-            // Messages
             @Override
             public void message(PubNub pubnub, PNMessageResult message) {
-                String messagePublisher = message.getPublisher();
-                Log.i(TAG, "Message publisher: " + messagePublisher);
-                Log.i(TAG, "Message Payload: " + message.getMessage());
-                Log.i(TAG, "Message Subscription: " + message.getSubscription());
-                Log.i(TAG, "Message Channel: " + message.getChannel());
-                Log.i(TAG, "Message timetoken: " + message.getTimetoken());
+
             }
 
-            // Presence
             @Override
             public void presence(@NotNull PubNub pubnub, @NotNull PNPresenceEventResult presence) {
-                Log.i(TAG, "Presence Event: " + presence.getEvent());
-                // Can be join, leave, state-change or timeout
 
-                Log.i(TAG, "Presence Channel: " + presence.getChannel());
-                // The channel to which the message was published
-
-                Log.i(TAG, "Presence Occupancy: " + presence.getOccupancy());
-                // Number of users subscribed to the channel
-
-                Log.i(TAG, "Presence State: " + presence.getState());
-                // User state
-
-                Log.i(TAG, "Presence UUID: " + presence.getUuid());
-                // UUID to which this event is related
-
-                presence.getJoin();
-                // List of users that have joined the channel (if event is 'interval')
-
-                presence.getLeave();
-                // List of users that have left the channel (if event is 'interval')
-
-                presence.getTimeout();
-                // List of users that have timed-out off the channel (if event is 'interval')
-
-                presence.getHereNowRefresh();
-                // Indicates to the client that it should call 'hereNow()' to get the
-                // complete list of users present in the channel.
             }
 
-            // Signals
             @Override
             public void signal(PubNub pubnub, PNSignalResult pnSignalResult) {
 
@@ -571,30 +502,14 @@ public class ConversationsFragment extends Fragment {
 
             }
 
-            // Message actions
             @Override
             public void messageAction(PubNub pubnub, PNMessageActionResult pnActionResult) {
-                PNMessageAction pnMessageAction = pnActionResult.getMessageAction();
-                Log.i(TAG, "Message action type: " + pnMessageAction.getType());
-                Log.i(TAG, "Message action value: " + pnMessageAction.getValue());
-                Log.i(TAG, "Message action uuid: " + pnMessageAction.getUuid());
-                Log.i(TAG, "Message action actionTimetoken: " + pnMessageAction.getActionTimetoken());
-                Log.i(TAG, "Message action messageTimetoken: " + pnMessageAction.getMessageTimetoken());
-                Log.i(TAG, "Message action subscription: " + pnActionResult.getSubscription());
-                Log.i(TAG, "Message action channel: " + pnActionResult.getChannel());
-                Log.i(TAG, "Message action timetoken: " + pnActionResult.getTimetoken());
+
             }
 
-            // Files
             @Override
             public void file(PubNub pubnub, PNFileEventResult pnFileEventResult) {
-                Log.i(TAG, "File channel: " + pnFileEventResult.getChannel());
-                Log.i(TAG, "File publisher: " + pnFileEventResult.getPublisher());
-                Log.i(TAG, "File message: " + pnFileEventResult.getMessage());
-                Log.i(TAG, "File timetoken: " + pnFileEventResult.getTimetoken());
-                Log.i(TAG, "File file.id: " + pnFileEventResult.getFile().getId());
-                Log.i(TAG, "File file.name: " + pnFileEventResult.getFile().getName());
-                Log.i(TAG, "File file.url: " + pnFileEventResult.getFile().getUrl());
+
             }
         });
 
