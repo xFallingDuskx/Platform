@@ -8,32 +8,14 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.example.platform.R;
 import com.example.platform.fragments.CatalogFragment;
-import com.example.platform.fragments.ChatsFragment;
+import com.example.platform.fragments.ConversationsFragment;
 import com.example.platform.fragments.CommunitiesFragment;
 import com.example.platform.fragments.HomeFragment;
 import com.example.platform.fragments.InboxFragment;
-import com.example.platform.models.Conversation;
-import com.example.platform.models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.pubnub.api.PNConfiguration;
-import com.pubnub.api.PubNub;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -67,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
                         break;
                     case R.id.action_chats:
                         Log.i(TAG, "Heading to Chats Fragment");
-                        fragment = new ChatsFragment();
+                        fragment = new ConversationsFragment();
                         break;
                     case R.id.action_inbox:
                         Log.i(TAG, "Heading to Inbox Fragment");
