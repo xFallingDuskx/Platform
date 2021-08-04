@@ -60,6 +60,7 @@ import com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult;
 import com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -241,23 +242,6 @@ public class ConversationsFragment extends Fragment {
                 });
     }
 
-    public void displayConversations() {
-//        Collections.sort(allConversations,
-//                (o1, o2) -> o1.getUpdatedAtDate().compareTo(o2.getUpdatedAtDate()));
-
-        for (Conversation conversation : allConversations) {
-            Log.i(TAG, "Conversation: " + conversation.getVisibleName());
-        }
-
-        adapter = new ConversationsAdapter(getActivity(), allConversations);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        rvConversations.setLayoutManager(linearLayoutManager);
-        rvConversations.setAdapter(adapter);
-
-        shimmerFrameLayout.stopShimmer();
-        shimmerFrameLayout.setVisibility(View.GONE);
-    }
-
     // Users must be resubscribed to their channels each time the app loads
     // Channels names are received from Parse Server
     public void subscribeToChannels() throws JSONException {
@@ -298,7 +282,6 @@ public class ConversationsFragment extends Fragment {
                             conversation.setVisibleName(visibleName);
                             conversation.setLastMessage(channelLastMessage);
                             conversation.setTimestamp(parseObject.getUpdatedAt());
-//                            conversation.setUpdatedAtDate(parseObject.getUpdatedAt());
                             allConversations.add(conversation);
                             Log.i(TAG, "Success: conversation " + conversation.getVisibleName() + " has been added");
                             Log.i(TAG, "The updatedAt Date for this conversation is: " + parseObject.getUpdatedAt().toString());
@@ -318,6 +301,20 @@ public class ConversationsFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public void displayConversations() {
+        for (Conversation conversation : allConversations) {
+            Log.i(TAG, "Conversation: " + conversation.getVisibleName());
+        }
+
+        adapter = new ConversationsAdapter(getActivity(), allConversations);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvConversations.setLayoutManager(linearLayoutManager);
+        rvConversations.setAdapter(adapter);
+
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
     }
 
     public void newComposePopUp() {
@@ -377,7 +374,63 @@ public class ConversationsFragment extends Fragment {
         }
 
         Log.i(TAG, "Searched User -- Username: " + searchedUserUsername + " / Object ID: " + searchedUserObjectId + " / Channel Name: " + channelName);
-        sendMessage(currentUserUsername, searchedUserUsername, searchedUserObjectId, channelName, searchedUserUsername);
+
+        // Check if the user has been part of this conversation before
+        checkChannel(currentUserUsername, searchedUserUsername, searchedUserObjectId, channelName, searchedUserUsername);
+    }
+
+    private void checkChannel(String currentUserUsername, String searchedUserUsername, String searchedUserObjectId, String channelName, String userUsername) throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Conversation");
+        query.whereContains(Conversation.KEY_MEMBERS, currentUserUsername);
+
+        // If the channel does not exist
+        if (query.count() == 0) {
+            sendMessage(currentUserUsername, searchedUserUsername, searchedUserObjectId, channelName, searchedUserUsername);
+        } else {
+            try {
+                rejoinConversation(currentUserUsername, query);
+            } catch (JSONException e) {
+                Log.d(TAG, "Issue adding the user back to a previously joined conversation");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    // Simply add the user back to the conversation if they were once part of it
+    private void rejoinConversation(String currentUserUsername, ParseQuery<ParseObject> query) throws ParseException, JSONException {
+        // Get current conversation members
+        ArrayList<String> currentMembers = new ArrayList<>();
+        ParseObject conversationParseObject = query.getFirst();
+        JSONArray jsonArray = conversationParseObject.getJSONArray(Conversation.KEY_MEMBERS);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            String member = jsonArray.getString(i);
+            currentMembers.add(member);
+        }
+        currentMembers.add(currentUserUsername);
+        conversationParseObject.put(Conversation.KEY_MEMBERS, currentMembers);
+        conversationParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "Issue updating conversation members /Error: " + e.getMessage());
+                } else {
+                    Log.i(TAG, "Success updating conversation members");
+                    try {
+                        Toast.makeText(getContext(), "Rejoining this conversation", Toast.LENGTH_SHORT).show();
+                        subscribeToChannels();
+
+                        rlComposePopUp.setVisibility(View.GONE);
+                        // And close the keyboard
+                        // Source: https://rmirabelle.medium.com/close-hide-the-soft-keyboard-in-android-db1da22b09d2
+                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(getView().getRootView().getWindowToken(), 0);
+                    } catch (JSONException jsonException) {
+                        Log.d(TAG, "Issue subscribingToChannels after rejoining conversation");
+                        jsonException.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     // Send greeting message to desired user

@@ -203,13 +203,6 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                     return true;
                 }
             });
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
         }
 
         public void bind(Comment comment) {
