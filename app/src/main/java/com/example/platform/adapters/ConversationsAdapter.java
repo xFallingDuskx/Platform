@@ -152,6 +152,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
                             Conversation conversation = conversations.get(position);
                             Intent intent = new Intent(context, ChatsActivity_Messaging.class);
                             intent.putExtra("channelName", conversation.getName());
+                            intent.putExtra("visibleName", conversation.getVisibleName());
                             context.startActivity(intent);
                         }
                         return super.onSingleTapUp(e);

@@ -1,6 +1,7 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.platform.R;
@@ -62,6 +64,8 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
     ParseUser currentUser;
     boolean updateLastMessage = false;
 
+    ImageView ivBack;
+    TextView tvHeading;
     EditText etMessageInput;
     ImageView ivSend;
 
@@ -75,6 +79,23 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
         setContentView(R.layout.activity_chats_messaging);
         context = getApplicationContext();
         currentUser = ParseUser.getCurrentUser();
+
+        // Set up toolbar
+        String visibleName = getIntent().getStringExtra("visibleName");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_Messaging);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        ivBack = findViewById(R.id.ivBack_Message);
+        tvHeading = findViewById(R.id.tvHeading_Messaging);
+
+        tvHeading.setText(visibleName);
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         // Set up RecyclerView and obtain other bits of necessary information
         channelName = getIntent().getStringExtra("channelName");
