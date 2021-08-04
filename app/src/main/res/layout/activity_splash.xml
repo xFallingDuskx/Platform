@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".activities.SplashActivity">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="false"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false"
+        android:layout_marginTop="250dp">
+
+        <TextView
+            android:id="@+id/tvLogoTitle_Splash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:text="Platform"
+            android:textColor="@color/white"
+            android:textSize="80sp" />
+
+        <TextView
+            android:id="@+id/tvLogoQuote_Splash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLogoTitle_Splash"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-15dp"
+            android:text="Share your media experience"
+            android:textColor="@color/whiteOpacit"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -24,11 +24,6 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
-        // Checking if user is already logged into the app
-        if (ParseUser.getCurrentUser() != null) {
-            goMainActivity();
-        }
-
         // If user has just logged out
         boolean loggedOut = getIntent().getBooleanExtra("loggedOut", false);
         if (loggedOut) {
