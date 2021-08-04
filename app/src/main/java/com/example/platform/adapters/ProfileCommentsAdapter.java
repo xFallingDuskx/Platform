@@ -27,12 +27,23 @@ import com.example.platform.activities.MovieTitleDetailsActivity;
 import com.example.platform.activities.ProfileCommentsActivity;
 import com.example.platform.activities.TvTitleDetailsActivity;
 import com.example.platform.models.Comment;
+import com.example.platform.models.Keyword;
+import com.example.platform.models.Title;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -42,6 +53,8 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
 
     private Context context;
     private List<Comment> comments;
+    private HashMap<String, Integer> itemKeywordsMap;
+    private ParseObject itemParseObject;
 
     public ProfileCommentsAdapter(Context context, List<Comment> comments) {
         this.context = context;
@@ -97,6 +110,15 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                         if (position != RecyclerView.NO_POSITION) {
                             Comment comment = comments.get(position);
                             String commentObjectId = comment.getObjectId();
+
+                            // Fetch item keywords in case user decides to delete the comment
+                            try {
+                                itemKeywordsMap = new HashMap<>();
+                                fetchItemKeywords(comment);
+                            } catch (ParseException parseException) {
+                                Log.d(TAG, "Issue fetching keywords for the item");
+                                parseException.printStackTrace();
+                            }
 
                             new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
                                     .setTitleText("Delete Comment?")
@@ -160,6 +182,7 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra("cover", comment.getEpisodeCoverPath());
                             }
+
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("id", comment.getTmdbId());
                             intent.putExtra("name", comment.getName());
@@ -168,12 +191,9 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                             intent.putExtra("releaseDate", comment.getReleaseDate());
                             context.startActivity(intent);
                             Log.i(TAG, "Opening DetailsActivity w/ comment: " + comment + " name: " + comment.getName() + " and TMDB ID: " + comment.getTmdbId() + " at position: " + position + " within the list: " + comments.toString());
-
                         }
                         return super.onSingleTapUp(e);
                     }
-
-
                 });
 
                 @Override
@@ -214,21 +234,71 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
         }
     }
 
+    public void fetchItemKeywords(Comment comment) throws ParseException {
+        if (! comment.getType().equals("episode")) {
+            itemParseObject = ParseQuery.getQuery("Title").include(Title.KEY_KEYWORDS).whereEqualTo(Title.KEY_TMDB_ID, comment.getTmdbId()).getFirst();
+        } else { // Episode type
+            itemParseObject = ParseQuery.getQuery("Episode").include(Title.KEY_KEYWORDS).whereEqualTo(Title.KEY_TMDB_ID, comment.getTmdbId()).getFirst();
+        }
+
+        JSONObject jsonObject = itemParseObject.getJSONObject(Title.KEY_KEYWORDS);
+        String json = jsonObject.toString();
+        Log.i(TAG, "String format of the json Map Object: " + json);
+        ObjectMapper mapper = new ObjectMapper();
+
+        //Convert Map to JSON and update the RecyclerView
+        try {
+            itemKeywordsMap = mapper.readValue(json, new TypeReference<HashMap<String, Integer>>() {});
+            Log.i(TAG, "The current keywords for the title are: " + itemKeywordsMap.toString());
+        } catch (JsonProcessingException e) {
+            Log.d(TAG, "Issue accessing keywords for the title");
+            e.printStackTrace();
+        }
+    }
+
     public void deleteComment(String commentObjectId) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
 
         // Retrieve the comment by its object id
         query.getInBackground(commentObjectId, (object, e) -> {
             if (e == null) {
+                String commentText = object.getString(Comment.KEY_TEXT);
+                int itemTmdbId = object.getInt(Comment.KEY_TMDB_ID);
+
                 object.deleteInBackground(e2 -> {
                     if(e2==null){
                         Log.i(TAG, "Comment was successfully deleted from Parse Server");
+                        removeCommentKeywords(commentText);
                     }else{
                         Log.d(TAG, "Failed to delete comment from Parse Server / Error: " + e2.getMessage());
                     }
                 });
             } else{
                 Log.d(TAG, "Failed to get comment in background to delete / Error: " + e.getMessage());
+            }
+        });
+    }
+
+    public void removeCommentKeywords(String commentText) {
+        HashSet<String> commentKeywords = Comment.getKeywords(commentText);
+
+        for (String keyword : commentKeywords) {
+            int currentValue = itemKeywordsMap.get(keyword);
+            Log.i(TAG, "The keyword " + keyword + " has a value of " + currentValue + " for the item w/ Object ID: " + itemParseObject.getObjectId() + " and TMDB ID: " + itemParseObject.getString(Title.KEY_TMDB_ID));
+            int newValue = currentValue - 1;
+            itemKeywordsMap.put(keyword, newValue);
+        }
+        Log.i(TAG, "The title keywords are " + itemKeywordsMap.toString());
+
+        itemParseObject.put(Title.KEY_KEYWORDS, itemKeywordsMap);
+        itemParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.d(TAG, "Issue saving title keyword update /Error: " + e.getMessage());
+                } else {
+                    Log.i(TAG, "Success saving title keywords update");
+                }
             }
         });
     }
