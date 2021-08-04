@@ -17,7 +17,6 @@ import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.platform.EndlessRecyclerViewScrollListener;
 import com.example.platform.R;
 import com.example.platform.adapters.TitlesSimpleAdapter;
-import com.example.platform.models.Episode;
 import com.example.platform.models.Title;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.ParseException;
@@ -35,7 +34,7 @@ import okhttp3.Headers;
 
 public class CatalogActivity_TitleDisplay extends AppCompatActivity {
 
-    private static final String TAG = "TvTitleDetailsActivity";
+    private static final String TAG = "CatalogActivity_TitleDisplay";
     public String PLATFORM_DISCOVER_URL_BASE = "https://api.themoviedb.org/3/discover/%s?api_key=e2b0127db9175584999a612837ae77b1&with_watch_providers=%s&watch_region=US&language=en-US&sort_by=popularity.desc&page=%d";
     public String GENRE_DISCOVER_URL_BASE = "https://api.themoviedb.org/3/discover/%s?api_key=e2b0127db9175584999a612837ae77b1&language=en-US&sort_by=popularity.desc&page=%d&with_genres=%s&with_original_language=en&with_watch_monetization_types=flatrate";
     int page = 0;

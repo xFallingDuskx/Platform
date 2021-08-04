@@ -1,5 +1,6 @@
 package com.example.platform.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.platform.R;
+import com.example.platform.activities.BaseActivity;
 import com.example.platform.activities.ChatsActivity_Messaging;
 import com.example.platform.models.Conversation;
 

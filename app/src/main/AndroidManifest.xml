@@ -15,7 +15,10 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Platform">
-        <activity android:name=".activities.ChatsActivity_Messaging"></activity>
+        <activity android:name=".activities.SplashActivity"></activity>
+        <activity android:name=".activities.ChatsActivity_Messaging"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity android:name=".activities.CatalogActivity_TitleDisplay" />
         <activity android:name=".activities.ProfileAboutActivity" />
         <activity android:name=".activities.ProfileRecommendationsActivity" />

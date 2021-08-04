@@ -16,8 +16,12 @@ import android.widget.Toast;
 import com.example.platform.R;
 import com.example.platform.adapters.ConversationsAdapter;
 import com.example.platform.adapters.MessagesAdapter;
+import com.example.platform.models.Conversation;
 import com.example.platform.models.Message;
 import com.google.gson.JsonObject;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
@@ -37,7 +41,8 @@ import com.pubnub.api.models.consumer.pubsub.PNSignalResult;
 import com.pubnub.api.models.consumer.pubsub.files.PNFileEventResult;
 import com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResult;
 
-import java.text.ParseException;
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -165,12 +170,11 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
 
                     @Override
                     public void run() {
-                        // Reset the input and close the keyboard
+                        // Reset the input
                         // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
-                        etMessageInput.setText("");
-                        View view = findViewById(android.R.id.content);
-                        InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                        View view = findViewById(android.R.id.content);
+//                        InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
                         // Go to recent message
                         adapter.notifyDataSetChanged();
@@ -243,7 +247,7 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                     public void onResponse(PNPublishResult result, PNStatus status) {
                         if (!status.isError()) {
                             Log.i(TAG, "Successfully sent new  message from original user");
-                            Long timetoken = result.getTimetoken(); // TODO: message timetoken
+                            etMessageInput.setText("");
                         } else {
                             Log.d(TAG, "Issue sending greeting message to searched user");
                             Toast.makeText(context, "Failed to send greeting message", Toast.LENGTH_SHORT).show();
@@ -255,11 +259,44 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
     //TODO: override onPause() and onBackPressed() {?} to save last message
     @Override
     protected void onPause() {
+        try {
+            updateParseServer();
+            Log.i(TAG, "Success updatingParseServer with onPause()");
+        } catch (ParseException e) {
+            Log.d(TAG, "Failed to updateParseServer with onPause()");
+            e.printStackTrace();
+        }
         super.onPause();
     }
 
     @Override
     public void onBackPressed() {
+        try {
+            updateParseServer();
+            Log.i(TAG, "Success updatingParseServer with onBackPressed()");
+        } catch (ParseException e) {
+            Log.d(TAG, "Failed to updateParseServer with onBackPressed");
+            e.printStackTrace();
+        }
         super.onBackPressed();
+    }
+
+    // Save the last message that was sent before a user leaves the activity for Conversations Fragment
+    public void updateParseServer() throws ParseException {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Conversation");
+        query.whereEqualTo(Conversation.KEY_NAME, channelName);
+        ParseObject parseObject = query.getFirst();
+        String lastMessage = allMessages.get(allMessages.size() - 1).getText();
+
+        // Retrieve the object by id
+        query.getInBackground(parseObject.getObjectId(), (object, e) -> {
+            if (e == null) {
+                object.put(Conversation.KEY_LAST_MESSAGE, lastMessage);
+                object.saveInBackground();
+                Log.i(TAG, "Successfully updated the conversation's last message");
+            } else {
+                Log.d(TAG, "Failed to update the conversation's last message / Error: " + e.getMessage());
+            }
+        });
     }
 }

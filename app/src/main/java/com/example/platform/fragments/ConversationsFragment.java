@@ -47,7 +47,6 @@ import com.pubnub.api.callbacks.PNCallback;
 import com.pubnub.api.callbacks.SubscribeCallback;
 import com.pubnub.api.models.consumer.PNPublishResult;
 import com.pubnub.api.models.consumer.PNStatus;
-import com.pubnub.api.models.consumer.message_actions.PNMessageAction;
 import com.pubnub.api.models.consumer.objects_api.channel.PNChannelMetadataResult;
 import com.pubnub.api.models.consumer.objects_api.channel.PNSetChannelMetadataResult;
 import com.pubnub.api.models.consumer.objects_api.membership.PNMembershipResult;
@@ -83,6 +82,8 @@ public class ConversationsFragment extends Fragment {
     EditText etCompose;
     Button btnComposeConfirm;
     PubNub pubnub;
+
+    boolean update = false;
 
     List<Conversation> allConversations;
     RecyclerView rvConversations;
@@ -124,6 +125,27 @@ public class ConversationsFragment extends Fragment {
         });
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onStop() {
+        Log.i(TAG, "onStop called");
+        update = true;
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        Log.i(TAG, "onResume called / Update: " + update);
+        if (update) {
+            try {
+                subscribeToChannels();
+            } catch (JSONException e) {
+                Log.d(TAG, "Issue subscribing to channels again on update");
+                e.printStackTrace();
+            }
+        }
+        super.onResume();
     }
 
     @Override
@@ -223,7 +245,7 @@ public class ConversationsFragment extends Fragment {
             Log.i(TAG, "Conversation: " + conversation.getVisibleName());
         }
 
-        adapter = new ConversationsAdapter(getContext(), allConversations);
+        adapter = new ConversationsAdapter(getActivity(), allConversations);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvConversations.setLayoutManager(linearLayoutManager);
         rvConversations.setAdapter(adapter);
