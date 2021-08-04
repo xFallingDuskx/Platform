@@ -19,6 +19,7 @@
         android:padding="12dp"
         tools:text="Your outgoing message here"
         android:textColor="@android:color/white"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:linksClickable="true"/>
 
 </RelativeLayout>
