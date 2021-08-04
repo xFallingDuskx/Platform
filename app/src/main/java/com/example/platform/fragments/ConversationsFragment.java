@@ -388,7 +388,7 @@ public class ConversationsFragment extends Fragment {
             sendMessage(currentUserUsername, searchedUserUsername, searchedUserObjectId, channelName, searchedUserUsername);
         } else {
             try {
-                rejoinConversation(currentUserUsername, query);
+                rejoinConversation(currentUserUsername, channelName);
             } catch (JSONException e) {
                 Log.d(TAG, "Issue adding the user back to a previously joined conversation");
                 e.printStackTrace();
@@ -397,8 +397,10 @@ public class ConversationsFragment extends Fragment {
     }
 
     // Simply add the user back to the conversation if they were once part of it
-    private void rejoinConversation(String currentUserUsername, ParseQuery<ParseObject> query) throws ParseException, JSONException {
+    private void rejoinConversation(String currentUserUsername, String channelName) throws ParseException, JSONException {
         // Get current conversation members
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Conversation");
+        query.whereEqualTo(Conversation.KEY_NAME, channelName);
         ArrayList<String> currentMembers = new ArrayList<>();
         ParseObject conversationParseObject = query.getFirst();
         JSONArray jsonArray = conversationParseObject.getJSONArray(Conversation.KEY_MEMBERS);
@@ -416,14 +418,15 @@ public class ConversationsFragment extends Fragment {
                 } else {
                     Log.i(TAG, "Success updating conversation members");
                     try {
-                        Toast.makeText(getContext(), "Rejoining this conversation", Toast.LENGTH_SHORT).show();
-                        subscribeToChannels();
+                        Toast.makeText(getContext(), "Rejoining this conversation", Toast.LENGTH_LONG).show();
 
                         rlComposePopUp.setVisibility(View.GONE);
                         // And close the keyboard
                         // Source: https://rmirabelle.medium.com/close-hide-the-soft-keyboard-in-android-db1da22b09d2
                         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(getView().getRootView().getWindowToken(), 0);
+
+                        subscribeToChannels();
                     } catch (JSONException jsonException) {
                         Log.d(TAG, "Issue subscribingToChannels after rejoining conversation");
                         jsonException.printStackTrace();
@@ -544,17 +547,11 @@ public class ConversationsFragment extends Fragment {
                         // that occur as part of subscribe
                         switch (status.getCategory()) {
                             case PNConnectedCategory:
-                                Log.i(TAG, "No issue connecting");
                             case PNReconnectedCategory:
-                                Log.i(TAG, "Subscribe temporarily failed but reconnected -- no longer any issues");
                             case PNDisconnectedCategory:
-                                Log.i(TAG, "No error in unsubscribing from everything.");
                             case PNUnexpectedDisconnectCategory:
-                                Log.d(TAG, "Most likely an issue with internet connection");
                             case PNAccessDeniedCategory:
-                                Log.d(TAG, "Access denied by PAM -- current user does not have permission to subscribe to this channel (group)");
                             default:
-                                Log.i(TAG, "No errors to be detected");
                         }
 
                     case PNHeartbeatOperation:
@@ -564,12 +561,9 @@ public class ConversationsFragment extends Fragment {
                         // through the status PNObjectEventListener callback, refer to
                         // /docs/sdks/java/android/api-reference/configuration#configuration_basic_usage
                         if (status.isError()) {
-                            Log.d(TAG, "There was an error with the heartbeat operation");
                         } else {
-                            Log.i(TAG, "heartbeat operation was successful");
                         }
                     default: {
-                        Log.i(TAG, "Default call for Heartbeat Operations");
                     }
                 }
             }
