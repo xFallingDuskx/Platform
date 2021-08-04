@@ -88,4 +88,7 @@ dependencies {
 
     // SLF4J error
     implementation "org.slf4j:slf4j-simple:1.6.1"
+
+    // FAB
+    implementation 'com.google.android.material:material:1.4.0'
 }

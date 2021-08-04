@@ -19,6 +19,7 @@ public class Conversation extends ParseObject {
     public static final String KEY_NAME = "name";
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_LAST_MESSAGE = "lastMessage";
+    public static final String KEY_UPDATED_AT = "updatedAt";
 
     public String id;
     public String name;

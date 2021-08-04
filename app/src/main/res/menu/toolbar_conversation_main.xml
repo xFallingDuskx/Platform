@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/miCompose"
-        android:icon="@drawable/ic_compose_temp"
+        android:icon="@drawable/ic_new_chat"
         android:title="Compose"
         app:showAsAction="always"/>
 

@@ -97,14 +97,35 @@
                 android:layout_below="@+id/etComposePopUp"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="Find and Greet"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/btnCancelPopUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/etComposePopUp"
+                android:layout_toLeftOf="@+id/btnComposePopUp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:text="Cancel"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
 
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:src="@drawable/ic_plus_circle"-->
+<!--            app:fabSize="normal"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_margin="15dp" />-->
+
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerFrameLayout_Conversations"
+            android:id= "@+id/shimmerFrameLayout_Conversations"
             android:layout_below="@+id/toolbar_Conversations"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

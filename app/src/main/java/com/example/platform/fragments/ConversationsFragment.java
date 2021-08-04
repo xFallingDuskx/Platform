@@ -65,6 +65,7 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import java.util.Date;
@@ -81,10 +82,12 @@ public class ConversationsFragment extends Fragment {
     RelativeLayout rlComposePopUp;
     EditText etCompose;
     Button btnComposeConfirm;
+    Button btnCompseCancel;
     PubNub pubnub;
 
     boolean update = false;
 
+    HashSet<String> currentConversationNames;
     List<Conversation> allConversations;
     RecyclerView rvConversations;
     ConversationsAdapter adapter;
@@ -179,6 +182,7 @@ public class ConversationsFragment extends Fragment {
         rlComposePopUp = view.findViewById(R.id.rlComposePopUp);
         etCompose = view.findViewById(R.id.etComposePopUp);
         btnComposeConfirm = view.findViewById(R.id.btnComposePopUp);
+        btnCompseCancel = view.findViewById(R.id.btnCancelPopUp);
         rvConversations = view.findViewById(R.id.rvConversations);
 
         // Connect to PubNub and establish a session with the user
@@ -238,8 +242,8 @@ public class ConversationsFragment extends Fragment {
     }
 
     public void displayConversations() {
-        Collections.sort(allConversations,
-                (o1, o2) -> o1.getUpdatedAtDate().compareTo(o2.getUpdatedAtDate()));
+//        Collections.sort(allConversations,
+//                (o1, o2) -> o1.getUpdatedAtDate().compareTo(o2.getUpdatedAtDate()));
 
         for (Conversation conversation : allConversations) {
             Log.i(TAG, "Conversation: " + conversation.getVisibleName());
@@ -257,12 +261,14 @@ public class ConversationsFragment extends Fragment {
     // Users must be resubscribed to their channels each time the app loads
     // Channels names are received from Parse Server
     public void subscribeToChannels() throws JSONException {
-        // Initialize list to hold user conversations
+        // Initialize list to hold user conversations and hashset to hold the conversation names
         allConversations = new ArrayList<>();
+        currentConversationNames = new HashSet<>();
 
         // Query for all channels the current user is a member of
         String currentUser = ParseUser.getCurrentUser().getUsername();
         ParseQuery<ParseObject> conversationQuery = ParseQuery.getQuery("Conversation").whereEqualTo(Conversation.KEY_MEMBERS, currentUser);
+        conversationQuery.orderByDescending(Conversation.KEY_UPDATED_AT);
 
         // Get the name of all of the channels
         List<String> allChannelNames = new ArrayList<>();
@@ -285,15 +291,17 @@ public class ConversationsFragment extends Fragment {
                             allChannelNames.add(channelName);
 
                             // create new Conversation object using 3 bits of information
+                            String visibleName = Conversation.convertToVisible(channelName, currentUser);
+                            currentConversationNames.add(visibleName);
                             Conversation conversation = new Conversation();
                             conversation.setName(channelName);
-                            conversation.setVisibleName(Conversation.convertToVisible(channelName, currentUser));
+                            conversation.setVisibleName(visibleName);
                             conversation.setLastMessage(channelLastMessage);
                             conversation.setTimestamp(parseObject.getUpdatedAt());
-                            conversation.setUpdatedAtDate(parseObject.getUpdatedAt());
-                            Log.i(TAG, "The updatedAt Date is: " + parseObject.getUpdatedAt().toString());
+//                            conversation.setUpdatedAtDate(parseObject.getUpdatedAt());
                             allConversations.add(conversation);
                             Log.i(TAG, "Success: conversation " + conversation.getVisibleName() + " has been added");
+                            Log.i(TAG, "The updatedAt Date for this conversation is: " + parseObject.getUpdatedAt().toString());
                             // TODO: get unread messages count for each conversation (channel) ?
                             // Source: https://www.pubnub.com/docs/chat/features/unread-counts
                         }
@@ -314,10 +322,17 @@ public class ConversationsFragment extends Fragment {
 
     public void newComposePopUp() {
         rlComposePopUp.setVisibility(View.VISIBLE);
+
         btnComposeConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = etCompose.getText().toString();
+
+                if (currentConversationNames.contains(username)) {
+                    Toast.makeText(getContext(), "You already have a conversation with this user", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Log.i(TAG, "Username to be searched is " + username);
                 if (username.isEmpty()) {
                     Toast.makeText(getContext(), "Username field must not be empty", Toast.LENGTH_SHORT).show();
@@ -330,6 +345,13 @@ public class ConversationsFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+            }
+        });
+
+        btnCompseCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlComposePopUp.setVisibility(View.GONE);
             }
         });
     }
@@ -443,10 +465,15 @@ public class ConversationsFragment extends Fragment {
                     Log.d(TAG, "Issue saving new conversation in Parse Server");
                 } else {
                     Log.i(TAG, "Success saving new conversation in Parse Server");
+                    try {
+                        subscribeToChannels();
+                    } catch (JSONException jsonException) {
+                        Log.d(TAG, "Issue subscribingToChannels again after saving new conversation");
+                        jsonException.printStackTrace();
+                    }
                 }
             }
         });
-        subscribeToChannels();
     }
 
     public void establishListeners() {

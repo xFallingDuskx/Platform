@@ -60,6 +60,7 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
     PubNub pubnub;
     String channelName;
     ParseUser currentUser;
+    boolean updateLastMessage = false;
 
     EditText etMessageInput;
     ImageView ivSend;
@@ -67,7 +68,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
     List<Message> allMessages;
     RecyclerView rvMessages;
     MessagesAdapter adapter;
-    boolean firstLoad; //todo: is this necessary?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
         channelName = getIntent().getStringExtra("channelName");
         allMessages = new ArrayList<>();
         rvMessages = findViewById(R.id.rvMessages);
-        firstLoad = true;
         adapter = new MessagesAdapter(context, allMessages, currentUser.getUsername());
         rvMessages.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
@@ -165,17 +164,12 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                 }
                 Message message = new Message(sender, type, text, sentDateString);
                 allMessages.add(message);
+                updateLastMessage = true;
 
                 runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        // Reset the input
-                        // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
-//                        View view = findViewById(android.R.id.content);
-//                        InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
                         // Go to recent message
                         adapter.notifyDataSetChanged();
                         rvMessages.smoothScrollToPosition(allMessages.size() - 1);
@@ -248,6 +242,7 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                         if (!status.isError()) {
                             Log.i(TAG, "Successfully sent new  message from original user");
                             etMessageInput.setText("");
+                            updateLastMessage = true;
                         } else {
                             Log.d(TAG, "Issue sending greeting message to searched user");
                             Toast.makeText(context, "Failed to send greeting message", Toast.LENGTH_SHORT).show();
@@ -256,7 +251,6 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                 });
     }
 
-    //TODO: override onPause() and onBackPressed() {?} to save last message
     @Override
     protected void onPause() {
         try {
@@ -283,6 +277,11 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
 
     // Save the last message that was sent before a user leaves the activity for Conversations Fragment
     public void updateParseServer() throws ParseException {
+        if (! updateLastMessage) {
+            Log.i(TAG, "No need to update conversation");
+            return;
+        }
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Conversation");
         query.whereEqualTo(Conversation.KEY_NAME, channelName);
         ParseObject parseObject = query.getFirst();
