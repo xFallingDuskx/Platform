@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.example.platform.R;
 import com.parse.ParseUser;
@@ -18,11 +21,20 @@ public class LaunchActivity extends AppCompatActivity {
     public static final String TAG = "LaunchActivity";
     private Button btnSignup;
     private Button btnLogin;
+    private RelativeLayout rlAllContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+
+        // If fadeIn animation should take place - only coming from launch screen
+        rlAllContent = findViewById(R.id.rlAllContent);
+        boolean fade = getIntent().getBooleanExtra("fadeIn", false);
+        if (fade) {
+            Animation fadeIn = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fade_in);
+            rlAllContent.startAnimation(fadeIn);
+        }
 
         // If user has just logged out
         boolean loggedOut = getIntent().getBooleanExtra("loggedOut", false);
