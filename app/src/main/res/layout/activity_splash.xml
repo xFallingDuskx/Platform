@@ -23,6 +23,7 @@
             android:layout_alignParentStart="false"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:fontFamily="@font/righteous"
             android:text="Platform"
             android:textColor="@color/white"
             android:textSize="80sp" />
@@ -36,6 +37,7 @@
             android:layout_alignParentBottom="false"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="-15dp"
+            android:fontFamily="@font/redhattext"
             android:text="Share your media experience"
             android:textColor="@color/whiteOpacit"
             android:textSize="20sp" />
