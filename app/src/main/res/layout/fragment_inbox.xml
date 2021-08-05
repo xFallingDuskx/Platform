@@ -4,32 +4,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.InboxFragment">
+    tools:context=".fragments.InboxFragment"
+    android:background="@color/black_lighter">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_Inbox"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:titleTextColor="@android:color/white">
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_Inbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            app:titleTextColor="@android:color/white">
+
+            <ImageView
+                android:id="@+id/ivProfileIcon_Inbox"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Inbox"
+                android:textColor="@android:color/white"
+                android:textSize="34sp" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_below="@id/toolbar_Inbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_inboxitem" />
+                <include layout="@layout/item_inboxitem" />
+                <include layout="@layout/item_inboxitem" />
+                <include layout="@layout/item_inboxitem" />
+                <include layout="@layout/item_inboxitem" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <ImageView
-            android:id="@+id/ivProfileIcon_Inbox"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/ic_profile" />
+            android:id="@+id/tvNotificationAlert"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            app:srcCompat= "@drawable/ic_notification_circle"
+            android:layout_below="@id/toolbar_Inbox"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="55dp"
+            android:layout_marginEnd="7dp"/>
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Inbox"
-            android:textColor="@android:color/white"
-            android:textSize="34sp" />
-
-    </androidx.appcompat.widget.Toolbar>
+    </RelativeLayout>
 
 </FrameLayout>

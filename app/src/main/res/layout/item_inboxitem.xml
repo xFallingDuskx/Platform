@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black_lighter"
+    android:paddingBottom="10dp"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:id="@+id/ivPic_Inbox"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        app:srcCompat="@drawable/gradient_circle" />
+
+    <TextView
+        android:id="@+id/tvHeading_Inbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/ivPic_Inbox"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:text="Heading"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tvTimestamp_Inbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/grey_light"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:text="Timestamp" />
+
+    <TextView
+        android:id="@+id/tvMessage_Inbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvHeading_Inbox"
+        android:layout_toEndOf="@+id/ivPic_Inbox"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:minLines="3"
+        android:scrollHorizontally="true"
+        android:textColor="@color/white_dimmer"
+        android:textSize="16sp"
+        android:text="Notification for user - Lorem ipsum dolor sit amet, veritus adolescens temporibus ad cum, ad qui tractatos reprehendunt. Usu ut ullum iracundia, agam interesset ea nam."/>
+
+    <ImageView
+        android:id="@+id/tvNotificationAlert"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:srcCompat = "@drawable/ic_notification_circle"
+        android:layout_below="@id/tvTimestamp_Inbox"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
+        android:visibility="invisible"/>
+
+</RelativeLayout>
