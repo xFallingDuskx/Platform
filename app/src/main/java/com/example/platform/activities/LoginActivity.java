@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         ivPasswordVisibilityIcon = findViewById(R.id.ivIconPasswordVisibility_Login);
         visible = false;
 
+        // onClick effects for when user is typing in the EditText views
         setOnClickEffects();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

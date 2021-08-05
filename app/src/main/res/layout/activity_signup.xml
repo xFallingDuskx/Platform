@@ -31,8 +31,27 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="30dp"
+        android:fontFamily="@font/redhattext_thinner"
         android:hint="Fullname"
         android:inputType="textEmailAddress" />
+
+    <RelativeLayout
+        android:id="@+id/rlUnderlineFullname"
+        android:layout_below="@id/etFullname"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconFullname"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/rlUnderlineFullname"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="22dp"
+        app:srcCompat= "@drawable/ic_fullname" />
 
     <EditText
         android:id="@+id/etUsername_Signup"
@@ -44,7 +63,26 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="30dp"
+        android:fontFamily="@font/redhattext_thinner"
         android:hint="Username" />
+
+    <RelativeLayout
+        android:id="@+id/rlUnderlineUsername_Signup"
+        android:layout_below="@id/etUsername_Signup"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconUsername_Signup"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/rlUnderlineUsername_Signup"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        app:srcCompat= "@drawable/ic_username" />
 
     <EditText
         android:id="@+id/etEmail"
@@ -56,8 +94,27 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="30dp"
+        android:fontFamily="@font/redhattext_thinner"
         android:hint="Email"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress" />
+
+    <RelativeLayout
+        android:id="@+id/rlUnderlineEmail"
+        android:layout_below="@id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconEmail"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/rlUnderlineEmail"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="22dp"
+        app:srcCompat= "@drawable/ic_email" />
 
     <EditText
         android:id="@+id/etPassword_Signup"
@@ -69,8 +126,37 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="30dp"
+        android:fontFamily="@font/redhattext_thinner"
         android:hint="Password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
+
+    <RelativeLayout
+        android:id="@+id/rlUnderlinePassword_Signup"
+        android:layout_below="@id/etPassword_Signup"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconPassword_Signup"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_above="@+id/rlUnderlinePassword_Signup"
+        android:layout_marginBottom="11dp"
+        android:layout_marginStart="21.5dp"
+        app:srcCompat= "@drawable/ic_password" />
+
+    <ImageView
+        android:id="@+id/ivIconPasswordVisibility_Signup"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/rlUnderlinePassword_Signup"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        app:srcCompat= "@drawable/ic_password_eye" />
 
     <EditText
         android:id="@+id/etPassword_Confirmation"
@@ -82,8 +168,37 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="30dp"
+        android:fontFamily="@font/redhattext_thinner"
         android:hint="Confirm Password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
+
+    <RelativeLayout
+        android:id="@+id/rlUnderlinePasswordConfirmation"
+        android:layout_below="@id/etPassword_Confirmation"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconPasswordConfirmation"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_above="@+id/rlUnderlinePasswordConfirmation"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="22dp"
+        app:srcCompat= "@drawable/ic_password_confirmation" />
+
+    <ImageView
+        android:id="@+id/ivIconPasswordConfirmationVisibility"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/rlUnderlinePasswordConfirmation"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        app:srcCompat= "@drawable/ic_password_eye" />
 
 
     <android.widget.Button

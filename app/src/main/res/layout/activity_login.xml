@@ -80,8 +80,8 @@
         android:layout_width="27dp"
         android:layout_height="27dp"
         android:layout_above="@+id/rlUnderlinePassword_Login"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginBottom="11dp"
+        android:layout_marginStart="22dp"
         app:srcCompat= "@drawable/ic_password" />
 
     <ImageView

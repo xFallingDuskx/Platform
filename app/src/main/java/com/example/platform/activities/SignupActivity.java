@@ -2,15 +2,22 @@ package com.example.platform.activities;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.codepath.asynchttpclient.AsyncHttpClient;
@@ -35,12 +42,27 @@ public class SignupActivity extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
     public String EMAIL_VERIFY_URL_BASE = "https://emailverification.whoisxmlapi.com/api/v1?apiKey=at_q49YobOASp4bKDhec8CdDDqfApDef&emailAddress=%s";
-    private EditText etEmail;
     private EditText etFullName;
     private EditText etUsername;
+    private EditText etEmail;
     private EditText etPassword;
     private EditText etPasswordConfirmation;
     private Button btnSignup;
+    RelativeLayout rlFullnameUnderline;
+    RelativeLayout rlUsernameUnderline;
+    RelativeLayout rlEmailUnderline;
+    RelativeLayout rlPasswordUnderline;
+    RelativeLayout rlPasswordConfirmationUnderline;
+    ImageView ivFullnameIcon;
+    ImageView ivUsernameIcon;
+    ImageView ivEmailIcon;
+    ImageView ivPasswordIcon;
+    ImageView ivPasswordVisibilityIcon;
+    boolean visible;
+    ImageView ivPasswordConfirmationIcon;
+    ImageView ivPasswordConfirmationVisibilityIcon;
+    boolean visibleConfirmation;
+
     SweetAlertDialog sweetAlertDialog;
     String email;
     String fullName;
@@ -58,6 +80,23 @@ public class SignupActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword_Signup);
         etPasswordConfirmation = findViewById(R.id.etPassword_Confirmation);
         btnSignup = findViewById(R.id.btnSignup_Signup);
+        rlFullnameUnderline = findViewById(R.id.rlUnderlineFullname);
+        rlUsernameUnderline = findViewById(R.id.rlUnderlineUsername_Signup);
+        rlEmailUnderline = findViewById(R.id.rlUnderlineEmail);
+        rlPasswordUnderline = findViewById(R.id.rlUnderlinePassword_Signup);
+        rlPasswordConfirmationUnderline = findViewById(R.id.rlUnderlinePasswordConfirmation);
+        ivFullnameIcon = findViewById(R.id.ivIconFullname);
+        ivUsernameIcon = findViewById(R.id.ivIconUsername_Signup);
+        ivEmailIcon = findViewById(R.id.ivIconEmail);
+        ivPasswordIcon = findViewById(R.id.ivIconPassword_Signup);
+        ivPasswordVisibilityIcon = findViewById(R.id.ivIconPasswordVisibility_Signup);
+        visible = false;
+        ivPasswordConfirmationIcon = findViewById(R.id.ivIconPasswordConfirmation);
+        ivPasswordConfirmationVisibilityIcon = findViewById(R.id.ivIconPasswordConfirmationVisibility);
+        visibleConfirmation = false;
+
+        // onClick effects for when user is typing in the EditText views
+        setOnClickEffects();
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +132,130 @@ public class SignupActivity extends AppCompatActivity {
                         verifyEmail(email);
                     }
                 }, 3000);
+            }
+        });
+    }
+
+    // Change the color of the edit text underline and associate icon
+    // Source: https://stackoverflow.com/questions/33797431/how-to-determine-if-someone-is-typing-on-edittext/33797614
+    private void setOnClickEffects() {
+        etFullName.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (! etFullName.getText().toString().isEmpty()) {
+                    rlFullnameUnderline.setBackgroundColor(getResources().getColor(R.color.black_lighter, getTheme()));
+                    ivFullnameIcon.setImageResource(R.drawable.ic_fullname_active);
+                } else {
+                    rlFullnameUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                    ivFullnameIcon.setImageResource(R.drawable.ic_fullname);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        etUsername.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (! etUsername.getText().toString().isEmpty()) {
+                    rlUsernameUnderline.setBackgroundColor(getResources().getColor(R.color.black_lighter, getTheme()));
+                    ivUsernameIcon.setImageResource(R.drawable.ic_username_active);
+                } else {
+                    rlUsernameUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                    ivUsernameIcon.setImageResource(R.drawable.ic_username);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        etEmail.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (! etEmail.getText().toString().isEmpty()) {
+                    rlEmailUnderline.setBackgroundColor(getResources().getColor(R.color.black_lighter, getTheme()));
+                    ivEmailIcon.setImageResource(R.drawable.ic_email_active);
+                } else {
+                    rlEmailUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                    ivEmailIcon.setImageResource(R.drawable.ic_email);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.redhattext_thinner);
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (! etPassword.getText().toString().isEmpty()) {
+                    rlPasswordUnderline.setBackgroundColor(getResources().getColor(R.color.black_lighter, getTheme()));
+                    ivPasswordIcon.setImageResource(R.drawable.ic_password_active);
+                    ivPasswordVisibilityIcon.setImageResource(R.drawable.ic_password_eye_active);
+                } else {
+                    rlPasswordUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                    ivPasswordIcon.setImageResource(R.drawable.ic_password);
+                    ivPasswordVisibilityIcon.setImageResource(R.drawable.ic_password_eye);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        ivPasswordVisibilityIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!visible) {
+                    etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    etPassword.setTypeface(typeface);
+                    visible = true;
+                } else {
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    etPassword.setTypeface(typeface);
+                    visible = false;
+                }
+            }
+        });
+
+        etPasswordConfirmation.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                boolean isEmpty = etPasswordConfirmation.getText().toString().isEmpty();
+                boolean samePasswords = etPassword.getText().toString().equals(etPasswordConfirmation.getText().toString());
+
+                if (isEmpty) {
+                    rlPasswordConfirmationUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                } else {
+                    if (samePasswords) {
+                        rlPasswordConfirmationUnderline.setBackgroundColor(getResources().getColor(R.color.green_confirm, getTheme()));
+                        etPasswordConfirmation.setTextColor(getResources().getColor(R.color.green_confirm, getTheme()));
+                        ivPasswordConfirmationIcon.setImageResource(R.drawable.ic_password_green);
+                    } else {
+                        rlPasswordConfirmationUnderline.setBackgroundColor(getResources().getColor(R.color.red_cancel, getTheme()));
+                        etPasswordConfirmation.setTextColor(getResources().getColor(R.color.red_cancel, getTheme()));
+                        ivPasswordConfirmationIcon.setImageResource(R.drawable.ic_password_red);
+                    }
+                }
+
+                if (! etPasswordConfirmation.getText().toString().isEmpty()) {
+                    ivPasswordConfirmationVisibilityIcon.setImageResource(R.drawable.ic_password_eye_active);
+                } else {
+                    ivPasswordConfirmationIcon.setImageResource(R.drawable.ic_password_confirmation);
+                    ivPasswordConfirmationVisibilityIcon.setImageResource(R.drawable.ic_password_eye);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        ivPasswordConfirmationVisibilityIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!visibleConfirmation) {
+                    etPasswordConfirmation.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    etPasswordConfirmation.setTypeface(typeface);
+                    visibleConfirmation = true;
+                } else {
+                    etPasswordConfirmation.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    etPasswordConfirmation.setTypeface(typeface);
+                    visibleConfirmation = false;
+                }
             }
         });
     }

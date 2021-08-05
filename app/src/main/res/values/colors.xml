@@ -16,4 +16,5 @@
     <color name="grey_light">#AEAEAE</color>
     <color name="grey_lighter">#BACACACA</color>
     <color name="red_cancel">#D50000</color>
+    <color name="green_confirm">#318A35</color>
 </resources>
