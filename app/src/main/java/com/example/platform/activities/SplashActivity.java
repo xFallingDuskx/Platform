@@ -78,7 +78,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 startActivity(intent);
             }
-        }, 3000);
+        }, 2000);
     }
 
     private void startSlidingAnimation() {

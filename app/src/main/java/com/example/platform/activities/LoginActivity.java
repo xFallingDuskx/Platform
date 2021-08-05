@@ -1,15 +1,22 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.platform.R;
@@ -26,6 +33,12 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
+    RelativeLayout rlUsernameUnderline;
+    RelativeLayout rlPasswordUnderline;
+    ImageView ivUsernameIcon;
+    ImageView ivPasswordIcon;
+    ImageView ivPasswordVisibilityIcon;
+    boolean visible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +48,14 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername_Login);
         etPassword = findViewById(R.id.etPassword_Login);
         btnLogin = findViewById(R.id.btnLogin_Login);
+        rlUsernameUnderline = findViewById(R.id.rlUnderlineUsername_Login);
+        rlPasswordUnderline = findViewById(R.id.rlUnderlinePassword_Login);
+        ivUsernameIcon = findViewById(R.id.ivIconUsername_Login);
+        ivPasswordIcon = findViewById(R.id.ivIconPassword_Login);
+        ivPasswordVisibilityIcon = findViewById(R.id.ivIconPasswordVisibility_Login);
+        visible = false;
+
+        setOnClickEffects();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +77,56 @@ public class LoginActivity extends AppCompatActivity {
                         loginUser(username, password);
                     }
                 }, 4000);
+            }
+        });
+    }
+
+    // Change the color of the edit text underline and associate icon
+    // Source: https://stackoverflow.com/questions/33797431/how-to-determine-if-someone-is-typing-on-edittext/33797614
+    private void setOnClickEffects() {
+        etUsername.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (! etUsername.getText().toString().isEmpty()) {
+                    rlUsernameUnderline.setBackgroundColor(getResources().getColor(R.color.black_lighter, getTheme()));
+                    ivUsernameIcon.setImageResource(R.drawable.ic_username_active);
+                } else {
+                    rlUsernameUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                    ivUsernameIcon.setImageResource(R.drawable.ic_username);
+                    }
+                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        etPassword.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if (! etPassword.getText().toString().isEmpty()) {
+                    rlPasswordUnderline.setBackgroundColor(getResources().getColor(R.color.black_lighter, getTheme()));
+                    ivPasswordIcon.setImageResource(R.drawable.ic_password_active);
+                    ivPasswordVisibilityIcon.setImageResource(R.drawable.ic_password_eye_active);
+                } else {
+                    rlPasswordUnderline.setBackgroundColor(getResources().getColor(R.color.grey_lighter, getTheme()));
+                    ivPasswordIcon.setImageResource(R.drawable.ic_password);
+                    ivPasswordVisibilityIcon.setImageResource(R.drawable.ic_password_eye);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        });
+
+        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.redhattext_thinner);
+        ivPasswordVisibilityIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!visible) {
+                    etPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    etPassword.setTypeface(typeface);
+                    visible = true;
+                } else {
+                    etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    etPassword.setTypeface(typeface);
+                    visible = false;
+                }
             }
         });
     }

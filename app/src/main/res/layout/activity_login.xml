@@ -26,21 +26,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLoginMessage"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
-        android:hint="Username"
-        android:backgroundTintMode="add"/>
+        android:fontFamily="@font/redhattext_thinner"
+        android:hint="Username" />
 
     <RelativeLayout
         android:id="@+id/rlUnderlineUsername_Login"
         android:layout_below="@id/etUsername_Login"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:layout_marginTop="-10dp"
         android:layout_marginHorizontal="20dp"
         android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconUsername_Login"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/rlUnderlineUsername_Login"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        app:srcCompat= "@drawable/ic_username" />
 
     <EditText
         android:id="@+id/etPassword_Login"
@@ -48,11 +57,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etUsername_Login"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="false"
-        android:layout_marginStart="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="0dp"
+        android:fontFamily="@font/redhattext_thinner"
         android:hint="Password"
         android:inputType="textPassword" />
 
@@ -60,10 +70,29 @@
         android:id="@+id/rlUnderlinePassword_Login"
         android:layout_below="@id/etPassword_Login"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:layout_marginTop="-10dp"
         android:layout_marginHorizontal="20dp"
         android:background="@color/grey_lighter" />
+
+    <ImageView
+        android:id="@+id/ivIconPassword_Login"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/rlUnderlinePassword_Login"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        app:srcCompat= "@drawable/ic_password" />
+
+    <ImageView
+        android:id="@+id/ivIconPasswordVisibility_Login"
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/rlUnderlinePassword_Login"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        app:srcCompat= "@drawable/ic_password_eye" />
 
     <android.widget.Button
         android:id="@+id/btnLogin_Login"
@@ -78,6 +107,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/button_black"
+        android:fontFamily="@font/redhattext"
         android:text="Log In"
         android:textColor="@color/white" />
 </RelativeLayout>
