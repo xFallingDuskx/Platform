@@ -14,11 +14,12 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
+        android:fontFamily="@font/righteous"
         android:text="Glad you're back."
         android:textColor="@color/black"
         android:textSize="60sp"
         tools:layout_editor_absoluteX="163dp"
-        tools:layout_editor_absoluteY="219dp" />
+        tools:layout_editor_absoluteY="219dp"/>
 
     <EditText
         android:id="@+id/etUsername_Login"
@@ -27,9 +28,19 @@
         android:layout_below="@+id/tvLoginMessage"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
-        android:hint="Username" />
+        android:hint="Username"
+        android:backgroundTintMode="add"/>
+
+    <RelativeLayout
+        android:id="@+id/rlUnderlineUsername_Login"
+        android:layout_below="@id/etUsername_Login"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
 
     <EditText
         android:id="@+id/etPassword_Login"
@@ -39,13 +50,22 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="false"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="0dp"
         android:hint="Password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword" />
 
-    <Button
+    <RelativeLayout
+        android:id="@+id/rlUnderlinePassword_Login"
+        android:layout_below="@id/etPassword_Login"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="-10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@color/grey_lighter" />
+
+    <android.widget.Button
         android:id="@+id/btnLogin_Login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,8 +74,10 @@
         android:layout_alignParentBottom="false"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="0dp"
-        android:text="Log In" />
+        android:background="@drawable/button_black"
+        android:text="Log In"
+        android:textColor="@color/white" />
 </RelativeLayout>

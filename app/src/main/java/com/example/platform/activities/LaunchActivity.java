@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.platform.R;
-import com.parse.ParseUser;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 

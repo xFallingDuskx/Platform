@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="100dp"
+        android:fontFamily="@font/righteous"
         android:text="Create your Account."
         android:textColor="@color/black"
         android:textSize="60sp"
@@ -85,7 +86,7 @@
         android:inputType="textPassword"/>
 
 
-    <Button
+    <android.widget.Button
         android:id="@+id/btnSignup_Signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,5 +97,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="0dp"
-        android:text="Signup" />
+        android:text="Signup"
+        android:background="@drawable/button_white_outlined"/>
+
 </RelativeLayout>

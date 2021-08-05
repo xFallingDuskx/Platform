@@ -36,7 +36,7 @@
             android:layout_alignParentStart="false"
             android:layout_alignParentBottom="false"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-15dp"
+            android:layout_marginTop="-8dp"
             android:fontFamily="@font/redhattext"
             android:text="Share your media experience"
             android:textColor="@color/whiteOpacit"
