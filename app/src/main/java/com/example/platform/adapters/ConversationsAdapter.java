@@ -127,6 +127,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    conversations.remove(position);
                                                     notifyItemRemoved(position);
 
                                                     sweetAlertDialog.setTitleText("Removed!")
@@ -174,6 +175,8 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             tvTimestamp.setText(conversation.getTimestamp());
             tvLastMessage.setText(conversation.getLastMessage());
         }
+
+
     }
 
     public void fetchConversationMembers(Conversation conversation) throws ParseException, JSONException {
@@ -204,4 +207,11 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             }
         });
     }
+//
+//    @Override
+//    public void onDetachedFromRecyclerView(@NonNull @NotNull RecyclerView recyclerView) {
+//        super.onDetachedFromRecyclerView(recyclerView);
+//    }
+//
+//
 }
