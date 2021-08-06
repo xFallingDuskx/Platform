@@ -64,7 +64,7 @@
             android:layout_centerInParent="true"
             android:layout_marginHorizontal="30dp"
             android:layout_marginBottom="100dp"
-            android:background="@color/black_light"
+            android:background="@drawable/compose_popup"
             android:visibility="gone">
 
             <TextView
@@ -75,8 +75,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:text="Who would you like to send a message to?"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textColor="@color/black_light"
+                android:textSize="17sp"
                 android:textStyle="bold"/>
 
             <EditText
@@ -84,11 +84,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvComposePopUp"
-                android:layout_marginHorizontal="15dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
                 android:hint="Username"
-                android:textColor="@color/white"
-                android:textColorHint="@color/grey_light" />
+                android:textColor="@color/black_light"
+                android:textColorHint="@color/grey_medium" />
+
+            <RelativeLayout
+                android:layout_below="@id/etComposePopUp"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="-10dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@color/black_light" />
 
             <Button
                 android:id="@+id/btnComposePopUp"
@@ -96,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etComposePopUp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="Find and Greet"
@@ -108,21 +116,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/etComposePopUp"
                 android:layout_toLeftOf="@+id/btnComposePopUp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:text="Cancel"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
-
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:src="@drawable/ic_plus_circle"-->
-<!--            app:fabSize="normal"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_margin="15dp" />-->
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id= "@+id/shimmerFrameLayout_Conversations"

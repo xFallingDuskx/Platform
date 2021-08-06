@@ -169,7 +169,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/grey_light">
+                android:background="@drawable/comment_box">
 
                 <TextView
                     android:id="@+id/tvCommentKeywordsHeading_Episode"
@@ -185,6 +185,24 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/tvNoComments_Episode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:foregroundGravity="center"
+                    android:text="No keywords to display just yet :)"
+                    android:textColor="@color/white_dimmer"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCommentKeywords_Episode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/tvCommentKeywordsHeading_Episode"
+                    android:layout_margin="5dp"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -195,7 +213,8 @@
                 android:layout_below="@id/rlCommentKeywords_Episode"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/grey_dark">
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/comment_input_box">
 
                 <ImageView
                     android:id="@+id/ivProfileIcon_MakeComment"
@@ -203,7 +222,7 @@
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/ic_profile" />
+                    android:src="@drawable/ic_profile_black" />
 
                 <EditText
                     android:id="@+id/etCommentInput_Episode"
@@ -211,9 +230,18 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivProfileIcon_MakeComment"
                     android:layout_toLeftOf="@+id/ivPostComment_Episode"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black_light"
                     android:hint="Make a comment"
-                    android:textColorHint="@color/grey_light" />
+                    android:textColorHint="@color/grey_medium" />
+
+                <RelativeLayout
+                    android:layout_below="@id/etCommentInput_Episode"
+                    android:layout_toRightOf="@+id/ivProfileIcon_MakeComment"
+                    android:layout_width="305dp"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="-10dp"
+                    android:background="@color/black_light" />
 
                 <ImageView
                     android:id="@+id/ivPostComment_Episode"
@@ -222,7 +250,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_post_comment" />
+                    android:src="@drawable/ic_post_comment_darker" />
 
             </RelativeLayout>
 
