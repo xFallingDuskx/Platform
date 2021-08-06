@@ -43,7 +43,8 @@
         android:layout_marginTop="20dp"
         android:text="Platform"
         android:textColor="@color/white"
-        android:textSize="60sp" />
+        android:textSize="60sp"
+        android:fontFamily="@font/righteous"/>
 
     <TextView
         android:id="@+id/tvLogoQuote_About"
@@ -54,7 +55,8 @@
         android:layout_centerHorizontal="true"
         android:text="Share your media experience"
         android:textColor="@color/white_dimmer"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/redhattext"/>
 
     <TextView
         android:id="@+id/tvLogoDescription_About"
@@ -69,7 +71,8 @@
         android:text="Platform creates a community for users to share their thoughts about the TV shows and movies they have playing on their screens without having to leave the comfort of their room. With comment threads operating in real-time, users are guranteed the opportunity to discuss what happened just moments ago. An unexpected plot twist, the death of the character everyone fell in love with, and even theories about what will happen after the out-of-nowhere cliffhanger – this is the platform to share it all and from other users as well. Furthermore, users are given a continuous feed of trending titles based upon their filter-selection. This feed is great not only for those times when users just want something new to watch, but also helpful for other users. With the up and down-voting feature for each title, which include the option to provided keywords to describe the title, other users are guranteed a more accurate viewing of trending titles."
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/redhattext_thinner"/>
 
     <TextView
         android:id="@+id/tvLogoCopyright_About"
@@ -80,6 +83,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/copyright"
         android:textColor="@color/white_dimmer"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/redhattext"/>
 
 </RelativeLayout>

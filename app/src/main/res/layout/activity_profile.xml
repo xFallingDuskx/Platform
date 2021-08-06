@@ -51,7 +51,8 @@
             android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="20sp"
-            tools:text="Username" />
+            tools:text="Username"
+            android:fontFamily="@font/redhattext"/>
 
         <TextView
             android:id="@+id/tvCreatedAt_Profile"
@@ -234,6 +235,7 @@
         android:background="@drawable/rounded_button_white"
         android:text="Sign Out"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:fontFamily="@font/redhattext"/>
 
 </RelativeLayout>

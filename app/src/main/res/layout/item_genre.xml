@@ -17,7 +17,8 @@
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
-        tools:text="GenreName" />
+        tools:text="GenreName"
+        android:fontFamily="@font/redhattext"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

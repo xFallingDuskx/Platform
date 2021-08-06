@@ -20,6 +20,7 @@
         tools:text="Your outgoing message here"
         android:textColor="@android:color/white"
         android:textSize="16dp"
-        android:linksClickable="true"/>
+        android:linksClickable="true"
+        android:fontFamily="@font/pt_sans"/>
 
 </RelativeLayout>

@@ -47,10 +47,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Recent"
-            android:textStyle="bold"
             android:textSize="40sp"
             android:textColor="@color/white"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/redhattext"/>
 
     </RelativeLayout>
 
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Popular"
-            android:textStyle="bold"
+            android:fontFamily="@font/redhattext"
             android:textSize="40sp"
             android:textColor="@color/white"
             android:layout_centerInParent="true"/>
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="By Genre"
-            android:textStyle="bold"
+            android:fontFamily="@font/redhattext"
             android:textSize="40sp"
             android:textColor="@color/white"
             android:layout_centerInParent="true"/>
@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="By Provider"
-            android:textStyle="bold"
+            android:fontFamily="@font/redhattext"
             android:textSize="40sp"
             android:textColor="@color/white"
             android:layout_centerInParent="true"/>

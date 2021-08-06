@@ -17,5 +17,6 @@
         tools:text="Keyword Sample"
         android:gravity="center"
         android:background="@color/grey_dark"
-        android:textColor="@color/white_dimmer"/>
+        android:textColor="@color/white_dimmer"
+        android:fontFamily="@font/pt_sans"/>
 </androidx.cardview.widget.CardView>
