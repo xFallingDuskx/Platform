@@ -112,7 +112,7 @@ public class HomeFragment_Movies extends Fragment {
 
         // Load more titles
         String TRENDING_MOVIE_SHOWS_URL = String.format(TRENDING_MOVIE_SHOWS_URL_BASE, desiredPage);
-        Log.i(TAG, "Trending TV shows URL at starting position " + startingPosition + ": " + TRENDING_MOVIE_SHOWS_URL);
+        Log.i(TAG, "Trending Movie shows URL at starting position " + startingPosition + ": " + TRENDING_MOVIE_SHOWS_URL);
 
         AsyncHttpClient client = new AsyncHttpClient();
 
