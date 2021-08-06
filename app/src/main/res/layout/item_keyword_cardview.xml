@@ -16,7 +16,7 @@
         android:textSize="18sp"
         tools:text="Keyword Sample"
         android:gravity="center"
-        android:background="@color/grey_dark"
-        android:textColor="@color/white_dimmer"
+        android:background="@color/white"
+        android:textColor="@color/black_light"
         android:fontFamily="@font/pt_sans"/>
 </androidx.cardview.widget.CardView>

@@ -369,7 +369,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/grey_light">
+                android:background="@drawable/comment_box">
 
                 <TextView
                     android:id="@+id/tvCommentKeywordsHeading_TV"
@@ -413,7 +413,8 @@
                 android:layout_below="@id/rlCommentKeywords_TV"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/grey_dark">
+                android:layout_marginTop="-5dp"
+                android:background="@drawable/comment_input_box">
 
                 <ImageView
                     android:id="@+id/ivProfileIcon_MakeComment"
@@ -421,7 +422,7 @@
                     android:layout_height="35dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/ic_profile" />
+                    android:src="@drawable/ic_profile_black" />
 
                 <EditText
                     android:id="@+id/etCommentInput_TV"
@@ -429,9 +430,20 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/ivProfileIcon_MakeComment"
                     android:layout_toLeftOf="@+id/ivPostComment_TV"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black_light"
                     android:hint="Make a comment"
-                    android:textColorHint="@color/grey_light" />
+                    android:textColorHint="@color/grey_medium"
+                    android:inputType="textShortMessage"
+                    android:imeOptions="actionSend"/>
+
+                <RelativeLayout
+                    android:layout_below="@id/etCommentInput_TV"
+                    android:layout_toRightOf="@+id/ivProfileIcon_MakeComment"
+                    android:layout_width="305dp"
+                    android:layout_height="2dp"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="-10dp"
+                    android:background="@color/black_light" />
 
                 <ImageView
                     android:id="@+id/ivPostComment_TV"
@@ -440,7 +452,7 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_post_comment" />
+                    android:src="@drawable/ic_post_comment_darker" />
 
             </RelativeLayout>
 

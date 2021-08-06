@@ -28,7 +28,7 @@
     <string name="title_share_message">Hey, check out this titles I came across on Platform - Share Your Media Experience:</string>
     <string name="episode_share_message">Hey, check out this episode I came across on Platform - Share Your Media Experience:</string>
 
-    <string name="comment_section_header"><u>Comments</u></string>
+    <string name="comment_section_header">Comments</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
