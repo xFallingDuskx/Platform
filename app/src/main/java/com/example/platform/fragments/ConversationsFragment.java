@@ -338,7 +338,7 @@ public class ConversationsFragment extends Fragment {
                         Log.i(TAG, "onTrack to searchUser by given username");
                         searchUser(username);
                     } catch (ParseException e) {
-                        Log.d(TAG, "Issue searching for user to send chat to");
+                        Log.d(TAG, "Issue searching for user to send chat to / Error: " + e.getMessage());
                         e.printStackTrace();
                     }
                 }
@@ -381,7 +381,7 @@ public class ConversationsFragment extends Fragment {
 
     private void checkChannel(String currentUserUsername, String searchedUserUsername, String searchedUserObjectId, String channelName, String userUsername) throws ParseException {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Conversation");
-        query.whereContains(Conversation.KEY_MEMBERS, currentUserUsername);
+        query.whereContains(Conversation.KEY_NAME, channelName);
 
         // If the channel does not exist
         if (query.count() == 0) {

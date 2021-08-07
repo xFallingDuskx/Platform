@@ -135,7 +135,7 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
                                             sweetAlertDialog.setContentText("Your comment is being deleted");
                                             sweetAlertDialog.setCancelable(false);
 
-                                            deleteComment(commentObjectId);
+                                            deleteComment(commentObjectId, position);
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -249,8 +249,9 @@ public class ProfileCommentsAdapter extends RecyclerView.Adapter<ProfileComments
         }
     }
 
-    public void deleteComment(String commentObjectId) {
+    public void deleteComment(String commentObjectId, int position) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Comment");
+        comments.remove(position);
 
         // Retrieve the comment by its object id
         query.getInBackground(commentObjectId, (object, e) -> {
