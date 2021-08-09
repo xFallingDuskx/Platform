@@ -50,18 +50,18 @@
             android:layout_marginHorizontal="10dp">
 
             <EditText
-                android:id="@+id/etMessageInput"
+                android:id="@+id/etSearchInput"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerInParent="false"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="20dp"
                 android:background="@null"
                 android:backgroundTintMode="screen"
                 android:fontFamily="@font/pt_sans"
                 android:hint="Find your community"
-                android:imeOptions="actionSend"
-                android:inputType="textShortMessage"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
                 android:textColor="@color/black_light"
                 android:textColorHint="@color/grey_medium"
                 android:textSize="18sp" />

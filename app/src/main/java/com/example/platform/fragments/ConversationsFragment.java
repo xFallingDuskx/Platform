@@ -373,6 +373,7 @@ public class ConversationsFragment extends Fragment {
             channelName = searchedUserUsername + "&" + currentUserUsername;
         }
 
+        etCompose.setText("");
         Log.i(TAG, "Searched User -- Username: " + searchedUserUsername + " / Object ID: " + searchedUserObjectId + " / Channel Name: " + channelName);
 
         // Check if the user has been part of this conversation before

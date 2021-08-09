@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/miSearch"
+        android:id="@+id/miCreate"
         android:icon="@drawable/ic_addition_sign"
-        android:title="Add"
+        android:title="Create New Community"
         app:showAsAction="always"/>
 
 </menu>

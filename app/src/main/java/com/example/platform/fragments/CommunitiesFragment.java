@@ -11,18 +11,24 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.platform.R;
 import com.example.platform.activities.CommunitiesActivity_ByGenre;
+import com.example.platform.activities.CommunitiesActivity_Create;
 import com.example.platform.activities.CommunitiesActivity_Display;
 import com.example.platform.activities.ProfileActivity;
 
@@ -37,6 +43,7 @@ public class CommunitiesFragment extends Fragment {
     public static final String TAG = "CommunitiesFragment";
     private ImageView ivProfile;
     RelativeLayout rlAll, rlPopular, rlByGenres, rlUserCommunities;
+    EditText etSearchInput;
 
     public CommunitiesFragment() {
         // Required empty public constructor
@@ -49,16 +56,26 @@ public class CommunitiesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Alert view that menu items exist
         setHasOptionsMenu(true);
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_communities, container, false);
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull @NotNull Menu menu, @NonNull @NotNull MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.toolbar_communities, menu);
+
+        // Allow user to start new chats
+        MenuItem createItem = menu.findItem(R.id.miCreate);
+        createItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.i(TAG, "onMenuItemClick to create a new community");
+                Intent intent = new Intent(getContext(), CommunitiesActivity_Create.class);
+                startActivity(intent);
+                return false;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -81,12 +98,35 @@ public class CommunitiesFragment extends Fragment {
             }
         });
 
+        // Handle searches
+        etSearchInput = (EditText) view.findViewById(R.id.etSearchInput);
+        etSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String search = etSearchInput.getText().toString();
+                    if (search.isEmpty()) {
+                        Toast.makeText(getContext(), "Search cannot be empty", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    intent.putExtra("option", "search");
+                    startActivity(intent);
+                    etSearchInput.setText("");
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+        // Set up views and onClick listeners for options
         rlAll = view.findViewById(R.id.rlViewAll);
         rlAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
-                intent.putExtra("tab", "all");
+                intent.putExtra("option", "all");
                 startActivity(intent);
             }
         });
@@ -96,7 +136,7 @@ public class CommunitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
-                intent.putExtra("tab", "popular");
+                intent.putExtra("option", "popular");
                 startActivity(intent);
             }
         });
@@ -115,7 +155,7 @@ public class CommunitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
-                intent.putExtra("tab", "user");
+                intent.putExtra("option", "user");
                 startActivity(intent);
             }
         });
