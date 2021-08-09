@@ -308,7 +308,7 @@ public class ConversationsFragment extends Fragment {
             Log.i(TAG, "Conversation: " + conversation.getVisibleName());
         }
 
-        adapter = new ConversationsAdapter(getActivity(), allConversations);
+        adapter = new ConversationsAdapter(getActivity(), allConversations, currentConversationNames);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvConversations.setLayoutManager(linearLayoutManager);
         rvConversations.setAdapter(adapter);
@@ -325,7 +325,7 @@ public class ConversationsFragment extends Fragment {
             public void onClick(View v) {
                 String username = etCompose.getText().toString();
 
-                if (currentConversationNames.contains(username)) {
+                if (adapter.currentConversationNames.contains(username)) {
                     Toast.makeText(getContext(), "You already have a conversation with this user", Toast.LENGTH_SHORT).show();
                     return;
                 }

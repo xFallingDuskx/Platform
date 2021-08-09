@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.platform.R;
 import com.example.platform.activities.ChatsActivity_Messaging;
+import com.example.platform.fragments.ConversationsFragment;
 import com.example.platform.models.Comment;
 import com.example.platform.models.Conversation;
 import com.example.platform.models.Title;
@@ -44,12 +45,14 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     private Context context;
     private List<Conversation> conversations;
     private ArrayList<String> currentMembers;
+    public HashSet<String> currentConversationNames;
     ParseObject conversationParseObject;
     String currentUser;
 
-    public ConversationsAdapter(Context context, List<Conversation> conversations) {
+    public ConversationsAdapter(Context context, List<Conversation> conversations, HashSet<String> currentConversationNames) {
         this.context = context;
         this.conversations = conversations;
+        this.currentConversationNames = currentConversationNames;
     }
 
     @NonNull
@@ -127,6 +130,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
                                             new Handler().postDelayed(new Runnable() {
                                                 @Override
                                                 public void run() {
+                                                    currentConversationNames.remove(conversations.get(position).getVisibleName());
                                                     conversations.remove(position);
                                                     notifyItemRemoved(position);
 
@@ -207,11 +211,4 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
             }
         });
     }
-//
-//    @Override
-//    public void onDetachedFromRecyclerView(@NonNull @NotNull RecyclerView recyclerView) {
-//        super.onDetachedFromRecyclerView(recyclerView);
-//    }
-//
-//
 }
