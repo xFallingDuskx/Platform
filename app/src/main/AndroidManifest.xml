@@ -15,6 +15,11 @@
         android:roundIcon="@drawable/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Platform">
+        <activity android:name=".activities.CommunitiesActivity_ByGenre"></activity>
+        <activity
+            android:name=".activities.CommunitiesActivity_Display"
+            android:label="@string/title_activity_communities_display"
+            android:theme="@style/Theme.Platform.NoActionBar" />
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,9 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.ChatsActivity_Messaging"
-            android:windowSoftInputMode="adjustPan"
-            />
+        <activity
+            android:name=".activities.ChatsActivity_Messaging"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.CatalogActivity_TitleDisplay" />
         <activity android:name=".activities.ProfileAboutActivity" />
         <activity android:name=".activities.ProfileRecommendationsActivity" />

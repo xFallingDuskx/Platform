@@ -1,45 +1,26 @@
 package com.example.platform.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.platform.R;
-import com.example.platform.activities.ProfileActivity;
-import com.example.platform.activities.SearchActivity;
 import com.example.platform.adapters.GenreAdapter;
-import com.example.platform.adapters.TitlesAdapter;
 import com.example.platform.models.Genre;
 import com.example.platform.models.SharedCatalogViewModel;
-import com.example.platform.models.Title;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,7 +31,6 @@ public class CatalogFragment_ByGenre extends Fragment {
     public static final String TAG = "CatalogFragment_ByGenre";
     private SharedCatalogViewModel sharedCatalogViewModel;
     private RecyclerView rvListedGenres;
-    FragmentManager fragmentManager;
     String mediaType;
     List<Genre> allGenres;
     GenreAdapter adapter;

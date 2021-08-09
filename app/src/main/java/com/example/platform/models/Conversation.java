@@ -28,6 +28,9 @@ public class Conversation extends ParseObject {
     public String timestamp;
     public Date updatedAtDate;
 
+    // Default, empty constructor
+    public Conversation() {}
+
     public static String getCurrentTimetoken() {
         long unixTime = System.currentTimeMillis() / 1000L;
         long timetoken = unixTime * 10000000;

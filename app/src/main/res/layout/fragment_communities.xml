@@ -69,7 +69,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlMockOption1"
+            android:id="@+id/rlViewAll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rlSearch"
@@ -99,11 +99,11 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlMockOption2"
+            android:id="@+id/rlPopular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/rlMockOption1"
+            android:layout_below="@+id/rlViewAll"
             android:background="@color/black_lighter">
 
             <TextView
@@ -130,11 +130,11 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlMockOption3"
+            android:id="@+id/rlByGenres"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/rlMockOption2"
+            android:layout_below="@+id/rlPopular"
             android:background="@color/black_lighter">
 
             <TextView
@@ -149,7 +149,7 @@
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:text="By Topics"
+                android:text="By Genres"
                 android:fontFamily="@font/redhattext"/>
 
             <RelativeLayout
@@ -161,11 +161,11 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/rlMockOption4"
+            android:id="@+id/rlUserCommunities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/rlMockOption3"
+            android:layout_below="@+id/rlByGenres"
             android:background="@color/black_lighter">
 
             <TextView

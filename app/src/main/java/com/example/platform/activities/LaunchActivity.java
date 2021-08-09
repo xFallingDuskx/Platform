@@ -72,12 +72,4 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void goMainActivity() {
-        Log.i(TAG, "Removing past activities from the stack to prevent user from going back");
-        Intent intent = new Intent(LaunchActivity.this, BaseActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
 }

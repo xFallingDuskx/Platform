@@ -19,8 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.platform.R;
+import com.example.platform.activities.CommunitiesActivity_ByGenre;
+import com.example.platform.activities.CommunitiesActivity_Display;
 import com.example.platform.activities.ProfileActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +36,7 @@ public class CommunitiesFragment extends Fragment {
 
     public static final String TAG = "CommunitiesFragment";
     private ImageView ivProfile;
+    RelativeLayout rlAll, rlPopular, rlByGenres, rlUserCommunities;
 
     public CommunitiesFragment() {
         // Required empty public constructor
@@ -73,6 +77,45 @@ public class CommunitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        rlAll = view.findViewById(R.id.rlViewAll);
+        rlAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
+                intent.putExtra("tab", "all");
+                startActivity(intent);
+            }
+        });
+
+        rlPopular = view.findViewById(R.id.rlPopular);
+        rlPopular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
+                intent.putExtra("tab", "popular");
+                startActivity(intent);
+            }
+        });
+
+        rlByGenres = view.findViewById(R.id.rlByGenres);
+        rlByGenres.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommunitiesActivity_ByGenre.class);
+                startActivity(intent);
+            }
+        });
+
+        rlUserCommunities = view.findViewById(R.id.rlUserCommunities);
+        rlUserCommunities.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
+                intent.putExtra("tab", "user");
                 startActivity(intent);
             }
         });
