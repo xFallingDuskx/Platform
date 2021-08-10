@@ -18,8 +18,6 @@ import com.example.platform.activities.CommunityDetailsActivity;
 import com.example.platform.models.Community;
 import com.parse.ParseFile;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 
 public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.ViewHolder>{
@@ -72,7 +70,7 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
                     if (position != RecyclerView.NO_POSITION) {
                         Community community = communities.get(position);
                         Intent intent = new Intent(context, CommunityDetailsActivity.class);
-                        intent.putExtra(Community.class.getSimpleName(), Parcels.wrap(community));
+                        intent.putExtra("name", community.getName());
                         context.startActivity(intent);
                         Log.i(TAG, "Opening CommunityDetailsActivity");
                     }

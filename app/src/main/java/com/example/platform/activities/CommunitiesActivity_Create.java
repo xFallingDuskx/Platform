@@ -168,6 +168,20 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
 
     public void showPopUp() {
         sweetAlertDialogMain = new SweetAlertDialog(CommunitiesActivity_Create.this, SweetAlertDialog.NORMAL_TYPE);
+
+        //Ensure no field is empty
+        if (etName.getText().toString().isEmpty() || etDescription.getText().toString().isEmpty() ||
+                etKeywords.getText().toString().isEmpty() || genresSelected.isEmpty()) {
+            sweetAlertDialogMain.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+            sweetAlertDialogMain.setTitleText("Error")
+                    .setContentText("All field must be filled")
+                    .setConfirmText("OK")
+                    .setConfirmClickListener(null)
+                    .show();
+            return;
+        }
+
+        sweetAlertDialogMain.changeAlertType(SweetAlertDialog.NORMAL_TYPE);
         sweetAlertDialogMain.setTitleText("Are you sure?")
                 .setContentText("Make sure all information regarding the community has been entered properly to avoid issues later on.")
 
@@ -209,12 +223,7 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
             sweetAlertDialogMain.setTitleText("Unable to Create")
                     .setContentText("A community with this name already exist. Please pick a different name.")
                     .setConfirmText("OK")
-                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-                            finish();
-                        }
-                    })
+                    .setConfirmClickListener(null)
                     .changeAlertType(SweetAlertDialog.WARNING_TYPE);
         } else {
             // Get keywords
