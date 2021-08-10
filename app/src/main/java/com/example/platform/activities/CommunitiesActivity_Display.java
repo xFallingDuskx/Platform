@@ -3,7 +3,9 @@ package com.example.platform.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import com.example.platform.R;
 import com.example.platform.adapters.CommunitiesAdapter;
 import com.example.platform.adapters.TitlesSimpleAdapter;
 import com.example.platform.models.Community;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -37,6 +40,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
     List<Community> allCommunities;
     CommunitiesAdapter adapter;
 
+    ShimmerFrameLayout shimmerFrameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,14 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
         context = getApplicationContext();
         intent = getIntent();
         objective = intent.getStringExtra("objective");
+
+        shimmerFrameLayout = findViewById(R.id.shimmerFrameLayout_Communities);
+        if(!shimmerFrameLayout.isShimmerVisible()) {
+            shimmerFrameLayout.setVisibility(View.VISIBLE);
+        }
+        if(!shimmerFrameLayout.isShimmerStarted()) {
+            shimmerFrameLayout.startShimmer();
+        }
 
         // Set up view
         rvCommunities = findViewById(R.id.rvCommunities);
@@ -53,20 +66,25 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
         rvCommunities.setLayoutManager(gridLayoutManager);
         rvCommunities.setAdapter(adapter);
 
-        // Add community data based on the objective
-        if (objective.equals("search")) {
-            query = intent.getStringExtra("query");
-            handleSearch(query);
-        } else if (objective.equals("all")) {
-            handleAll();
-        } else if (objective.equals("popular")) {
-            handlePopular();
-        } else if (objective.equals("genre")) {
-            genreName = intent.getStringExtra("genreName");
-            handleByGenre(genreName);
-        } else { // objective == user (communities)
-            handleUserCommunities();
-        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Add community data based on the objective
+                if (objective.equals("search")) {
+                    query = intent.getStringExtra("query");
+                    handleSearch(query);
+                } else if (objective.equals("all")) {
+                    handleAll();
+                } else if (objective.equals("popular")) {
+                    handlePopular();
+                } else if (objective.equals("genre")) {
+                    genreName = intent.getStringExtra("genreName");
+                    handleByGenre(genreName);
+                } else { // objective == user (communities)
+                    handleUserCommunities();
+                }
+            }
+        }, 5000);
     }
 
     public void handleSearch(String query) {
@@ -129,6 +147,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
             }
             allCommunities.addAll(communities);
             adapter.notifyDataSetChanged();
+            shimmerFrameLayout.stopShimmer();
+            shimmerFrameLayout.setVisibility(View.GONE);
         });
     }
 
@@ -150,6 +170,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 }
                 allCommunities.addAll(communities);
                 adapter.notifyDataSetChanged();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
         });
     }
@@ -172,6 +194,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 }
                 allCommunities.addAll(communities);
                 adapter.notifyDataSetChanged();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
         });
     }
@@ -196,6 +220,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 }
                 allCommunities.addAll(communities);
                 adapter.notifyDataSetChanged();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
         });
     }
@@ -219,6 +245,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 }
                 allCommunities.addAll(communities);
                 adapter.notifyDataSetChanged();
+                shimmerFrameLayout.stopShimmer();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
         });
     }
