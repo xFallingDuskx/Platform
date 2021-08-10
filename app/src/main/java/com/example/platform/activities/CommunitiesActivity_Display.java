@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -75,33 +76,39 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
         String queryUpperCase = query.toUpperCase();
 
         ParseQuery<Community> nameQuery = ParseQuery.getQuery(Community.class);
-        nameQuery.whereFullText(Community.KEY_NAME, query);
+        nameQuery.whereContains(Community.KEY_NAME, query);
         ParseQuery<Community> nameQueryStandard = ParseQuery.getQuery(Community.class);
-        nameQueryStandard.whereFullText(Community.KEY_NAME, queryStandardCasing);
+        nameQueryStandard.whereContains(Community.KEY_NAME, queryStandardCasing);
         ParseQuery<Community> nameQueryLower = ParseQuery.getQuery(Community.class);
-        nameQueryLower.whereFullText(Community.KEY_NAME, queryLowerCase);
+        nameQueryLower.whereContains(Community.KEY_NAME, queryLowerCase);
         ParseQuery<Community> nameQueryUpper = ParseQuery.getQuery(Community.class);
-        nameQueryUpper.whereFullText(Community.KEY_NAME, queryUpperCase);
+        nameQueryUpper.whereContains(Community.KEY_NAME, queryUpperCase);
 
-//        ParseQuery<Community> nameStartsWithQuery = ParseQuery.getQuery(Community.class);
-//        nameStartsWithQuery.whereStartsWith(Community.KEY_NAME, query);
-
+        //Todo: consider removing queries for description
         ParseQuery<Community> descriptionQuery = ParseQuery.getQuery(Community.class);
-        descriptionQuery.whereFullText(Community.KEY_DESCRIPTION, query);
+        descriptionQuery.whereContains(Community.KEY_DESCRIPTION, query);
+        ParseQuery<Community> descriptionQueryStandard = ParseQuery.getQuery(Community.class);
+        descriptionQueryStandard.whereContains(Community.KEY_DESCRIPTION, queryStandardCasing);
+        ParseQuery<Community> descriptionQueryLower = ParseQuery.getQuery(Community.class);
+        descriptionQueryLower.whereContains(Community.KEY_DESCRIPTION, queryLowerCase);
+        ParseQuery<Community> descriptionQueryUpper = ParseQuery.getQuery(Community.class);
+        descriptionQueryUpper.whereContains(Community.KEY_DESCRIPTION, queryUpperCase);
 
         ParseQuery<Community> genreQuery = ParseQuery.getQuery(Community.class);
-        genreQuery.whereEqualTo(Community.KEY_GENRES, Arrays.asList(query, queryStandardCasing, queryLowerCase, queryUpperCase));
+        genreQuery.whereEqualTo(Community.KEY_GENRES, queryStandardCasing);
 
         ParseQuery<Community> keywordQuery = ParseQuery.getQuery(Community.class);
-        keywordQuery.whereEqualTo(Community.KEY_KEYWORDS, Arrays.asList(query, queryStandardCasing, queryLowerCase, queryUpperCase));
+        keywordQuery.whereEqualTo(Community.KEY_KEYWORDS, queryLowerCase);
 
         List<ParseQuery<Community>> allQueries = new ArrayList<ParseQuery<Community>>();
         allQueries.add(nameQuery);
         allQueries.add(nameQueryStandard);
         allQueries.add(nameQueryLower);
         allQueries.add(nameQueryUpper);
-//        allQueries.add(nameStartsWithQuery);
         allQueries.add(descriptionQuery);
+        allQueries.add(descriptionQueryStandard);
+        allQueries.add(descriptionQueryLower);
+        allQueries.add(descriptionQueryUpper);
         allQueries.add(genreQuery);
         allQueries.add(keywordQuery);
 
@@ -109,21 +116,19 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
         mainQuery.include(Community.KEY_NAME);
         mainQuery.include(Community.KEY_DESCRIPTION);
 
-        mainQuery.addDescendingOrder("createdAt");
-        mainQuery.findInBackground(new FindCallback<Community>() {
-            @Override
-            public void done(List<Community> communities, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue getting posts", e);
-                    return;
-                }
-                // For debugging
-                for (Community community : communities) {
-                    Log.i(TAG, "Community: " + community.getName() + " / Description: " + community.getDescription());
-                }
-                allCommunities.addAll(communities);
-                adapter.notifyDataSetChanged();
+        mainQuery.addDescendingOrder(Community.KEY_NUMBER_OF_MEMBERS);
+        mainQuery.findInBackground((communities, e) -> {
+            if (e != null) {
+                Log.e(TAG, "Issue getting communities", e);
+                return;
             }
+            Log.i(TAG, "Success getting communities for the query / Communities: " + communities.toString());
+            // For debugging
+            for (Community community : communities) {
+                Log.i(TAG, "Community: " + community.getName() + " / Description: " + community.getDescription());
+            }
+            allCommunities.addAll(communities);
+            adapter.notifyDataSetChanged();
         });
     }
 
