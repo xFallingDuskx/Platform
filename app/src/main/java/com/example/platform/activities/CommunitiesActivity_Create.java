@@ -32,7 +32,10 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -49,9 +52,9 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
     RelativeLayout rlGenreSelection, rlGenreSpace;
     boolean genresVisible = false;
     ListView lvGenre;
-    List<String> genresSelected;
+    Set<String> genresSelected;
     
-    SweetAlertDialog sweetAlertDialog;
+    SweetAlertDialog sweetAlertDialogMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
         btnCreate = findViewById(R.id.btnCreate_Communities);
 
         // Allow users to select from a list of genres
+        genresSelected = new TreeSet<>();
         setupGenreSelection();
 
         // Create community on user submission
@@ -133,8 +137,8 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
     }
 
     public void showPopUp() {
-        sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE);
-        sweetAlertDialog.setTitleText("Are you sure?")
+        sweetAlertDialogMain = new SweetAlertDialog(CommunitiesActivity_Create.this, SweetAlertDialog.NORMAL_TYPE);
+        sweetAlertDialogMain.setTitleText("Are you sure?")
                 .setContentText("Make sure all information regarding the community has been entered properly to avoid issues later on.")
 
                 .setConfirmButton("Yes", new SweetAlertDialog.OnSweetClickListener() {
@@ -142,21 +146,16 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
                     public void onClick(SweetAlertDialog sweetAlertDialog) {
                         Log.i(TAG, "User is onTrack to delete the comment");
                         // Change SweetAlert to loading type
-                        sweetAlertDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
-                        sweetAlertDialog.getProgressHelper().setBarColor(Color.parseColor("#171717"));
-                        sweetAlertDialog.setTitleText("Create...");
-                        sweetAlertDialog.setContentText("Your community is being created");
-                        sweetAlertDialog.setCancelable(false);
+                        sweetAlertDialogMain.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+                        sweetAlertDialogMain.getProgressHelper().setBarColor(Color.parseColor("#171717"));
+                        sweetAlertDialogMain.setTitleText("Create...");
+                        sweetAlertDialogMain.setContentText("Your community is being created");
+                        sweetAlertDialogMain.setCancelable(false);
 
-                        createCommunity();
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                sweetAlertDialog.setTitleText("Create!")
-                                        .setContentText("Your Platform community has been successfully created!")
-                                        .setConfirmText("OK")
-                                        .setConfirmClickListener(null)
-                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                createCommunity();
                             }
                         }, 4000);
                     }
@@ -169,32 +168,38 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
         // Get keywords
         String[] keywordsArray = etKeywords.getText().toString().split(", ");
         List<String> keywords = new ArrayList<>();
-        for (int i = 0; i < keywordsArray.length; i++) {
-            String keyword = keywordsArray[i].toLowerCase();
+        for (String s : keywordsArray) {
+            String keyword = s.toLowerCase();
             keywords.add(keyword);
         }
 
-        ParseObject community = new ParseObject("Community");
-        community.put(Community.KEY_NAME, etName.getText().toString());
-        community.put(Community.KEY_DESCRIPTION, etDescription.getText().toString());
-        community.put(Community.KEY_CREATOR, ParseUser.getCurrentUser().getUsername());
-        community.put(Community.KEY_MEMBERS, new JSONArray());
-        community.put(Community.KEY_GENRES, genresSelected);
-        community.put(Community.KEY_KEYWORDS, keywords);
+        String currentUser = ParseUser.getCurrentUser().getUsername();
+        Community community = new Community();
+        community.setName(etName.getText().toString());
+        community.setDescription(etDescription.getText().toString());
+        community.setCreator(currentUser);
+        community.setMembers(Arrays.asList(currentUser));
+        community.setGenres(new ArrayList<>(genresSelected));
+        community.setKeywords(keywords);
 
         // Saves the new object.
         // Notice that the SaveCallback is totally optional!
         community.saveInBackground(e -> {
             if (e==null){
                 Log.i(TAG, "Community was saved successfully");
-                sweetAlertDialog.setTitleText("Create!")
+                sweetAlertDialogMain.setTitleText("Create!")
                         .setContentText("Your Platform community has been successfully created!")
                         .setConfirmText("OK")
-                        .setConfirmClickListener(null)
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                finish();
+                            }
+                        })
                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
             }else{
                 Log.d(TAG, "Issue saving community /Error: " + e.getMessage());
-                sweetAlertDialog.setTitleText("Sorry!")
+                sweetAlertDialogMain.setTitleText("Sorry!")
                         .setContentText("There was an issue creating your community")
                         .setConfirmText("OK")
                         .setConfirmClickListener(null)
@@ -216,26 +221,29 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
         }
 
         // Community genres - inside of
-        Rect genresRect = new Rect();
-        rlGenreSelection.getGlobalVisibleRect(genresRect);
-        if (genresRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
+        Rect genreDisplayRect = new Rect();
+        tvGenreDisplay.getGlobalVisibleRect(genreDisplayRect);
+        if (genreDisplayRect.contains((int) ev.getRawX(), (int) ev.getRawY())) {
             Log.i(TAG, "Inside of genre space");
-            if (!genresVisible) {
-                openGenreSelection();
-            }
+
             etName.clearFocus();
             etKeywords.clearFocus();
             etDescription.clearFocus();
+
             // Close the keyboard
-            // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
+            // Source: https://stackoverflow.com/questions/1109022/how-do-you-close-hide-the-android-soft-keyboard-programmatically
             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-            //Find the currently focused view, so we can grab the correct window token from it.
             View view = findViewById(android.R.id.content).getRootView();
-            //If no view currently has focus, create a new one, just so we can grab a window token from it
             if (view == null) {
                 view = new View(context);
             }
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            Log.i(TAG, "Genre view is visible: " + genresVisible);
+            if (!genresVisible) {
+                openGenreSelection();
+            }
+            return true;
         }
 
         // Community name input

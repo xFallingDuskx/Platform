@@ -42,7 +42,7 @@
             android:backgroundTintMode="screen"
             android:fontFamily="@font/pt_sans"
             android:hint="i.e MarvelLovers"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionNext"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/whiteOpacit"
@@ -75,7 +75,7 @@
             android:layout_marginTop="5dp"
             android:paddingTop="3dp"
             android:paddingBottom="5dp"
-            android:layout_height="40dp"
+            android:layout_height="42dp"
             android:layout_marginBottom="20dp"
             android:layout_marginHorizontal="15dp">
 
@@ -83,7 +83,7 @@
                 android:id="@+id/tvGenreDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
+                android:layout_marginVertical="4dp"
                 android:text="Tap to select all genres that match"
                 android:textColor="@color/whiteOpacit"
                 android:textSize="18sp"
@@ -93,6 +93,7 @@
                 android:layout_below="@id/tvGenreDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
                 android:choiceMode="multipleChoice"
                 android:visibility="gone"/>
         </RelativeLayout>
@@ -134,7 +135,7 @@
             android:backgroundTintMode="screen"
             android:fontFamily="@font/pt_sans"
             android:hint="i.e Avengers, Captain America, Hulk"
-            android:imeOptions="actionSearch"
+            android:imeOptions="actionNext"
             android:inputType="text"
             android:textColor="@color/white"
             android:textColorHint="@color/whiteOpacit"
@@ -180,8 +181,7 @@
             android:fontFamily="@font/pt_sans"
             android:gravity="top"
             android:hint="This community is for..."
-            android:imeOptions="actionSearch"
-            android:inputType="text"
+            android:imeOptions="actionDone"
             android:textColor="@color/white"
             android:textColorHint="@color/whiteOpacit"
             android:textSize="18sp" />
