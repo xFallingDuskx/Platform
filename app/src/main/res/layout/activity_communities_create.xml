@@ -7,12 +7,51 @@
     tools:context=".activities.CommunitiesActivity_Create"
     android:background="@color/black_lighter">
 
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvImageContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="250dp"
+            android:layout_gravity="center"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/photo_outline"/>
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Tap to add photo from gallery"
+                android:textColor="@color/whiteOpacit"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/ivCover_Communities"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"/>
+
+        </androidx.cardview.widget.CardView>
+
+
+
     <TextView
         android:id="@+id/tvNameHeading_Communities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/cvImageContainer"
         android:fontFamily="@font/pt_sans"
         android:text="Community name"
         android:textColor="@color/white"
@@ -23,6 +62,7 @@
         android:id="@+id/rlName_Communities"
         android:background="@drawable/input_box_outlined"
         android:layout_below="@id/tvNameHeading_Communities"
+        android:layout_toEndOf="@+id/cvImageContainer"
         android:layout_width="match_parent"
         android:layout_marginTop="5dp"
         android:paddingTop="3dp"
@@ -53,7 +93,8 @@
         android:id="@+id/rlGenreSpace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rlName_Communities">
+        android:layout_below="@+id/cvImageContainer"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/tvGenreHeading_Communities"

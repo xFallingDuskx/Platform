@@ -1,6 +1,7 @@
 package com.example.platform.models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 
 import org.json.JSONArray;
@@ -20,6 +21,7 @@ public class Community extends ParseObject {
     public static final String KEY_GENRES = "genres";
     public static final String KEY_KEYWORDS = "keywords";
     public static final String KEY_NUMBER_OF_MEMBERS = "numberOfMembers";
+    public static final String KEY_IMAGE = "image";
 
     public String name;
     public String description;
@@ -117,5 +119,13 @@ public class Community extends ParseObject {
 
     public int getNumberOfMembers() {
         return getInt(KEY_NUMBER_OF_MEMBERS);
+    }
+
+    public ParseFile getImage() {
+        return getParseFile(KEY_IMAGE);
+    }
+
+    public void setImage(ParseFile parseFile) {
+        put(KEY_IMAGE, parseFile);
     }
 }

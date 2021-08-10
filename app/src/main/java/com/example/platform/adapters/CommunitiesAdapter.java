@@ -57,11 +57,13 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvName, tvDescription;
+        ImageView ivCover;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tvName_CommunityItem);
             tvDescription = itemView.findViewById(R.id.tvDescription_CommunityItem);
+            ivCover = itemView.findViewById(R.id.ivCover_CommunityItem);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,6 +83,14 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
         public void bind(Community community) {
             tvName.setText(community.getName());
             tvDescription.setText(community.getDescription());
+
+            ParseFile image = community.getImage();
+            if (image != null) {
+                Glide.with(context)
+                        .load(image.getUrl())
+                        .centerInside()
+                        .into(ivCover);
+            }
         }
     }
 }

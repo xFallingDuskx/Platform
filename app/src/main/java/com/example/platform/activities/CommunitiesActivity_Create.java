@@ -1,13 +1,20 @@
 package com.example.platform.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.MotionEvent;
@@ -18,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -25,17 +33,18 @@ import android.widget.Toast;
 
 import com.example.platform.R;
 import com.example.platform.models.Community;
-import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import org.json.JSONArray;
-
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -45,11 +54,17 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class CommunitiesActivity_Create extends AppCompatActivity {
 
     public static final String TAG = "CommunitiesActivity_Create";
+    public final static int PICK_PHOTO_CODE = 1046;
     Context context;
     EditText etName;
     EditText etKeywords;
     EditText etDescription;
     Button btnCreate;
+
+    CardView cvImageContainer;
+    ImageView ivCover;
+    File photoFile;
+    String photoFileName = "community_image.jpg";
 
     TextView tvGenreDisplay;
     RelativeLayout rlGenreSelection, rlGenreSpace;
@@ -73,6 +88,18 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
         etKeywords = findViewById(R.id.etKeywordsInput_Communities);
         etDescription = findViewById(R.id.etDescriptionInput_Communities);
         btnCreate = findViewById(R.id.btnCreate_Communities);
+        cvImageContainer = findViewById(R.id.cvImageContainer);
+        ivCover = findViewById(R.id.ivCover_Communities);
+
+        // Allow users to select a photo fraom their gallery
+        // Source: https://guides.codepath.com/android/Accessing-the-Camera-and-Stored-Media#accessing-stored-media
+        cvImageContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick to add image for community");
+                selectPhoto();
+            }
+        });
 
         // Allow users to select from a list of genres
         genresSelected = new TreeSet<>();
@@ -151,7 +178,7 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
                         // Change SweetAlert to loading type
                         sweetAlertDialogMain.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
                         sweetAlertDialogMain.getProgressHelper().setBarColor(Color.parseColor("#171717"));
-                        sweetAlertDialogMain.setTitleText("Create...");
+                        sweetAlertDialogMain.setTitleText("Creating...");
                         sweetAlertDialogMain.setContentText("Your community is being created");
                         sweetAlertDialogMain.setCancelable(false);
 
@@ -207,13 +234,14 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
             community.setGenres(new ArrayList<>(genresSelected));
             community.setKeywords(keywords);
             community.setNumberOfMembers(1);
+            community.setImage(new ParseFile(photoFile));
 
             // Saves the new object.
             // Notice that the SaveCallback is totally optional!
             community.saveInBackground(e -> {
                 if (e == null) {
                     Log.i(TAG, "Community was saved successfully");
-                    sweetAlertDialogMain.setTitleText("Create!")
+                    sweetAlertDialogMain.setTitleText("Created!")
                             .setContentText("Your Platform community has been successfully created!")
                             .setConfirmText("OK")
                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -323,5 +351,84 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
         rlGenreSelection.setLayoutParams(params);
         lvGenre.setVisibility(View.VISIBLE);
         genresVisible = true;
+    }
+
+    // Trigger gallery selection for a photo
+    public void selectPhoto() {
+        Log.d(TAG, "Entered selectPhoto");
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_PHOTO_CODE);
+    }
+
+    public Bitmap loadFromUri(Uri photoUri) {
+        Log.d(TAG, "Entered loadFromUri");
+        Bitmap image = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                // support older versions of Android by using getBitmap
+                image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "Entered onActivityResult for image");
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+            Log.d(TAG, "Entered if-statement of onActivityResult");
+
+            Uri photoUri = data.getData();
+
+            // Load the image located at photoUri into selectedImage
+            Bitmap selectedImage = loadFromUri(photoUri);
+            // Load the selected image into a preview
+            ivCover.setImageBitmap(selectedImage);
+
+        // Convert selectedImage BitMap to a File to save in Parse
+        // Source: https://stackoverflow.com/questions/7769806/convert-bitmap-to-file
+        // Source: https://stackoverflow.com/questions/11144783/how-to-access-an-image-from-the-phones-photo-gallery
+
+            //create a file to write bitmap data
+            photoFile = new File(context.getCacheDir(), photoFileName);
+            try {
+                photoFile.createNewFile();
+            } catch (IOException e) {
+                Log.d(TAG, "Issue creating new file for image");
+                e.printStackTrace();
+            }
+
+            //Convert bitmap to byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            //write the bytes in file
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(photoFile);
+            } catch (FileNotFoundException e) {
+                Log.d(TAG, "Issue writing the file -- file could not be found");
+                e.printStackTrace();
+            }
+
+            try {
+                fos.write(bitmapdata);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
+                Log.d(TAG, "Issue writing the file");
+                e.printStackTrace();
+            }
+        }
     }
 }

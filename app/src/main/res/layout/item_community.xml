@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black_lighter">
@@ -11,21 +11,39 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp">
 
-        <ImageView
-            android:id="@+id/ivCover_CommunityItem"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvImageContainer_CommunityItem"
+            app:cardCornerRadius="250dp"
+            android:layout_gravity="center"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/gradient_circle"/>
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/gradient_circle"/>
+
+
+            <ImageView
+                android:id="@+id/ivCover_CommunityItem"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
+
+
 
         <TextView
             android:id="@+id/tvName_CommunityItem"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/ivCover_CommunityItem"
+            android:layout_below="@+id/cvImageContainer_CommunityItem"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             android:ellipsize="end"
