@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black_lighter">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp">
+
+        <ImageView
+            android:id="@+id/ivCover_CommunityItem"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/gradient_circle"/>
+
+        <TextView
+            android:id="@+id/tvName_CommunityItem"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ivCover_CommunityItem"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:minLines="2"
+            android:scrollHorizontally="true"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            tools:text="Community Name" />
+
+        <TextView
+            android:id="@+id/tvDescription_CommunityItem"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvName_CommunityItem"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:ellipsize="end"
+            android:gravity="center|top"
+            android:maxLines="4"
+            android:minLines="4"
+            android:scrollHorizontally="true"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            tools:text="Community description" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -19,6 +19,7 @@ public class Community extends ParseObject {
     public static final String KEY_MEMBERS = "members";
     public static final String KEY_GENRES = "genres";
     public static final String KEY_KEYWORDS = "keywords";
+    public static final String KEY_NUMBER_OF_MEMBERS = "numberOfMembers";
 
     public String name;
     public String description;
@@ -108,5 +109,13 @@ public class Community extends ParseObject {
             }
             return keywords;
         }
+    }
+
+    public void setNumberOfMembers(int numberOfMembers) {
+        put(KEY_NUMBER_OF_MEMBERS, numberOfMembers);
+    }
+
+    public int getNumberOfMembers() {
+        return getInt(KEY_NUMBER_OF_MEMBERS);
     }
 }

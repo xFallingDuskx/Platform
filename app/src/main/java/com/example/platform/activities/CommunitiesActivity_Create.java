@@ -25,7 +25,10 @@ import android.widget.Toast;
 
 import com.example.platform.R;
 import com.example.platform.models.Community;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
@@ -155,7 +158,12 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                createCommunity();
+                                try {
+                                    createCommunity();
+                                } catch (ParseException e) {
+                                    Log.d(TAG, "Issue creating community for the user");
+                                    e.printStackTrace();
+                                }
                             }
                         }, 4000);
                     }
@@ -164,48 +172,67 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
     }
 
 
-    public void createCommunity() {
-        // Get keywords
-        String[] keywordsArray = etKeywords.getText().toString().split(", ");
-        List<String> keywords = new ArrayList<>();
-        for (String s : keywordsArray) {
-            String keyword = s.toLowerCase();
-            keywords.add(keyword);
-        }
-
-        String currentUser = ParseUser.getCurrentUser().getUsername();
-        Community community = new Community();
-        community.setName(etName.getText().toString());
-        community.setDescription(etDescription.getText().toString());
-        community.setCreator(currentUser);
-        community.setMembers(Arrays.asList(currentUser));
-        community.setGenres(new ArrayList<>(genresSelected));
-        community.setKeywords(keywords);
-
-        // Saves the new object.
-        // Notice that the SaveCallback is totally optional!
-        community.saveInBackground(e -> {
-            if (e==null){
-                Log.i(TAG, "Community was saved successfully");
-                sweetAlertDialogMain.setTitleText("Create!")
-                        .setContentText("Your Platform community has been successfully created!")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sweetAlertDialog) {
-                                finish();
-                            }
-                        })
-                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-            }else{
-                Log.d(TAG, "Issue saving community /Error: " + e.getMessage());
-                sweetAlertDialogMain.setTitleText("Sorry!")
-                        .setContentText("There was an issue creating your community")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(null)
-                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+    public void createCommunity() throws ParseException {
+        // Ensure this community does not already exist
+        String name = etName.getText().toString();
+        ParseQuery<Community> parseQuery = ParseQuery.getQuery(Community.class);
+        parseQuery.whereEqualTo(Community.KEY_NAME, name);
+        if (parseQuery.count() != 0) {
+            Log.i(TAG, "Community has already been created");
+            sweetAlertDialogMain.setTitleText("Unable to Create")
+                    .setContentText("A community with this name already exist. Please pick a different name.")
+                    .setConfirmText("OK")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            finish();
+                        }
+                    })
+                    .changeAlertType(SweetAlertDialog.WARNING_TYPE);
+        } else {
+            // Get keywords
+            String[] keywordsArray = etKeywords.getText().toString().split(", ");
+            List<String> keywords = new ArrayList<>();
+            for (String s : keywordsArray) {
+                String keyword = s.toLowerCase();
+                keywords.add(keyword);
             }
-        });
+
+            String currentUser = ParseUser.getCurrentUser().getUsername();
+            Community community = new Community();
+            community.setName(name);
+            community.setDescription(etDescription.getText().toString());
+            community.setCreator(currentUser);
+            community.setMembers(Arrays.asList(currentUser));
+            community.setGenres(new ArrayList<>(genresSelected));
+            community.setKeywords(keywords);
+            community.setNumberOfMembers(1);
+
+            // Saves the new object.
+            // Notice that the SaveCallback is totally optional!
+            community.saveInBackground(e -> {
+                if (e == null) {
+                    Log.i(TAG, "Community was saved successfully");
+                    sweetAlertDialogMain.setTitleText("Create!")
+                            .setContentText("Your Platform community has been successfully created!")
+                            .setConfirmText("OK")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    finish();
+                                }
+                            })
+                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                } else {
+                    Log.d(TAG, "Issue saving community /Error: " + e.getMessage());
+                    sweetAlertDialogMain.setTitleText("Sorry!")
+                            .setContentText("There was an issue creating your community")
+                            .setConfirmText("OK")
+                            .setConfirmClickListener(null)
+                            .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                }
+            });
+        }
     }
 
     @Override

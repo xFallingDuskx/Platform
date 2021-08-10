@@ -111,7 +111,8 @@ public class CommunitiesFragment extends Fragment {
                         Toast.makeText(getContext(), "Search cannot be empty", Toast.LENGTH_SHORT).show();
                         return true;
                     }
-                    intent.putExtra("option", "search");
+                    intent.putExtra("objective", "search");
+                    intent.putExtra("query", search);
                     startActivity(intent);
                     etSearchInput.setText("");
                     handled = true;
@@ -120,13 +121,13 @@ public class CommunitiesFragment extends Fragment {
             }
         });
 
-        // Set up views and onClick listeners for options
+        // Set up views and onClick listeners for objectiveives
         rlAll = view.findViewById(R.id.rlViewAll);
         rlAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
-                intent.putExtra("option", "all");
+                intent.putExtra("objective", "all");
                 startActivity(intent);
             }
         });
@@ -136,7 +137,7 @@ public class CommunitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
-                intent.putExtra("option", "popular");
+                intent.putExtra("objective", "popular");
                 startActivity(intent);
             }
         });
@@ -155,7 +156,7 @@ public class CommunitiesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
-                intent.putExtra("option", "user");
+                intent.putExtra("objective", "user");
                 startActivity(intent);
             }
         });
