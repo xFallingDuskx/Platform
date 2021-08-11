@@ -20,6 +20,8 @@
     <string name="follow_action_failed">Failed to save your new following status</string>
     <string name="following">Following</string>
     <string name="not_following">Not Following</string>
+    <string name="joined">Joined</string>
+    <string name="not_joined">Join</string>
     <string name="liked_title">You liked the title&#160;</string>
     <string name="unliked_title">You unliked the title&#160;</string>
     <string name="like_action_failed">Failed to save your like action</string>
@@ -27,6 +29,7 @@
     <string name="cannot_save_comment">Unable to save comment</string>
     <string name="title_share_message">Hey, check out this titles I came across on Platform - Share Your Media Experience:</string>
     <string name="episode_share_message">Hey, check out this episode I came across on Platform - Share Your Media Experience:</string>
+    <string name="community_share_message">Hey, check out this great community I came across on Platform - Share Your Media Experience:</string>
 
     <string name="comment_section_header">Comments</string>
     <!-- Strings used for fragments for navigation -->

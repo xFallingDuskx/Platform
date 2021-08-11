@@ -2,6 +2,7 @@ package com.example.platform.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,9 @@ import com.example.platform.R;
 import com.example.platform.activities.CommunityDetailsActivity;
 import com.example.platform.models.Community;
 import com.parse.ParseFile;
+
+import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -70,7 +74,7 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
                     if (position != RecyclerView.NO_POSITION) {
                         Community community = communities.get(position);
                         Intent intent = new Intent(context, CommunityDetailsActivity.class);
-                        intent.putExtra("name", community.getName());
+                        intent.putExtra(Community.class.getSimpleName(), Parcels.wrap(community));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                         Log.i(TAG, "Opening CommunityDetailsActivity");

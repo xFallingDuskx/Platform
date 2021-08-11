@@ -245,7 +245,7 @@ public class ChatsActivity_Messaging extends AppCompatActivity {
                     Toast.makeText(context, "Cannot send an empty text message", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Log.i(TAG, "onClick to send new message");
+                Log.i(TAG, "onTrack to send new message");
                 JsonObject messagePayload = Message.createMessageObject(currentUser.getUsername(), message, new Date());
                 publishMessage(messagePayload);
 

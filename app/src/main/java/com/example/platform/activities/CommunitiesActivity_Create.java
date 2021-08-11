@@ -1,5 +1,6 @@
 package com.example.platform.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -37,6 +38,13 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.pubnub.api.PNConfiguration;
+import com.pubnub.api.PubNub;
+import com.pubnub.api.callbacks.PNCallback;
+import com.pubnub.api.models.consumer.PNStatus;
+import com.pubnub.api.models.consumer.objects_api.channel.PNSetChannelMetadataResult;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -269,6 +277,28 @@ public class CommunitiesActivity_Create extends AppCompatActivity {
                             .changeAlertType(SweetAlertDialog.ERROR_TYPE);
                 }
             });
+
+            // Create on pubnub the channel
+            PNConfiguration pnConfiguration = new PNConfiguration();
+            pnConfiguration.setSubscribeKey("sub-c-f3e50456-f16a-11eb-9d61-d6c76bc6f614");
+            pnConfiguration.setPublishKey("pub-c-d5e6773e-3948-488a-a5cd-4976b5c9de45");
+            pnConfiguration.setUuid(ParseUser.getCurrentUser().getObjectId()); // Set the PubNub unique user ID as the User's Object ID in the Parse server
+            PubNub pubnub =  new PubNub(pnConfiguration);
+
+            pubnub.setChannelMetadata()
+                    .channel(name)
+                    .name(name)
+                    .description(etDescription.getText().toString())
+                    .async(new PNCallback<PNSetChannelMetadataResult>() {
+                        @Override
+                        public void onResponse(@Nullable final PNSetChannelMetadataResult result, @NotNull final PNStatus status) {
+                            if (status.isError()) {
+                                Log.d(TAG, "Issue creating new channel for community / Error: " + status.toString());
+                            } else {
+                                Log.i(TAG, "Successfully created new channel for community");
+                            }
+                        }
+                    });
         }
     }
 

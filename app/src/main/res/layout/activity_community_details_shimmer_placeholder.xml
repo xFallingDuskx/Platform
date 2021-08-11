@@ -40,15 +40,15 @@
 
                 <TextView
                     android:id="@+id/tvName_Community_Details"
-                    android:layout_width="wrap_content"
+                    android:background="@color/grey_light"
+                    android:layout_width="290dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
                     android:textColor="@color/white"
                     android:textSize="36sp"
-                    android:textStyle="bold"
-                    tools:text="Community Name" />
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
@@ -133,6 +133,7 @@
 
             <TextView
                 android:id="@+id/tvDescription_Community_Details"
+                android:background="@color/grey_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rlIcons_Community_Details"
@@ -140,9 +141,9 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
                 android:scrollHorizontally="true"
+                android:minLines="3"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                tools:text="Description of the comunity" />
+                android:textSize="16sp"/>
 
 
             <TextView
@@ -219,21 +220,5 @@
         </RelativeLayout>
 
     </ScrollView>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerFrameLayoutCommunity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <include layout="@layout/activity_community_details_shimmer_placeholder" />
-
-        </RelativeLayout>
-    </com.facebook.shimmer.ShimmerFrameLayout>
 
 </RelativeLayout>
