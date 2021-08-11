@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black_light"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/ivProfilePicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_profile"/>
+
+    <TextView
+        android:id="@+id/tvUsername_Post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivProfilePicture"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Username" />
+
+    <TextView
+        android:id="@+id/tvTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="false"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/tvUsername_Post"
+        android:textColor="@color/grey_light"
+        android:textSize="16sp"
+        tools:text="Timestamp" />
+
+    <TextView
+        android:id="@+id/tvPostText_Post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername_Post"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@+id/ivProfilePicture"
+        android:textColor="@color/whiteOpacit"
+        android:textSize="16sp"
+        android:linksClickable="true"
+        tools:text="Post from user - Lorem ipsum dolor sit amet, veritus adolescens temporibus ad cum, ad qui tractatos reprehendunt. Usu ut ullum iracundia, agam interesset ea nam." />
+
+</RelativeLayout>

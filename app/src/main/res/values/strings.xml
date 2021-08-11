@@ -31,6 +31,10 @@
     <string name="episode_share_message">Hey, check out this episode I came across on Platform - Share Your Media Experience:</string>
     <string name="community_share_message">Hey, check out this great community I came across on Platform - Share Your Media Experience:</string>
 
+    <string name="no_communities_search">There are no communities that match this search \n Click here to create the community you wish to see</string>
+    <string name="no_communities_genre">There are no communities for this genre yet \n Click here to create the community you wish to see</string>
+    <string name="no_communities_user">You have not created any communities yet \n Click here to create your first community</string>
+
     <string name="comment_section_header">Comments</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +37,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
     String objective;
     String query;
     String genreName;
+    TextView tvNotAvailable;
+    Button btnCreateCommunity;
 
     RecyclerView rvCommunities;
     List<Community> allCommunities;
@@ -59,6 +63,8 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
         }
 
         // Set up view
+        tvNotAvailable = findViewById(R.id.tvNotAvailable_Communities);
+        btnCreateCommunity = findViewById(R.id.btnCreateCommunity);
         rvCommunities = findViewById(R.id.rvCommunities);
         allCommunities = new ArrayList<>();
         adapter = new CommunitiesAdapter(context, allCommunities);
@@ -85,6 +91,16 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 }
             }
         }, 5000);
+
+        // If user chooses to create a community
+        btnCreateCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommunitiesActivity_Create.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
     public void handleSearch(String query) {
@@ -149,6 +165,13 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             shimmerFrameLayout.stopShimmer();
             shimmerFrameLayout.setVisibility(View.GONE);
+
+            // if there are no fitting communities
+            if (allCommunities.isEmpty()) {
+                tvNotAvailable.setText(R.string.no_communities_search);
+                tvNotAvailable.setVisibility(View.VISIBLE);
+                btnCreateCommunity.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -222,6 +245,13 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
+
+                // if there are no fitting communities
+                if (allCommunities.isEmpty()) {
+                    tvNotAvailable.setText(R.string.no_communities_genre);
+                    tvNotAvailable.setVisibility(View.VISIBLE);
+                    btnCreateCommunity.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -247,6 +277,13 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 shimmerFrameLayout.stopShimmer();
                 shimmerFrameLayout.setVisibility(View.GONE);
+
+                // if there are no fitting communities
+                if (allCommunities.isEmpty()) {
+                    tvNotAvailable.setText(R.string.no_communities_user);
+                    tvNotAvailable.setVisibility(View.VISIBLE);
+                    btnCreateCommunity.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

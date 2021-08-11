@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,9 +25,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.platform.R;
 import com.example.platform.adapters.CommentsAdapter;
+import com.example.platform.adapters.PostsAdapter;
 import com.example.platform.models.Comment;
 import com.example.platform.models.Community;
 import com.example.platform.models.Message;
+import com.example.platform.models.Post;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.JsonObject;
 import com.parse.Parse;
@@ -63,8 +66,10 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -83,10 +88,11 @@ public class CommunityDetailsActivity extends AppCompatActivity {
     TextView tvName, tvDescription, tvParticipationStatus, tvMembers;
     ImageView ivParticipationStatus, ivShare, ivCover, ivPost;
     EditText etPostInput;
+    RelativeLayout rlMakePost;
 
     RecyclerView rvPosts;
-    List<Comment> allPosts;
-    CommentsAdapter adapter;
+    List<Post> allPosts;
+    PostsAdapter adapter;
     PubNub pubnub;
 
     ShimmerFrameLayout shimmerFrameLayout;
@@ -117,6 +123,8 @@ public class CommunityDetailsActivity extends AppCompatActivity {
         ivPost = findViewById(R.id.ivPost_Community);
         tvMembers = findViewById(R.id.tvMembersText_Community_Details);
         etPostInput = findViewById(R.id.etPostInput_Community);
+        rlMakePost = findViewById(R.id.rlMakePost_Community);
+        rlMakePost.setVisibility(View.GONE);
         currentUser = ParseUser.getCurrentUser().getUsername();
         joined = false;
 
@@ -137,7 +145,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                 setCommunityInformation();
 
                 // Load the post
-                displayPosts()
+                displayPosts();
 
 
                 // Handle post being made by user
@@ -166,6 +174,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
             ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
             tvParticipationStatus.setText(R.string.joined);
             joined = true;
+            rlMakePost.setVisibility(View.VISIBLE);
         }
         ParseFile image = community.getImage();
         if (image != null) {
@@ -179,12 +188,16 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                     .centerCrop()
                     .into(ivCover);
         }
+
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        svEntireScreen.setVisibility(View.VISIBLE);
     }
 
     public void displayPosts() {
-        rvPosts = findViewById(R.id.rvComments_Episode);
+        rvPosts = findViewById(R.id.rvPosts_Community);
         allPosts = new ArrayList<>();
-        adapter = new CommentsAdapter(context, allPosts);
+        adapter = new PostsAdapter(context, allPosts);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         rvPosts.setLayoutManager(linearLayoutManager);
         rvPosts.setAdapter(adapter);
@@ -219,87 +232,58 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                 Log.i(TAG, "New message received");
 
                 JsonObject messageObject = event.getMessage().getAsJsonObject();
-                String sender = messageObject.get(Message.KEY_SENDER).getAsString();
-                String text = messageObject.get(Message.KEY_TEXT).getAsString();
-                String type = "";
+                String user = messageObject.get(Post.KEY_USER).getAsString();
+                String text = messageObject.get(Post.KEY_TEXT).getAsString();
 
-                String sentDateString = messageObject.get(Message.KEY_SENT_DATE).getAsString();
+                // Get timestamp
+                // Source: https://www.pubnub.com/docs/chat/features/messages#receive-messages
+                long timetoken = event.getTimetoken() / 10_000L;
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(timetoken);
+                String localDateTime = sdf.format(calendar.getTimeInMillis());
 
-                // Determine if the message was sent by the current user or not
-                if (sender.equals(currentUser.getUsername())) {
-                    type = Message.KEY_TYPE_SENT;
-                } else {
-                    type = Message.KEY_TYPE_RECEIVED;
-
-                }
-                Message message = new Message(sender, type, text, sentDateString);
-                allMessages.add(message);
-                updateLastMessage = true;
-
+                Post post = new Post(user, text, localDateTime);
+                allPosts.add(post);
                 runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
                         // Go to recent message
                         adapter.notifyDataSetChanged();
-                        rvMessages.smoothScrollToPosition(allMessages.size() - 1);
+                        rvPosts.smoothScrollToPosition(allPosts.size() - 1);
                     }
                 });
 
-                Log.i(TAG, "New Message / Sender: " + sender + " / Type: " + type + " / Text: " + text + " / Sent Date: " + sentDateString);
+                Log.i(TAG, "New Post / User: " + user + " / Text: " + text + " / Local Date: " + localDateTime);
             }
 
             @Override
-            public void status(PubNub pubnub, PNStatus event) {
-
-            }
+            public void status(PubNub pubnub, PNStatus event) {}
 
             @Override
-            public void presence(PubNub pubnub, PNPresenceEventResult event) {
-
-            }
+            public void presence(PubNub pubnub, PNPresenceEventResult event) {}
 
             @Override
-            public void signal(PubNub pubnub, PNSignalResult event) { }
+            public void signal(PubNub pubnub, PNSignalResult event) {}
 
             @Override
-            public void uuid(PubNub pubnub, PNUUIDMetadataResult pnUUIDMetadataResult) { }
+            public void uuid(PubNub pubnub, PNUUIDMetadataResult pnUUIDMetadataResult) {}
 
             @Override
-            public void channel(PubNub pubnub, PNChannelMetadataResult pnChannelMetadataResult) { }
+            public void channel(PubNub pubnub, PNChannelMetadataResult pnChannelMetadataResult) {}
 
             @Override
-            public void membership(PubNub pubnub, PNMembershipResult pnMembershipResult) { }
+            public void membership(PubNub pubnub, PNMembershipResult pnMembershipResult) {}
 
             @Override
-            public void messageAction(PubNub pubnub, PNMessageActionResult event) { }
+            public void messageAction(PubNub pubnub, PNMessageActionResult event) {}
 
             @Override
-            public void file(PubNub pubnub, PNFileEventResult pnFileEventResult) {
-
-            }
+            public void file(PubNub pubnub, PNFileEventResult pnFileEventResult) {}
         });
 
-        pubnub.subscribe().channels(Arrays.asList(channelName)).withPresence().execute();
-
-        etMessageInput = findViewById(R.id.etMessageInput);
-        ivSend = findViewById(R.id.ivSend);
-
-        // Handle user sending message
-        ivSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = etMessageInput.getText().toString();
-                if (message.isEmpty()) {
-                    Toast.makeText(context, "Cannot send an empty text message", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                Log.i(TAG, "onClick to send new message");
-                JsonObject messagePayload = Message.createMessageObject(currentUser.getUsername(), message, new Date());
-                publishMessage(messagePayload);
-
-            }
-        });
+        pubnub.subscribe().channels(Arrays.asList(community.getName())).withPresence().execute();
     }
 
     public void createChannel() {
@@ -342,20 +326,24 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                     }
 
                                     JsonObject messageObject = fetchMessageItem.getMessage().getAsJsonObject();
-                                    String sender = messageObject.get(Message.KEY_SENDER).getAsString();
-                                    String text = messageObject.get(Message.KEY_TEXT).getAsString();
-                                    String type = "";
+                                    String user = messageObject.get(Post.KEY_USER).getAsString();
+                                    String text = messageObject.get(Post.KEY_TEXT).getAsString();
 
-                                    String sentDateString = messageObject.get(Message.KEY_SENT_DATE).getAsString();
-                                    Message message = new Message(sender, type, text, sentDateString);
-                                    allMessages.add(message);
+                                    // Get timestamp
+                                    // Source: https://www.pubnub.com/docs/chat/features/messages#receive-messages
+                                    long timetoken = fetchMessageItem.getTimetoken() / 10_000L;
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.setTimeInMillis(timetoken);
+                                    String localDateTime = sdf.format(calendar.getTimeInMillis());
 
-                                    Log.i(TAG, "New Message / Sender: " + sender + " / Type: " + type + " / Text: " + text + " / Sent Date: " + sentDateString);
-
+                                    Post post = new Post(user, text, localDateTime);
+                                    allPosts.add(post);
+                                    Log.i(TAG, "New Post / User: " + user + " / Text: " + text + " / Local Date: " + localDateTime);
                                 }
                             }
 
-                            // Go to recent message
+                            // Go to recent posts
                             adapter.notifyDataSetChanged();
                             rvPosts.smoothScrollToPosition(0);
                         } else {
@@ -376,7 +364,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "onTrack to publish post by user");
-                JsonObject messagePayload = Message.createMessageObject(currentUser, message, new Date());
+                JsonObject messagePayload = Post.createPostObject(currentUser, message);
                 publishMessage(messagePayload);
             }
         });
@@ -441,6 +429,9 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                     tvParticipationStatus.setText(R.string.not_joined);
                                     members.remove(members.indexOf(currentUser));
                                     joined = false;
+                                    rlMakePost.setVisibility(View.GONE);
+                                    String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) - 1) + " Members";
+                                    tvMembers.setText(updatedMembersDisplay);
                                     sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                     sweetAlertDialog.setTitleText("Change successful")
                                             .setContentText("You are no longer are member of " + community.getName())
@@ -454,6 +445,9 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                     tvParticipationStatus.setText(R.string.joined);
                     members.add(currentUser);
                     joined = true;
+                    rlMakePost.setVisibility(View.VISIBLE);
+                    String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) + 1) + " Members";
+                    tvMembers.setText(updatedMembersDisplay);
                     SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
                     sweetAlertDialog.setTitleText("Successfully joined")
                             .setContentText("You are now a member of " + community.getName())
@@ -480,13 +474,18 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                             tvParticipationStatus.setText(R.string.not_joined);
                             members.remove(members.indexOf(currentUser));
                             joined = false;
-
+                            rlMakePost.setVisibility(View.GONE);
+                            String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) - 1) + " Members";
+                            tvMembers.setText(updatedMembersDisplay);
                         } else {
                             Log.i(TAG, "User was unable to leave the community due to issue");
                             ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
                             tvParticipationStatus.setText(R.string.joined);
                             members.add(currentUser);
                             joined = true;
+                            rlMakePost.setVisibility(View.VISIBLE);
+                            String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) + 1) + " Members";
+                            tvMembers.setText(updatedMembersDisplay);
                         }
                     }
                 });

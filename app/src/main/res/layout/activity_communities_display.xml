@@ -12,6 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <TextView
+        android:id="@+id/tvNotAvailable_Communities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white_dimmer"
+        android:textSize="16sp"
+        android:lineSpacingExtra="5dp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <android.widget.Button
+        android:id="@+id/btnCreateCommunity"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvNotAvailable_Communities"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_create_community"
+        android:fontFamily="@font/redhattext"
+        android:text="Create+"
+        android:visibility="gone"/>
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayout_Communities"
         android:layout_width="match_parent"
