@@ -94,6 +94,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
     List<Post> allPosts;
     PostsAdapter adapter;
     PubNub pubnub;
+    int numberOfMembers;
 
     ShimmerFrameLayout shimmerFrameLayout;
     ScrollView svEntireScreen;
@@ -243,12 +244,15 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                 // Get timestamp
                 // Source: https://www.pubnub.com/docs/chat/features/messages#receive-messages
                 long timetoken = event.getTimetoken() / 10_000L;
+                Date date = new Date(timetoken);
+                String timestamp = Post.calculateTimeAgo(date);
+
                 SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(timetoken);
                 String localDateTime = sdf.format(calendar.getTimeInMillis());
 
-                Post post = new Post(user, text, localDateTime);
+                Post post = new Post(user, text, timestamp);
                 allPosts.add(post);
                 runOnUiThread(new Runnable() {
 
@@ -260,7 +264,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                     }
                 });
 
-                Log.i(TAG, "New Post / User: " + user + " / Text: " + text + " / Local Date: " + localDateTime);
+                Log.i(TAG, "New Post / User: " + user + " / Text: " + text + " / Timestamp: " + timestamp);
             }
 
             @Override
@@ -337,14 +341,17 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                     // Get timestamp
                                     // Source: https://www.pubnub.com/docs/chat/features/messages#receive-messages
                                     long timetoken = fetchMessageItem.getTimetoken() / 10_000L;
+                                    Date date = new Date(timetoken);
+                                    String timestamp = Post.calculateTimeAgo(date);
+
                                     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
                                     Calendar calendar = Calendar.getInstance();
                                     calendar.setTimeInMillis(timetoken);
                                     String localDateTime = sdf.format(calendar.getTimeInMillis());
 
-                                    Post post = new Post(user, text, localDateTime);
+                                    Post post = new Post(user, text, timestamp);
                                     allPosts.add(post);
-                                    Log.i(TAG, "New Post / User: " + user + " / Text: " + text + " / Local Date: " + localDateTime);
+                                    Log.i(TAG, "New Post / User: " + user + " / Text: " + text + " / Timestamp: " + timestamp);
                                 }
                             }
 
@@ -435,7 +442,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                     members.remove(members.indexOf(currentUser));
                                     joined = false;
                                     rlMakePost.setVisibility(View.GONE);
-                                    int numberOfMembers = community.getNumberOfMembers() - 1;
+                                    numberOfMembers = community.getNumberOfMembers() - 1;
                                     if (numberOfMembers == 1) {
                                         tvMembers.setText(numberOfMembers + " Member");
                                     } else {
@@ -455,7 +462,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                     members.add(currentUser);
                     joined = true;
                     rlMakePost.setVisibility(View.VISIBLE);
-                    int numberOfMembers = community.getNumberOfMembers() + 1;
+                    numberOfMembers = community.getNumberOfMembers() + 1;
                     if (numberOfMembers == 1) {
                         tvMembers.setText(numberOfMembers + " Member");
                     } else {
@@ -474,7 +481,8 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                 // Retrieve the community by id
                 query.getInBackground(community.getObjectId(), (community, e) -> {
                     if (e == null) {
-                        community.put("members", members);
+                        community.put(Community.KEY_MEMBERS, members);
+                        community.put(Community.KEY_NUMBER_OF_MEMBERS, numberOfMembers);
                         community.saveInBackground();
                         Log.i(TAG, "Success changing the participation status of the current user");
                     } else {
@@ -488,7 +496,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                             members.remove(members.indexOf(currentUser));
                             joined = false;
                             rlMakePost.setVisibility(View.GONE);
-                            int numberOfMembers = community.getNumberOfMembers() - 1;
+                            numberOfMembers = community.getNumberOfMembers() - 1;
                             if (numberOfMembers == 1) {
                                 tvMembers.setText(numberOfMembers + " Member");
                             } else {
@@ -501,7 +509,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                             members.add(currentUser);
                             joined = true;
                             rlMakePost.setVisibility(View.VISIBLE);
-                            int numberOfMembers = community.getNumberOfMembers() + 1;
+                            numberOfMembers = community.getNumberOfMembers() + 1;
                             if (numberOfMembers == 1) {
                                 tvMembers.setText(numberOfMembers + " Member");
                             } else {

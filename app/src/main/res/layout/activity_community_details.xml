@@ -13,6 +13,7 @@
         android:layout_height="fill_parent">
 
         <RelativeLayout
+            android:id="@+id/rlCommunityDetailsContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -168,57 +169,57 @@
                 android:background="@color/black_light"
                 android:scrollbars="horizontal"/>
 
-            <RelativeLayout
-                android:id="@+id/rlMakePost_Community"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="50dp"
-                android:layout_below="@id/rvPosts_Community"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/comment_input_box">
-
-                <ImageView
-                    android:id="@+id/ivProfileIcon_MakePost"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="5dp"
-                    android:src="@drawable/ic_profile_black" />
-
-                <EditText
-                    android:id="@+id/etPostInput_Community"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/ivProfileIcon_MakePost"
-                    android:layout_toLeftOf="@+id/ivPost_Community"
-                    android:textColor="@color/black_light"
-                    android:hint="Make a post"
-                    android:textColorHint="@color/grey_medium" />
-
-                <RelativeLayout
-                    android:layout_below="@id/etPostInput_Community"
-                    android:layout_toRightOf="@+id/ivProfileIcon_MakePost"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginEnd="45dp"
-                    android:layout_marginTop="-10dp"
-                    android:background="@color/black_light" />
-
-                <ImageView
-                    android:id="@+id/ivPost_Community"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginEnd="5dp"
-                    android:src="@drawable/ic_post_comment_darker" />
-
-            </RelativeLayout>
-
         </RelativeLayout>
 
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/rlMakePost_Community"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:layout_alignBottom="@+id/svCommunityDetails"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/comment_input_box">
+
+        <ImageView
+            android:id="@+id/ivProfileIcon_MakePost"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/ic_profile_black" />
+
+        <EditText
+            android:id="@+id/etPostInput_Community"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ivProfileIcon_MakePost"
+            android:layout_toLeftOf="@+id/ivPost_Community"
+            android:textColor="@color/black_light"
+            android:hint="Make a post"
+            android:textColorHint="@color/grey_medium" />
+
+        <RelativeLayout
+            android:layout_below="@id/etPostInput_Community"
+            android:layout_toRightOf="@+id/ivProfileIcon_MakePost"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginTop="-10dp"
+            android:background="@color/black_light" />
+
+        <ImageView
+            android:id="@+id/ivPost_Community"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_post_comment_darker" />
+
+    </RelativeLayout>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerFrameLayoutCommunity"

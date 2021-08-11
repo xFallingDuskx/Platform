@@ -19,12 +19,12 @@ public class Post {
 
     String user;
     String text;
-    String localDateTime;
+    String timestamp;
 
-    public Post(String user, String text, String localDateTime) {
+    public Post(String user, String text, String timestamp) {
         this.user = user;
         this.text = text;
-        this.localDateTime = localDateTime;
+        this.timestamp = timestamp;
     }
 
     // Message Json object to be sent through PubNub
@@ -42,6 +42,8 @@ public class Post {
         int MINUTE_MILLIS = 60 * SECOND_MILLIS;
         int HOUR_MILLIS = 60 * MINUTE_MILLIS;
         int DAY_MILLIS = 24 * HOUR_MILLIS;
+        int MONTH_MILLIS = 30 * DAY_MILLIS;
+        int YEAR_MILLIS = 365 * DAY_MILLIS;
 
         try {
             createdAt.getTime();
@@ -61,8 +63,12 @@ public class Post {
                 return diff / HOUR_MILLIS + " hours ago";
             } else if (diff < 48 * HOUR_MILLIS) {
                 return "yesterday";
-            } else {
+            } else if ((diff / DAY_MILLIS) < 30){
                 return diff / DAY_MILLIS + " days ago";
+            } else if ((diff / MONTH_MILLIS) < 11) {
+                return diff / MONTH_MILLIS + " months ago";
+            } else {
+                return diff / YEAR_MILLIS + " years ago";
             }
         } catch (Exception e) {
             Log.i("Error:", "getRelativeTimeAgo failed", e);
@@ -81,6 +87,6 @@ public class Post {
     }
 
     public String getLocalDateTime() {
-        return localDateTime;
+        return timestamp;
     }
 }
