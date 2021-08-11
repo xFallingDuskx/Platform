@@ -33,7 +33,7 @@
 
     <string name="no_communities_search">There are no communities that match this search \n Click here to create the community you wish to see</string>
     <string name="no_communities_genre">There are no communities for this genre yet \n Click here to create the community you wish to see</string>
-    <string name="no_communities_user">You have not created any communities yet \n Click here to create your first community</string>
+    <string name="no_communities_user">You are not a member of any communities\n\nJoin a community or click here to create a community you wish to see</string>
 
     <string name="comment_section_header">Comments</string>
     <!-- Strings used for fragments for navigation -->

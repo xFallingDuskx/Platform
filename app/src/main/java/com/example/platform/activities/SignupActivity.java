@@ -341,9 +341,12 @@ public class SignupActivity extends AppCompatActivity {
                         }
                         else {
                             Log.i(TAG, "Success creating new Pubnub user object");
-                            sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                            sweetAlertDialog.setTitleText("Success");
-                            sweetAlertDialog.setContentText(getString(R.string.successful_signup));
+
+                            SweetAlertDialog sweetAlertTemp = new SweetAlertDialog(SignupActivity.this, SweetAlertDialog.SUCCESS_TYPE);
+                            sweetAlertTemp.setTitleText("Success")
+                                    .setContentText(getString(R.string.successful_signup))
+                                    .show();
+                            sweetAlertDialog.cancel();
 
                             new Handler().postDelayed(new Runnable() {
                                 @Override

@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -24,21 +26,14 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.platform.R;
-import com.example.platform.adapters.CommentsAdapter;
 import com.example.platform.adapters.PostsAdapter;
-import com.example.platform.models.Comment;
 import com.example.platform.models.Community;
-import com.example.platform.models.Message;
 import com.example.platform.models.Post;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.gson.JsonObject;
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.pubnub.api.PNConfiguration;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.callbacks.PNCallback;
@@ -61,7 +56,6 @@ import com.pubnub.api.models.consumer.pubsub.message_actions.PNMessageActionResu
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
@@ -86,7 +80,8 @@ public class CommunityDetailsActivity extends AppCompatActivity {
     String currentUser;
     boolean joined;
     TextView tvName, tvDescription, tvParticipationStatus, tvMembers;
-    ImageView ivParticipationStatus, ivShare, ivCover, ivPost;
+    ImageView ivParticipationStatus, ivShare, ivCover;
+    Button btnPost;
     EditText etPostInput;
     RelativeLayout rlMakePost;
 
@@ -121,7 +116,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
         ivParticipationStatus = findViewById(R.id.ivParticipationStatus_Community_Details);
         ivShare = findViewById(R.id.ivShare_Community_Details);
         ivCover = findViewById(R.id.ivCover_Community_Details);
-        ivPost = findViewById(R.id.ivPost_Community);
+        btnPost = findViewById(R.id.btnPost_Community);
         tvMembers = findViewById(R.id.tvMembersText_Community_Details);
         etPostInput = findViewById(R.id.etPostInput_Community);
         rlMakePost = findViewById(R.id.rlMakePost_Community);
@@ -205,6 +200,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
         allPosts = new ArrayList<>();
         adapter = new PostsAdapter(context, allPosts);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        linearLayoutManager.setReverseLayout(true);
         rvPosts.setLayoutManager(linearLayoutManager);
         rvPosts.setAdapter(adapter);
 
@@ -367,7 +363,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
     }
 
     public void handlePosting() {
-        ivPost.setOnClickListener(new View.OnClickListener() {
+        btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String message = etPostInput.getText().toString();
@@ -398,6 +394,11 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                         }
                     }
                 });
+        // Close the keyboard
+        // Source: https://gist.github.com/lopspower/6e20680305ddfcb11e1e
+        View view = findViewById(android.R.id.content);
+        InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     // User clicks on share icon
@@ -437,9 +438,12 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(SweetAlertDialog sweetAlertDialog) {
                                     Log.i(TAG, "User desires to leave this community");
+                                    members.remove(currentUser);
+                                    updateParseServer(members);
+
                                     ivParticipationStatus.setImageResource(R.drawable.ic_following_false);
                                     tvParticipationStatus.setText(R.string.not_joined);
-                                    members.remove(members.indexOf(currentUser));
+                                    Log.i(TAG, "Current members after initial removal are: " + Arrays.toString(members.toArray()));
                                     joined = false;
                                     rlMakePost.setVisibility(View.GONE);
                                     numberOfMembers = community.getNumberOfMembers() - 1;
@@ -448,18 +452,22 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                     } else {
                                         tvMembers.setText(numberOfMembers + " Members");
                                     }
-                                    sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                                    sweetAlertDialog.setTitleText("Change successful")
+
+                                    SweetAlertDialog sweetAlertTemp = new SweetAlertDialog(CommunityDetailsActivity.this, SweetAlertDialog.SUCCESS_TYPE);
+                                    sweetAlertTemp.setTitleText("Change successful")
                                             .setContentText("You are no longer are member of " + community.getName())
-                                            .setConfirmClickListener(null);
+                                            .show();
+                                    sweetAlertDialog.cancel();
                                 }
                             })
                             .show();
                 } else {
                     Log.i(TAG, "User desires to join this community");
+                    members.add(currentUser);
+                    updateParseServer(members);
+
                     ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
                     tvParticipationStatus.setText(R.string.joined);
-                    members.add(currentUser);
                     joined = true;
                     rlMakePost.setVisibility(View.VISIBLE);
                     numberOfMembers = community.getNumberOfMembers() + 1;
@@ -473,51 +481,58 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                             .setContentText("You are now a member of " + community.getName())
                             .setConfirmClickListener(null)
                             .show();
+
                 }
 
-                // Change and update the user following titles within the parse server
-                ParseQuery<Community> query = ParseQuery.getQuery("Community");
 
-                // Retrieve the community by id
-                query.getInBackground(community.getObjectId(), (community, e) -> {
-                    if (e == null) {
-                        community.put(Community.KEY_MEMBERS, members);
-                        community.put(Community.KEY_NUMBER_OF_MEMBERS, numberOfMembers);
-                        community.saveInBackground();
-                        Log.i(TAG, "Success changing the participation status of the current user");
+            }
+        });
+    }
+
+    public void updateParseServer(List<String> members) {
+        // Change and update the user following titles within the parse server
+        ParseQuery<Community> query = ParseQuery.getQuery("Community");
+
+        // Retrieve the community by id
+        query.getInBackground(community.getObjectId(), (community, e) -> {
+            Log.d(TAG, "Current members at Parse save are: " + Arrays.toString(members.toArray()));
+            if (e == null) {
+                community.put(Community.KEY_MEMBERS, new JSONArray(members));
+                community.put(Community.KEY_NUMBER_OF_MEMBERS, members.size());
+                community.saveInBackground();
+                Log.i(TAG, "Success changing the participation status of the current user");
+            } else {
+                Log.d(TAG, "Issue changing the participation status of the current user");
+
+                // Reverse user action
+                if (joined) { // If user desired to join the community, but there was an issue doing so
+                    Log.i(TAG, "User was unable to join the community due to issue");
+                    ivParticipationStatus.setImageResource(R.drawable.ic_following_false);
+                    tvParticipationStatus.setText(R.string.not_joined);
+                    this.members.remove(currentUser);
+                    Log.i(TAG, "Current members after reverse removal are: " + Arrays.toString(members.toArray()));
+                    joined = false;
+                    rlMakePost.setVisibility(View.GONE);
+                    numberOfMembers = community.getNumberOfMembers() - 1;
+                    if (numberOfMembers == 1) {
+                        tvMembers.setText(numberOfMembers + " Member");
                     } else {
-                        Log.d(TAG, "Issue changing the participation status of the current user");
-
-                        // Reverse user action
-                        if (joined) { // If user desired to join the community, but there was an issue doing so
-                            Log.i(TAG, "User was unable to join the community due to issue");
-                            ivParticipationStatus.setImageResource(R.drawable.ic_following_false);
-                            tvParticipationStatus.setText(R.string.not_joined);
-                            members.remove(members.indexOf(currentUser));
-                            joined = false;
-                            rlMakePost.setVisibility(View.GONE);
-                            numberOfMembers = community.getNumberOfMembers() - 1;
-                            if (numberOfMembers == 1) {
-                                tvMembers.setText(numberOfMembers + " Member");
-                            } else {
-                                tvMembers.setText(numberOfMembers + " Members");
-                            }
-                        } else {
-                            Log.i(TAG, "User was unable to leave the community due to issue");
-                            ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
-                            tvParticipationStatus.setText(R.string.joined);
-                            members.add(currentUser);
-                            joined = true;
-                            rlMakePost.setVisibility(View.VISIBLE);
-                            numberOfMembers = community.getNumberOfMembers() + 1;
-                            if (numberOfMembers == 1) {
-                                tvMembers.setText(numberOfMembers + " Member");
-                            } else {
-                                tvMembers.setText(numberOfMembers + " Members");
-                            }
-                        }
+                        tvMembers.setText(numberOfMembers + " Members");
                     }
-                });
+                } else {
+                    Log.i(TAG, "User was unable to leave the community due to issue");
+                    ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
+                    tvParticipationStatus.setText(R.string.joined);
+                    this.members.add(currentUser);
+                    joined = true;
+                    rlMakePost.setVisibility(View.VISIBLE);
+                    numberOfMembers = community.getNumberOfMembers() + 1;
+                    if (numberOfMembers == 1) {
+                        tvMembers.setText(numberOfMembers + " Member");
+                    } else {
+                        tvMembers.setText(numberOfMembers + " Members");
+                    }
+                }
             }
         });
     }

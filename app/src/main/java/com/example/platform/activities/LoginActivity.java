@@ -145,9 +145,11 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-                sweetAlertDialog.setTitleText("Success");
-                sweetAlertDialog.setContentText(getString(R.string.successful_login));
+                SweetAlertDialog sweetAlertTemp = new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.SUCCESS_TYPE);
+                sweetAlertTemp.setTitleText("Success")
+                        .setContentText(getString(R.string.successful_login))
+                        .show();
+                sweetAlertDialog.cancel();
 
                 new Handler().postDelayed(new Runnable() {
                     @Override

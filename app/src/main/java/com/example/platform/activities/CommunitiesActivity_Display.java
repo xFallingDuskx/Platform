@@ -47,6 +47,12 @@ public class CommunitiesActivity_Display extends AppCompatActivity {
     ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        rvCommunities.notifyAll();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communities_display);
