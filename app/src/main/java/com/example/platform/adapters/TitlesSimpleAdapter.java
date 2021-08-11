@@ -99,7 +99,7 @@ public class TitlesSimpleAdapter extends RecyclerView.Adapter<TitlesSimpleAdapte
             tvName.setText(title.getName());
             Glide.with(context)
                     .load(title.getPosterPath())
-                    .placeholder(R.drawable.poster_placeholder)
+                    .placeholder(R.drawable.platform_portrait_placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
                     .into(ivCover);
         }

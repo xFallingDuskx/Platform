@@ -116,13 +116,13 @@ public class ProfileFollowingsAdapter extends RecyclerView.Adapter<ProfileFollow
                 Log.i(TAG, "Episode Glide is being used");
                 Glide.with(context)
                         .load(title.getPosterPath())
-                        .placeholder(R.drawable.backdrop_placeholder)
+                        .placeholder(R.drawable.platform_backdrop_placeholder)
                         .fitCenter()
                         .into(ivTitleCover);
             } else {
                 Glide.with(context)
                         .load(title.getPosterPath())
-                        .placeholder(R.drawable.poster_placeholder)
+                        .placeholder(R.drawable.platform_portrait_placeholder)
                         .centerCrop() // scale image to fill the entire ImageView
                         .into(ivTitleCover);
             }

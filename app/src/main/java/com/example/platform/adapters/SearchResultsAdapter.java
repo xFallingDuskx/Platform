@@ -103,7 +103,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
             Glide.with(context)
                     .load(title.getPosterPath())
-                    .placeholder(R.drawable.poster_placeholder)
+                    .placeholder(R.drawable.platform_portrait_placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
                     .into(ivTitleCover);
         }

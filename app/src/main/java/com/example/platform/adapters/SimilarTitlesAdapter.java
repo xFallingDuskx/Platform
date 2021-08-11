@@ -117,13 +117,13 @@ public class SimilarTitlesAdapter extends RecyclerView.Adapter<SimilarTitlesAdap
             if (title.getType().equals("tv")) {
                 Glide.with(context)
                         .load(title.getBackdropPath())
-                        .placeholder(R.drawable.backdrop_placeholder)
+                        .placeholder(R.drawable.platform_backdrop_placeholder)
                         .fitCenter()
                         .into(ivTitleCover);
             } else {
                 Glide.with(context)
                         .load(title.getPosterPath())
-                        .placeholder(R.drawable.poster_placeholder)
+                        .placeholder(R.drawable.platform_portrait_placeholder)
                         .fitCenter()
                         .into(ivTitleCover);
             }

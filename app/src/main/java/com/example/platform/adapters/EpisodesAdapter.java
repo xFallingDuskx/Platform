@@ -96,10 +96,9 @@ public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.ViewHo
             tvSeasonAndEpisode.setText(seasonAndEpisode);
             tvEpisodeDetails.setText(episode.getDescription());
 
-
             Glide.with(context)
                     .load(episode.getStillPath())
-                    .placeholder(R.drawable.backdrop_placeholder)
+                    .placeholder(R.drawable.platform_backdrop_placeholder)
                     .fitCenter()
                     .into(ivEpisodeCover);
         }

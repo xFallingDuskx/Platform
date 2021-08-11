@@ -71,6 +71,7 @@ public class CommunitiesAdapter extends RecyclerView.Adapter<CommunitiesAdapter.
                         Community community = communities.get(position);
                         Intent intent = new Intent(context, CommunityDetailsActivity.class);
                         intent.putExtra("name", community.getName());
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                         Log.i(TAG, "Opening CommunityDetailsActivity");
                     }

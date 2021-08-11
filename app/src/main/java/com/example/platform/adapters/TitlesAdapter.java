@@ -175,7 +175,7 @@ public class TitlesAdapter extends RecyclerView.Adapter<TitlesAdapter.ViewHolder
 
             Glide.with(context)
                     .load(title.getPosterPath())
-                    .placeholder(R.drawable.poster_placeholder)
+                    .placeholder(R.drawable.platform_portrait_placeholder)
                     .centerCrop() // scale image to fill the entire ImageView
                     .into(ivCover);
 
