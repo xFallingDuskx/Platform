@@ -168,7 +168,12 @@ public class CommunityDetailsActivity extends AppCompatActivity {
     public void setCommunityInformation() {
         tvName.setText(community.getName());
         tvDescription.setText(community.getDescription());
-        tvMembers.setText(community.getNumberOfMembers() + " Members");
+        int numberOfMembers = community.getNumberOfMembers();
+        if (numberOfMembers == 1) {
+            tvMembers.setText(numberOfMembers + " Member");
+        } else {
+            tvMembers.setText(numberOfMembers + " Members");
+        }
 
         if (members.contains(currentUser)) {
             ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
@@ -410,7 +415,7 @@ public class CommunityDetailsActivity extends AppCompatActivity {
             public void onClick(View v){
                 // If the user is part of the community and wishes to leave it
                 if (joined) {
-                    SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE);
+                    SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(CommunityDetailsActivity.this, SweetAlertDialog.WARNING_TYPE);
                     sweetAlertDialog.setTitleText("Are you sure?")
                             .setContentText("If you leave this community, you will no longer be able to make post with your fellow Platform users.")
                             .setCancelText("Nevermind")
@@ -430,8 +435,12 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                                     members.remove(members.indexOf(currentUser));
                                     joined = false;
                                     rlMakePost.setVisibility(View.GONE);
-                                    String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) - 1) + " Members";
-                                    tvMembers.setText(updatedMembersDisplay);
+                                    int numberOfMembers = community.getNumberOfMembers() - 1;
+                                    if (numberOfMembers == 1) {
+                                        tvMembers.setText(numberOfMembers + " Member");
+                                    } else {
+                                        tvMembers.setText(numberOfMembers + " Members");
+                                    }
                                     sweetAlertDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                                     sweetAlertDialog.setTitleText("Change successful")
                                             .setContentText("You are no longer are member of " + community.getName())
@@ -446,9 +455,13 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                     members.add(currentUser);
                     joined = true;
                     rlMakePost.setVisibility(View.VISIBLE);
-                    String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) + 1) + " Members";
-                    tvMembers.setText(updatedMembersDisplay);
-                    SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE);
+                    int numberOfMembers = community.getNumberOfMembers() + 1;
+                    if (numberOfMembers == 1) {
+                        tvMembers.setText(numberOfMembers + " Member");
+                    } else {
+                        tvMembers.setText(numberOfMembers + " Members");
+                    }
+                    SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(CommunityDetailsActivity.this, SweetAlertDialog.SUCCESS_TYPE);
                     sweetAlertDialog.setTitleText("Successfully joined")
                             .setContentText("You are now a member of " + community.getName())
                             .setConfirmClickListener(null)
@@ -475,8 +488,12 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                             members.remove(members.indexOf(currentUser));
                             joined = false;
                             rlMakePost.setVisibility(View.GONE);
-                            String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) - 1) + " Members";
-                            tvMembers.setText(updatedMembersDisplay);
+                            int numberOfMembers = community.getNumberOfMembers() - 1;
+                            if (numberOfMembers == 1) {
+                                tvMembers.setText(numberOfMembers + " Member");
+                            } else {
+                                tvMembers.setText(numberOfMembers + " Members");
+                            }
                         } else {
                             Log.i(TAG, "User was unable to leave the community due to issue");
                             ivParticipationStatus.setImageResource(R.drawable.ic_following_true);
@@ -484,8 +501,12 @@ public class CommunityDetailsActivity extends AppCompatActivity {
                             members.add(currentUser);
                             joined = true;
                             rlMakePost.setVisibility(View.VISIBLE);
-                            String updatedMembersDisplay = (Integer.valueOf(tvMembers.getText().toString().substring(0, 1)) + 1) + " Members";
-                            tvMembers.setText(updatedMembersDisplay);
+                            int numberOfMembers = community.getNumberOfMembers() + 1;
+                            if (numberOfMembers == 1) {
+                                tvMembers.setText(numberOfMembers + " Member");
+                            } else {
+                                tvMembers.setText(numberOfMembers + " Members");
+                            }
                         }
                     }
                 });

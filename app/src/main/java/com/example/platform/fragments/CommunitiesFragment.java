@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -99,13 +100,14 @@ public class CommunitiesFragment extends Fragment {
         });
 
         // Handle searches
+        // Source: https://www.bragitoff.com/2017/04/trigger-button-click-press-doneenter-key-keyboard-solved/
         etSearchInput = (EditText) view.findViewById(R.id.etSearchInput);
         etSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
                 boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE) || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Intent intent = new Intent(getContext(), CommunitiesActivity_Display.class);
                     String search = etSearchInput.getText().toString();
                     if (search.isEmpty()) {
                         Toast.makeText(getContext(), "Search cannot be empty", Toast.LENGTH_SHORT).show();
@@ -114,7 +116,12 @@ public class CommunitiesFragment extends Fragment {
                     intent.putExtra("objective", "search");
                     intent.putExtra("query", search);
                     startActivity(intent);
-                    etSearchInput.setText("");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            etSearchInput.setText("");
+                        }
+                    }, 2000);
                     handled = true;
                 }
                 return handled;

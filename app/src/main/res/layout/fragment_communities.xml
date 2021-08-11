@@ -61,7 +61,7 @@
                 android:fontFamily="@font/pt_sans"
                 android:hint="Find your community"
                 android:imeOptions="actionSearch"
-                android:inputType="text"
+                android:inputType="textShortMessage"
                 android:textColor="@color/black_light"
                 android:textColorHint="@color/grey_medium"
                 android:textSize="18sp" />
