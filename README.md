@@ -54,7 +54,7 @@ User can...
 - Make posts within the communities they are a member of
 
 ## Video Walkthrough
-Check out video here:
+Check out video here: https://www.youtube.com/watch?v=XBuMm3tSlZY
 Watch at 0.5 or 0.75 speed to truly notice all features
 
 ## Credits
