@@ -1,16 +1,23 @@
 package com.example.platform.activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -600,6 +607,7 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
         comment.setDescription(titleDescription);
         comment.setReleaseDate(titleReleaseDate);
         comment.saveInBackground(new SaveCallback() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void done(ParseException e) {
                 if (e != null) {
@@ -628,9 +636,69 @@ public class TvTitleDetailsActivity extends AppCompatActivity {
                     View view = findViewById(android.R.id.content);
                     InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                    // Send notification
+                    sendNotification(tmdbId, titleName, currentUser, commentText);
                 }
             }
         });
+    }
+
+    // Handle sending notification for the new comment
+    // Source: https://guides.codepath.com/android/Notifications
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void sendNotification(Integer tmdbId, String titleName, String currentUser, String commentText) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel notificationChannel = notificationManager.getNotificationChannel(String.valueOf(tmdbId));
+
+        // If the channel does not yet exist for the title
+        if (notificationChannel == null) {
+            createNotificationChannel();
+        }
+
+        // If the user taps on the notification
+        Intent intent = new Intent(this, TvTitleDetailsActivity.class);
+        intent.putExtra("id", titleTmdbID);
+        intent.putExtra("name", titleName);
+        intent.putExtra("posterPath", titleCoverPath);
+        intent.putExtra("type", "tv");
+        intent.putExtra("description", titleDescription);
+        intent.putExtra("releaseDate", titleReleaseDate);
+        intent.putExtra("titleLiked", titleLiked);
+        intent.putExtra("userLikedTitles", userLikedTitles);
+        intent.putExtra("scrollToComments", scrollToComments);
+        // Next, let's turn this into a PendingIntent using
+        int requestID = (int) System.currentTimeMillis(); //unique requestID to differentiate between various notification with same NotifId
+        int flags = PendingIntent.FLAG_CANCEL_CURRENT; // cancel old intent and create new one
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestID, intent, flags);
+
+        Notification notification = new NotificationCompat.Builder(
+                this, String.valueOf(tmdbId)).setSmallIcon(R.drawable.ic_launcher_round)
+                .setContentTitle("New comment for the title " + titleName)
+                .setContentText("Made by the user " + currentUser + " - Click to view")
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true) // Hides the notification after its been selected
+                .build();
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        // mId allows you to update the notification later on.
+        mNotificationManager.notify(0, notification);
+    }
+
+    // Create a notification channel for this title if it does not exist
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = titleName;
+            String description = "Notification channel for the title " + titleName;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(String.valueOf(titleTmdbID), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     // Handles the Following status for the title
