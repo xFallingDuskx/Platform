@@ -1,7 +1,7 @@
 Original App Design Project - README Template
 ===
 
-# Platform (temporary name)
+# Platform
 
 ## Table of Contents
 1. [Overview](#Overview)
